@@ -11,15 +11,24 @@ DenotativeObject subclass: #CarolinaLaCurandera
 CarolinaLaCurandera class
 	instanceVariableNames: 'frasesParaPrometedores riverwood cantidadDeInteraccionesPorPersonajes frasesParaDesconocidos treborElGuardiaDeSkyrim'!
 
-!CarolinaLaCurandera class methodsFor: 'interacciones - privadas' stamp: 'belen 9/30/2021 15:18:36'!
+!CarolinaLaCurandera class methodsFor: 'interacciones - privadas' stamp: 'belen 10/1/2021 11:29:26'!
 aplicarInfluenciaAlPuebloSobre: unPersonajeJugadorAInteractuar
 
+		
+		(self cantidadDeInteraccionesEsMaximaCon: unPersonajeJugadorAInteractuar) ifTrue: [^self influenciarAlPuebloCon: unPersonajeJugadorAInteractuar] 
+		ifFalse: [^0.].
+		! !
+
+!CarolinaLaCurandera class methodsFor: 'interacciones - privadas' stamp: 'belen 10/1/2021 11:10:51'!
+cantidadDeInteraccionesEsMaximaCon: unPersonajeJugadorAInteractuar
+
+		
 		| cantidadDeInteracciones |
 		cantidadDeInteracciones := self obtenerCantidadDeInteraccionesCon: unPersonajeJugadorAInteractuar.
 		
-		cantidadDeInteracciones = 3 ifTrue: [^self influenciarAlPuebloCon: unPersonajeJugadorAInteractuar
-			] ifFalse: [^0.].
-		"riverwood actualizarEstatusDelPersonajeJugador: unPersonajeJugadorAInteractuar a:'prometedor'."! !
+		(cantidadDeInteracciones = 3)ifTrue:[^true] ifFalse:[^false]
+
+	! !
 
 !CarolinaLaCurandera class methodsFor: 'interacciones - privadas' stamp: 'belen 9/30/2021 15:37:01'!
 influenciarAlPuebloCon: unPersonajeJugadorAInteractuar
@@ -102,7 +111,7 @@ reiniciarHiloDeConversacionCon:  unPersonajeJugadorAInteractuar
 	^cantidadDeInteraccionesPorPersonajes at: unPersonajeJugadorAInteractuar  put: 0.! !
 
 
-!CarolinaLaCurandera class methodsFor: 'as yet unclassified' stamp: 'belen 9/30/2021 15:54:43'!
+!CarolinaLaCurandera class methodsFor: 'as yet unclassified' stamp: 'belen 10/1/2021 11:41:57'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -155,7 +164,7 @@ olvidarInteracciones
 	! !
 
 
-!ElPuebloDeRiverwood class methodsFor: 'as yet unclassified' stamp: 'belen 9/30/2021 15:54:44'!
+!ElPuebloDeRiverwood class methodsFor: 'as yet unclassified' stamp: 'belen 10/1/2021 11:41:57'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -575,7 +584,7 @@ responderSegunOpinionDelPuebloSobre: unPersonajeJugadorAInteractuar
 	! !
 
 
-!TreborElGuardiaDeSkyrim class methodsFor: 'as yet unclassified' stamp: 'belen 9/30/2021 15:54:44'!
+!TreborElGuardiaDeSkyrim class methodsFor: 'as yet unclassified' stamp: 'belen 10/1/2021 11:41:57'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
