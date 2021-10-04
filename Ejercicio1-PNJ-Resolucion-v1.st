@@ -111,7 +111,7 @@ reiniciarHiloDeConversacionCon:  unPersonajeJugadorAInteractuar
 	^cantidadDeInteraccionesPorPersonajes at: unPersonajeJugadorAInteractuar  put: 0.! !
 
 
-!CarolinaLaCurandera class methodsFor: 'as yet unclassified' stamp: 'belen 10/1/2021 11:41:57'!
+!CarolinaLaCurandera class methodsFor: 'as yet unclassified' stamp: 'belen 10/4/2021 09:23:00'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -156,15 +156,15 @@ obtenerOpinionSobreElPersonajeJugador: unPersonajeJugadorAInteractuar
 
 	^opinionesSobrePersonajesJugadores at: unPersonajeJugadorAInteractuar ifAbsent: ['desconocido'].! !
 
-!ElPuebloDeRiverwood class methodsFor: 'interacciones' stamp: 'belen 9/30/2021 15:41:07'!
-olvidarInteracciones
+!ElPuebloDeRiverwood class methodsFor: 'interacciones' stamp: 'belen 10/4/2021 09:18:33'!
+olvidarCalificaciones
 
 
 	opinionesSobrePersonajesJugadores := Dictionary new
 	! !
 
 
-!ElPuebloDeRiverwood class methodsFor: 'as yet unclassified' stamp: 'belen 10/1/2021 11:41:57'!
+!ElPuebloDeRiverwood class methodsFor: 'as yet unclassified' stamp: 'belen 10/4/2021 09:23:00'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -184,17 +184,18 @@ DenotativeObject subclass: #PruebasInteracionesConCarolinaLaCurandera
 PruebasInteracionesConCarolinaLaCurandera class
 	instanceVariableNames: ''!
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con un personaje' stamp: 'belen 9/29/2021 12:30:11'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con un personaje' stamp: 'belen 10/4/2021 09:09:42'!
 test01CuandoLaCuranderaInteractuaPorPrimeraVezConUnPersonajeLeRespondeConSuPrimerFrase
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
-	"self riverwood actualizarEstatusDelPersonajeJugador: self hamilton a: 'desconocido'." 
+	 
 	mensaje := self carolinaLaCurandera interactuarCon: self hamilton.
 	
 	Assert that: mensaje isEqualTo: '¿Estás enfermo Forastero?'.! !
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con un personaje' stamp: 'JMB 9/25/2021 12:48:37'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con un personaje' stamp: 'belen 10/4/2021 09:10:05'!
 test02CuandoLaCuranderaInteractuaPorSegundaVezConUnPersonajeLeRespondeConSuSegundaFrase
+
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	self carolinaLaCurandera interactuarCon: self hamilton.
@@ -203,8 +204,9 @@ test02CuandoLaCuranderaInteractuaPorSegundaVezConUnPersonajeLeRespondeConSuSegun
 	
 	Assert that: mensaje isEqualTo: 'Ah, solo quieres conversar'.! !
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con un personaje' stamp: 'JMB 9/25/2021 12:49:16'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con un personaje' stamp: 'belen 10/4/2021 09:10:26'!
 test03CuandoLaCuranderaInteractuaPorTerceraVezConUnPersonajeLeRespondeConSuTercerFrase
+
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	self carolinaLaCurandera interactuarCon: self hamilton.
@@ -215,15 +217,17 @@ test03CuandoLaCuranderaInteractuaPorTerceraVezConUnPersonajeLeRespondeConSuTerce
 	Assert that: mensaje isEqualTo: 'Cuando tengas una aflicción, ven a verme'.! !
 
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con mas de un personaje' stamp: 'belen 9/29/2021 12:31:07'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con mas de un personaje' stamp: 'belen 10/4/2021 09:10:45'!
 test04LaCuranderaMantieneDosInteraccionesConDiferentesPersonajes
+
 	self olvidarInteraccionesYOpiniones.
 	
 	Assert that: (self carolinaLaCurandera interactuarCon: self hamilton) isEqualTo: '¿Estás enfermo Forastero?'.
 	Assert that: (self carolinaLaCurandera interactuarCon: self tirion) isEqualTo: '¿Estás enfermo Forastero?'.! !
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con mas de un personaje' stamp: 'belen 9/29/2021 12:32:56'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con mas de un personaje' stamp: 'belen 10/4/2021 09:11:03'!
 test05LaCuranderaMantieneDosInteraccionesCompletasConDiferentesPersonajes
+	
 	self olvidarInteraccionesYOpiniones.
 	
 	Assert that: (self carolinaLaCurandera interactuarCon: self hamilton) isEqualTo: '¿Estás enfermo Forastero?'.
@@ -237,8 +241,9 @@ test05LaCuranderaMantieneDosInteraccionesCompletasConDiferentesPersonajes
 	! !
 
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con personajes prometedores' stamp: 'JMB 9/25/2021 12:50:32'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con personajes prometedores' stamp: 'belen 10/4/2021 09:11:34'!
 test06CuandoLaCuranderaInteractuaPorPrimeraVezConUnPersonajeCalificadoPorElPuebloComoPrometedorLeRespondeConSuPrimerFrase
+	
 	| mensaje |	
 	self olvidarInteraccionesYOpiniones.
 	self hacerQueRiverwoodVeaPrometedorAHamilton.
@@ -248,8 +253,9 @@ test06CuandoLaCuranderaInteractuaPorPrimeraVezConUnPersonajeCalificadoPorElPuebl
 	Assert that: mensaje isEqualTo: 'Salud aventurero!!'.
 ! !
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con personajes prometedores' stamp: 'JMB 9/25/2021 12:50:39'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'interacciones con personajes prometedores' stamp: 'belen 10/4/2021 09:11:53'!
 test07CuandoLaCuranderaInteractuaPorSegundaVezConUnPersonajeCalificadoPorElPuebloComoPrometedorLeRespondeConSuSegundaFrase
+
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	self hacerQueRiverwoodVeaPrometedorAHamilton.
@@ -282,8 +288,9 @@ test09CuandoLaCuranderaCambiaLaOpinionDelPuebloSobreElPersonajeAPrometedorReinic
 	
 	Assert that:   (self carolinaLaCurandera interactuarCon: self hamilton) isEqualTo: 'Salud aventurero!!'! !
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'cambio de opiniones' stamp: 'JMB 9/25/2021 12:51:06'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'cambio de opiniones' stamp: 'belen 10/4/2021 09:13:19'!
 test10CuandoLaCuranderaCambiaLaOpinionDelPuebloSobreElPersonajeAPrometedorReiniciaElHiloDeDialogoDelGuardiaConElPersonaje
+	
 	self olvidarInteraccionesYOpiniones.
 	self treborElGuardia interactuarCon: self hamilton.
 	
@@ -294,12 +301,12 @@ test10CuandoLaCuranderaCambiaLaOpinionDelPuebloSobreElPersonajeAPrometedorReinic
 	Assert that: 'Bienvenido aventurero!!' isEqualTo: (self treborElGuardia interactuarCon: self hamilton)! !
 
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'personajes' stamp: 'ely 9/28/2021 17:39:52'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'personajes' stamp: 'belen 10/4/2021 09:14:08'!
 carolinaLaCurandera
 
 	^ CarolinaLaCurandera
 
-	"Assert isTrue: false description: 'Reemplazar esto por la implementación correspondiente'."! !
+	! !
 
 !PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'personajes' stamp: 'ely 9/28/2021 17:47:35'!
 hamilton
@@ -325,16 +332,19 @@ esVistoPorElPuebloComoPrometedor: unPersonaje
 	
 ! !
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'opiniones e interacciones' stamp: 'belen 9/30/2021 14:56:48'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'opiniones e interacciones' stamp: 'belen 10/4/2021 09:20:10'!
 hacerQueLaCuranderaOlvideSusInteracciones
+
 	CarolinaLaCurandera olvidarInteracciones.! !
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'opiniones e interacciones' stamp: 'belen 9/30/2021 14:51:17'!
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'opiniones e interacciones' stamp: 'belen 10/4/2021 09:20:04'!
 hacerQueRiverwoodOlvideTodasSusCalificaciones
-	ElPuebloDeRiverwood olvidarInteracciones.! !
 
-!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'opiniones e interacciones' stamp: 'belen 9/30/2021 15:44:08'!
+	ElPuebloDeRiverwood olvidarCalificaciones.! !
+
+!PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'opiniones e interacciones' stamp: 'belen 10/4/2021 09:19:52'!
 hacerQueRiverwoodVeaPrometedorAHamilton
+
 	ElPuebloDeRiverwood actualizarOpinionSobre: self hamilton a: 'prometedor'.! !
 
 !PruebasInteracionesConCarolinaLaCurandera class methodsFor: 'opiniones e interacciones' stamp: 'JMB 9/25/2021 12:48:36'!
@@ -357,8 +367,9 @@ DenotativeObject subclass: #PruebasInteracionesConTreborElGuardia
 PruebasInteracionesConTreborElGuardia class
 	instanceVariableNames: ''!
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 9/29/2021 12:36:54'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 10/4/2021 09:14:29'!
 test01CuandoElGuardiaInteractuaPorPrimeraVezConUnPersonajeLeRespondeConSuPrimerFrase
+	
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	
@@ -367,8 +378,9 @@ test01CuandoElGuardiaInteractuaPorPrimeraVezConUnPersonajeLeRespondeConSuPrimerF
 	Assert that: mensaje isEqualTo: 'Hola forastero'.
 ! !
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 9/29/2021 12:37:03'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 10/4/2021 09:14:40'!
 test02CuandoElGuardiaInteractuaPorSegundaVezConUnPersonajeLeRespondeConSuSegundaFrase
+	
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	
@@ -378,8 +390,9 @@ test02CuandoElGuardiaInteractuaPorSegundaVezConUnPersonajeLeRespondeConSuSegunda
 	
 	Assert that: mensaje isEqualTo: '¿Todo bien?'.! !
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 9/30/2021 14:59:19'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 10/4/2021 09:14:54'!
 test03CuandoElGuardiaOlvidaInteraccionesPreviasConUnPersonajeAlVolverAInteractuarLeRespondeConSuPrimerFrase
+	
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	
@@ -390,8 +403,9 @@ test03CuandoElGuardiaOlvidaInteraccionesPreviasConUnPersonajeAlVolverAInteractua
 	
 	Assert that: mensaje isEqualTo: 'Hola forastero'.! !
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 9/29/2021 12:37:19'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 10/4/2021 09:14:59'!
 test04CuandoElGuardiaInteractuaPorTerceraVezConUnPersonajeLeRespondeConSuTercerFrase
+	
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	
@@ -402,8 +416,9 @@ test04CuandoElGuardiaInteractuaPorTerceraVezConUnPersonajeLeRespondeConSuTercerF
 	
 	Assert that: mensaje isEqualTo: '¿Algún problema?'.! !
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 9/29/2021 12:37:28'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con un personaje' stamp: 'belen 10/4/2021 09:15:05'!
 test05CuandoElGuardiaInterctuaYTerminoSuRepertorioDeFrasesConUnPersonajeLeRespondeConSuUltimaFrase
+	
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	
@@ -423,8 +438,9 @@ test06ElGuardiaMantieneDosInteraccionesConDiferentesPersonajes
 	Assert that: (self treborElGuardia interactuarCon: self hamilton) isEqualTo: 'Hola forastero'.
 	Assert that: (self treborElGuardia interactuarCon: self tirion) isEqualTo: 'Hola forastero'.! !
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con mas de un personaje' stamp: 'JMB 9/25/2021 12:53:43'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con mas de un personaje' stamp: 'belen 10/4/2021 09:16:20'!
 test07ElGuardiaMantieneDosInteraccionesCompletasConDiferentesPersonajes
+	
 	self olvidarInteraccionesYOpiniones.
 	
 	Assert that: (self treborElGuardia interactuarCon: self hamilton) isEqualTo: 'Hola forastero'.
@@ -438,19 +454,20 @@ test07ElGuardiaMantieneDosInteraccionesCompletasConDiferentesPersonajes
 	! !
 
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con personajes prometedores' stamp: 'belen 9/28/2021 16:04:57'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con personajes prometedores' stamp: 'belen 10/4/2021 09:16:38'!
 test08CuandoElGuardiaInteractuaPorPrimeraVezConUnPersonajeCalificadoPorElPuebloComoPrometedorLeRespondeConSuPrimerFrase
+	
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	self hacerQueRiverwoodVeaPrometedorAHamilton.
-	"mensaje := self treborElGuardia obtenerEstatusDelPersonajeJugadorParaElPueblo: self hamilton."
 	mensaje := self treborElGuardia interactuarCon: self hamilton.
 	
 	Assert that: mensaje isEqualTo: 'Bienvenido aventurero!!'.
 ! !
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con personajes prometedores' stamp: 'belen 9/28/2021 16:06:17'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'interacciones con personajes prometedores' stamp: 'belen 10/4/2021 09:16:59'!
 test09CuandoElGuardiaInteractuaPorSegundaVezConUnPersonajeCalificadoPorElPuebloComoPrometedorLeRespondeConSuSegundaFrase
+	
 	| mensaje |
 	self olvidarInteraccionesYOpiniones.
 	self hacerQueRiverwoodVeaPrometedorAHamilton.
@@ -479,23 +496,25 @@ treborElGuardia
 	^ TreborElGuardiaDeSkyrim ! !
 
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'opiniones e interacciones' stamp: 'belen 9/30/2021 14:57:42'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'opiniones e interacciones' stamp: 'belen 10/4/2021 09:17:21'!
 hacerQueElGuardiaOlvideSusInteracciones
+	
 	TreborElGuardiaDeSkyrim olvidarInteracciones.! !
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'opiniones e interacciones' stamp: 'belen 9/30/2021 14:49:28'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'opiniones e interacciones' stamp: 'belen 10/4/2021 09:19:37'!
 hacerQueRiverwoodOlvideTodasSusCalificaciones
 	
-	ElPuebloDeRiverwood olvidarInteracciones.! !
+	ElPuebloDeRiverwood olvidarCalificaciones.! !
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'opiniones e interacciones' stamp: 'belen 9/30/2021 15:44:35'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'opiniones e interacciones' stamp: 'belen 10/4/2021 09:17:33'!
 hacerQueRiverwoodVeaPrometedorAHamilton
-	"Assert isTrue: false description: 'Reemplazar esto por la implementación correspondiente'."
+	
 	
 	ElPuebloDeRiverwood actualizarOpinionSobre: self hamilton a: 'prometedor'. ! !
 
-!PruebasInteracionesConTreborElGuardia class methodsFor: 'opiniones e interacciones' stamp: 'JMB 9/25/2021 12:52:12'!
+!PruebasInteracionesConTreborElGuardia class methodsFor: 'opiniones e interacciones' stamp: 'belen 10/4/2021 09:17:39'!
 olvidarInteraccionesYOpiniones
+
 	self hacerQueElGuardiaOlvideSusInteracciones. 	
 	self hacerQueRiverwoodOlvideTodasSusCalificaciones.
 ! !
@@ -514,13 +533,13 @@ DenotativeObject subclass: #TreborElGuardiaDeSkyrim
 TreborElGuardiaDeSkyrim class
 	instanceVariableNames: 'frasesParaPrometedores cantidadDeInteraccionesPorPersonajes frasesParaDesconocidos riverwood'!
 
-!TreborElGuardiaDeSkyrim class methodsFor: 'interacciones' stamp: 'belen 9/30/2021 15:14:08'!
+!TreborElGuardiaDeSkyrim class methodsFor: 'interacciones' stamp: 'belen 10/4/2021 09:21:33'!
 interactuarCon: unPersonajeJugadorAInteractuar
 	
 			self recordarInteraccionCon: unPersonajeJugadorAInteractuar.
 			
 			 ^self responderSegunOpinionDelPuebloSobre: unPersonajeJugadorAInteractuar.
-			"self responderSegunCantidadDeInteraccionesCon: unPersonajeJugadorAInteractuar."
+			
 			
 		! !
 
@@ -584,12 +603,12 @@ responderSegunOpinionDelPuebloSobre: unPersonajeJugadorAInteractuar
 	! !
 
 
-!TreborElGuardiaDeSkyrim class methodsFor: 'as yet unclassified' stamp: 'belen 10/1/2021 11:41:57'!
+!TreborElGuardiaDeSkyrim class methodsFor: 'as yet unclassified' stamp: 'belen 10/4/2021 09:23:00'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
 	frasesParaPrometedores := #('Bienvenido aventurero!!' 'Espero que tengas una buena estadía en Riverwood' ).
-	cantidadDeInteraccionesPorPersonajes := ((Dictionary new) add: (#Hamilton->1); add: (#Tirion->1); yourself).
+	cantidadDeInteraccionesPorPersonajes := ((Dictionary new) add: (#Hamilton->1); add: (#Tirion->0); yourself).
 	frasesParaDesconocidos := #('Hola forastero' '¿Todo bien?' '¿Algún problema?' ).
 	riverwood := ElPuebloDeRiverwood.! !
 
