@@ -203,26 +203,20 @@ initialize
 	suspended:= OrderedCollection new.! !
 
 
-!CustomerBook methodsFor: 'customer management' stamp: 'belen 10/8/2021 17:26:10'!
+!CustomerBook methodsFor: 'customer management' stamp: 'belen 10/10/2021 11:19:09'!
 addCustomerNamed: aName
 
-	aName isEmpty ifTrue: [ self signalCustomerNameCannotBeEmpty ].
-	
-	((active includes: aName) or: [suspended includes: aName]) ifTrue: [ self signalCustomerAlreadyExists ].
-	
+	self verifyValidName: aName.
+	self verifyCustomerDoesNotExist: aName.
 	active add: aName ! !
 
-!CustomerBook methodsFor: 'customer management' stamp: 'belen 10/8/2021 17:13:21'!
+!CustomerBook methodsFor: 'customer management' stamp: 'belen 10/10/2021 11:33:53'!
 removeCustomerNamed: aName 
 	
-	
-	(self includesCustomerNamed: aName) ifTrue:[
-		
-		aName = (self isActive: aName) ifTrue:[^self removeCustomerNamed: aName from: active ] ifFalse:[^self removeCustomerNamed: aName from: suspended].
-		] ifFalse:[^ NotFound signal.]
+	self verifyCustomerExist: aName.
+	self remove: aName. 
 
  	
-	
 	"
 	1 to: active size do: 
 	[ :index |
@@ -245,11 +239,11 @@ removeCustomerNamed: aName
 	
 ! !
 
-!CustomerBook methodsFor: 'customer management' stamp: 'NR 4/3/2019 10:14:26'!
+!CustomerBook methodsFor: 'customer management' stamp: 'belen 10/10/2021 11:21:50'!
 suspendCustomerNamed: aName 
-	
-	(active includes: aName) ifFalse: [^CantSuspend signal].
-	
+
+	self verifyCustomerIsActive: aName.
+
 	active remove: aName.
 	
 	suspended add: aName
@@ -272,10 +266,11 @@ numberOfSuspendedCustomers
 	^suspended size! !
 
 
-!CustomerBook methodsFor: 'testing' stamp: 'NR 4/3/2019 10:14:26'!
+!CustomerBook methodsFor: 'testing' stamp: 'belen 10/10/2021 11:29:34'!
 includesCustomerNamed: aName
 
-	^(active includes: aName) or: [ suspended includes: aName ]! !
+	^(active includes: aName) or: [ suspended includes: aName ]
+! !
 
 !CustomerBook methodsFor: 'testing' stamp: 'belen 10/8/2021 16:05:18'!
 isActive: aName
@@ -287,6 +282,29 @@ isActive: aName
 isEmpty
 	
 	^active isEmpty and: [ suspended isEmpty ]! !
+
+!CustomerBook methodsFor: 'testing' stamp: 'belen 10/10/2021 11:30:00'!
+verifyCustomerDoesNotExist: aName
+
+	(self includesCustomerNamed: aName) ifTrue: [ ^self signalCustomerAlreadyExists ].
+	! !
+
+!CustomerBook methodsFor: 'testing' stamp: 'belen 10/10/2021 11:31:26'!
+verifyCustomerExist: aName
+
+	(self includesCustomerNamed: aName) ifFalse:[^ NotFound signal.].! !
+
+!CustomerBook methodsFor: 'testing' stamp: 'belen 10/10/2021 11:21:21'!
+verifyCustomerIsActive: aName
+	
+	(self isActive: aName) ifFalse: [^CantSuspend signal].
+	! !
+
+!CustomerBook methodsFor: 'testing' stamp: 'belen 10/10/2021 11:15:53'!
+verifyValidName: aName
+
+	aName isEmpty ifTrue: [ ^self signalCustomerNameCannotBeEmpty ].
+	! !
 
 
 !CustomerBook methodsFor: 'signal errors' stamp: 'HernanWilkinson 7/6/2011 17:52'!
@@ -300,7 +318,12 @@ signalCustomerNameCannotBeEmpty
 	self error: self class customerCanNotBeEmptyErrorMessage ! !
 
 
-!CustomerBook methodsFor: 'as yet unclassified' stamp: 'belen 10/8/2021 16:40:15'!
+!CustomerBook methodsFor: 'customer management-private' stamp: 'belen 10/10/2021 11:33:33'!
+remove: aName
+
+	aName = (self isActive: aName) ifTrue:[^self removeCustomerNamed: aName from: active ] ifFalse:[^self removeCustomerNamed: aName from: 	suspended].! !
+
+!CustomerBook methodsFor: 'customer management-private' stamp: 'belen 10/8/2021 16:40:15'!
 removeCustomerNamed: aName from: typeOfCustomer 
 
 	 
