@@ -504,11 +504,6 @@ greatestCommonDivisorWith: anEntero
 	^ self class with: (value gcd: anEntero integerValue).! !
 
 
-!Entero methodsFor: 'as yet unclassified' stamp: 'belen 10/23/2021 15:03:48'!
-aplicarFibo
-
-	self subclassResponsibility! !
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Entero class' category: 'Numeros-Parte2-Ejercicio'!
