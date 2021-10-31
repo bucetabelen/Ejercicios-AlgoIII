@@ -148,33 +148,42 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 16:18:29'!
-test01AgregoUnaOracionYElStackAumentaDeTamanioCorrectamente
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 12:59:05'!
+test01AddSentenceToTheStackAndTheStackGrowsInSize
 
 	|finder|
 
 	finder := SentenceFinderByPrefix new.
-	finder llenarOraciones: 'hola'.
+	finder addSentence: 'hola'.
+	finder addSentence: 'como'.
+	finder addSentence: 'todo'.
 	
 	
-	self assert: (finder cantidadTotalDeOraciones) equals: 1.! !
+	self assert: (finder cantidadTotalDeOraciones) equals: 3.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 17:14:14'!
-test02ComparoNombres
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 13:07:43'!
+test02TheSentenceAddedToTheStackHadTheSamePrefixAndTheSentencesgrowsInSize
 
 	|finder|
 	
 	finder := SentenceFinderByPrefix new.
 	
-	finder llenarOraciones: 'hola'.
+	finder addSentence: 'hola como estas'.
+	finder addSentence: 'hola'.
+	finder addSentence:'hola todo bien'.
 	
 	
 	
-	self assert: (finder find: 'ho') equals: 'hola'.
+	
+	
+	self assert: (finder find: 'hol')equals: 'hola todo bien'.
 	
 	
 	
 	! !
+
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 13:02:46'!
+test03! !
 
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
@@ -200,7 +209,7 @@ isEmpty
 	
 ! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 15:42:51'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 19:06:45'!
 pop
 	self verifyStateOfStackEmpty.
 	^stack pop! !
@@ -256,27 +265,41 @@ stackEmptyErrorDescription
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
 Object subclass: #SentenceFinderByPrefix
-	instanceVariableNames: 'stack oraciones array'
+	instanceVariableNames: 'stack sentences'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 11:12:35'!
+addSentence: aSentence
+
+	^stack push: aSentence.
+	
+	
+	
+
+	! !
 
 !SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 16:17:09'!
 cantidadTotalDeOraciones
 
 	^stack size.! !
 
-!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 17:23:48'!
-find: unaOracion
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 12:56:54'!
+find: aPrefix
 	
+	|sizeOfPrefix|
+	
+	sizeOfPrefix := aPrefix size.
 	
 
-	1 to: (stack size) do:[
+	1 to: (stack size) do:[:index |
 		|tam|
-		tam := stack top commonPrefixWith: unaOracion.
-		tam = unaOracion size ifTrue:[oraciones add: stack top].
+		 
+		tam := aPrefix commonPrefixWith: stack top.
+		tam = sizeOfPrefix ifTrue:[sentences add: stack top].
 		stack pop.
-		^oraciones at: 1].
+		^sentences at: index].
 	
 	
 	"
@@ -289,21 +312,16 @@ find: unaOracion
             ] 
     ]."! !
 
-!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 16:33:04'!
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 11:13:46'!
 initialize
 
 	stack := OOStack new.
-	oraciones := OrderedCollection new.! !
+	sentences := OrderedCollection new.! !
 
-!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 16:14:47'!
-llenarOraciones: unaOracion
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 12:42:39'!
+sentencesSize
 
-	^stack push: unaOracion.
-	
-	
-	
-
-	! !
+	^sentences size.! !
 
 
 !classDefinition: #StateOfOOStack category: 'Stack-Exercise'!
@@ -348,6 +366,11 @@ top
 
 	self subclassResponsibility.
 	! !
+
+!StateOfOOStack methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 18:58:21'!
+verifyStateOfStack
+
+	self subclassResponsibility.! !
 
 
 !classDefinition: #OOStackEmpty category: 'Stack-Exercise'!
@@ -395,13 +418,12 @@ isEmpty
 
 	^(self size = 0)! !
 
-!OOStackNotEmpty methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 15:40:27'!
+!OOStackNotEmpty methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 19:06:59'!
 pop
 
 	| removed |
 	removed := stack removeLast.
 	
-	"self verifyStateOfStack."
 	
 	^removed.
 	
