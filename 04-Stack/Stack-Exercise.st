@@ -94,7 +94,7 @@ test07TopDoesNotRemoveObjectFromStack
 	self assert: stack size = 1.
 	! !
 
-!OOStackTest methodsFor: 'test' stamp: 'HAW 4/14/2017 22:48:26'!
+!OOStackTest methodsFor: 'test' stamp: 'mely 10/31/2021 16:00:28'!
 test08CanNotPopWhenThereAreNoObjectsInTheStack
 
 	| stack  |
@@ -105,6 +105,7 @@ test08CanNotPopWhenThereAreNoObjectsInTheStack
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = OOStack stackEmptyErrorDescription ]
+		
 		
 ! !
 
@@ -161,7 +162,7 @@ test01AddSentenceToTheStackAndTheStackGrowsInSize
 	
 	self assert: (finder cantidadTotalDeOraciones) equals: 3.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 13:07:43'!
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 14:51:45'!
 test02TheSentenceAddedToTheStackHadTheSamePrefixAndTheSentencesgrowsInSize
 
 	|finder|
@@ -169,21 +170,96 @@ test02TheSentenceAddedToTheStackHadTheSamePrefixAndTheSentencesgrowsInSize
 	finder := SentenceFinderByPrefix new.
 	
 	finder addSentence: 'hola como estas'.
-	finder addSentence: 'hola'.
-	finder addSentence:'hola todo bien'.
-	
-	
-	
-	
-	
-	self assert: (finder find: 'hol')equals: 'hola todo bien'.
+
+
+	self assert: (finder find: 'hol')equals: 1.
 	
 	
 	
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 13:02:46'!
-test03! !
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 14:56:44'!
+test03SentencesAddedToTheStackHadTheSamePrefixAndTheSentencesgrowsInSize
+
+	|finder|
+	
+	finder := SentenceFinderByPrefix new.
+
+	finder addSentence: 'hola'.
+	finder addSentence: 'hola que tal'.
+	
+	self assert: (finder find: 'hol') equals: 2.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 15:42:52'!
+test04SomeSentencesAddedToTheStackHadDifferentPrefixAndTheSentencesDoNotGrowInSize
+
+	|finder|
+	
+	finder := SentenceFinderByPrefix new.
+
+	finder addSentence: 'hola'.
+	finder addSentence: 'como andas'.
+	finder addSentence: 'adios'.
+	
+	self assert: (finder find: 'hol') equals: 1.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 15:41:57'!
+test05AfterFindOperationStackKeepsSameOrder
+
+	|finder|
+	
+	finder := SentenceFinderByPrefix new.
+
+	finder addSentence: '1'.
+	finder addSentence: '2'.
+	finder addSentence: '3'.
+	
+	finder find: '1'.
+	self assert: (finder top) equals: '3'.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 16:23:45'!
+test06ValidacionDeMasDeDosFindsContinuosDevolviendoseLaCorrecta
+
+	|finder|
+	
+	finder := SentenceFinderByPrefix new.
+
+	finder addSentence: 'hola'.
+	finder addSentence: 'como andas'.
+	finder addSentence: 'adios'.
+	
+	finder find: 'hol'.
+	
+	self assert: (finder find: 'com') equals: 1.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 16:24:19'!
+test07PrefixCanNotEmpty 
+
+	| finder  |
+	
+	finder := SentenceFinderByPrefix  new.
+	
+	
+	self
+		should: [ finder find: '']
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix prefixEmptyErrorDescription ]
+		! !
+
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 16:24:57'!
+test08PrefixCanNotWhiteSpace 
+
+	| finder  |
+	
+	finder := SentenceFinderByPrefix  new.
+	
+	
+	self
+		should: [ finder find: ' ']
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix prefixEmptySpaceErrorDescription ]! !
 
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
@@ -261,11 +337,10 @@ stackEmptyErrorDescription
 	^ 'Stack is empty'
 	! !
 
-
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
 Object subclass: #SentenceFinderByPrefix
-	instanceVariableNames: 'stack sentences'
+	instanceVariableNames: 'stack'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
@@ -285,43 +360,77 @@ cantidadTotalDeOraciones
 
 	^stack size.! !
 
-!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 12:56:54'!
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 16:03:33'!
 find: aPrefix
 	
-	|sizeOfPrefix|
+	|sizeOfPrefix aux sentences|
 	
+	self validatePrefix: aPrefix .
 	sizeOfPrefix := aPrefix size.
 	
-
-	1 to: (stack size) do:[:index |
+	sentences := OrderedCollection new.
+	aux := OrderedCollection new.
+	
+ 	1 to: (stack size) do:[:index |
 		|tam|
 		 
 		tam := aPrefix commonPrefixWith: stack top.
 		tam = sizeOfPrefix ifTrue:[sentences add: stack top].
-		stack pop.
-		^sentences at: index].
-	
-	
-	"
-	1 to: typeOfCustomer size do:
-[ :index |
-        aName = (typeOfCustomer at: index)
-            ifTrue: [
-                typeOfCustomer removeAt: index.
-                ^ aName 
-            ] 
-    ]."! !
+		aux add: stack pop.
+		].
+	self updateStack: aux.
+	^sentences size.! !
 
-!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 11:13:46'!
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 15:45:56'!
 initialize
 
-	stack := OOStack new.
-	sentences := OrderedCollection new.! !
+	stack := OOStack new.! !
 
 !SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 10/31/2021 12:42:39'!
 sentencesSize
 
 	^sentences size.! !
+
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 15:22:39'!
+top
+	
+	^stack top.! !
+
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 15:39:26'!
+updateStack: aux
+	
+	|stackAux|
+	
+	stackAux  := OOStack new.
+
+	(1 to: aux size) reverseDo: [:index | stackAux push: 
+		(aux at: index)].
+	
+	^stack := stackAux.  ! !
+
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 16:17:42'!
+validatePrefix: aPrefix
+	
+	(aPrefix = '') ifTrue:[^self error: SentenceFinderByPrefix prefixEmptyErrorDescription].
+	
+	(aPrefix = ' ') ifTrue: [^self error: SentenceFinderByPrefix prefixEmptySpaceErrorDescription].! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SentenceFinderByPrefix class' category: 'Stack-Exercise'!
+SentenceFinderByPrefix class
+	instanceVariableNames: ''!
+
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 15:59:54'!
+prefixEmptyErrorDescription
+	
+	^ 'Prefix is empty'
+	! !
+
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 16:22:13'!
+prefixEmptySpaceErrorDescription
+	
+	^ 'Prefix can not include an empty space'.! !
 
 
 !classDefinition: #StateOfOOStack category: 'Stack-Exercise'!
