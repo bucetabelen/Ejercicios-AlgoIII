@@ -217,8 +217,8 @@ test05AfterFindOperationStackKeepsSameOrder
 	finder find: '1'.
 	self assert: (finder top) equals: '3'.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 16:23:45'!
-test06ValidacionDeMasDeDosFindsContinuosDevolviendoseLaCorrecta
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'mm 10/31/2021 21:44:10'!
+test06DoContinuousFindsAndReturnsTheCorrectValueInEachOne
 
 	|finder|
 	
@@ -276,10 +276,8 @@ initialize
 	
 	! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 14:55:23'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'mm 10/31/2021 21:40:44'!
 isEmpty
-
-	"(stack size = 0) ifTrue:[^true] ifFalse: [^false]."
 	
 	^stack isEmpty.
 	
@@ -305,12 +303,9 @@ size
 
 	^stack size.! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 15:17:43'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'mm 10/31/2021 21:40:59'!
 top
 
-	"(self isEmpty) ifTrue: [^self error: OOStack stackEmptyErrorDescription ]."
-
-	"^stack at: (stack size)."
 	^stack top.! !
 
 !OOStack methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 15:06:11'!
