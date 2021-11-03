@@ -66,7 +66,7 @@ test05StackBehavesLIFO
 	self assert: stack isEmpty 
 	! !
 
-!OOStackTest methodsFor: 'test' stamp: 'belen 11/1/2021 13:02:25'!
+!OOStackTest methodsFor: 'test' stamp: 'belen 11/2/2021 14:16:26'!
 test06TopReturnsLastPushedObject
 
 	| stack pushedObject |
@@ -79,7 +79,7 @@ test06TopReturnsLastPushedObject
 	self assert: stack top = pushedObject.
 	! !
 
-!OOStackTest methodsFor: 'test' stamp: 'belen 11/1/2021 13:02:25'!
+!OOStackTest methodsFor: 'test' stamp: 'belen 11/2/2021 14:16:26'!
 test07TopDoesNotRemoveObjectFromStack
 
 	| stack pushedObject |
@@ -127,7 +127,7 @@ test09CanNotPopWhenThereAreNoObjectsInTheStackAndTheStackHadObjects
 		
 ! !
 
-!OOStackTest methodsFor: 'test' stamp: 'belen 11/1/2021 13:02:25'!
+!OOStackTest methodsFor: 'test' stamp: 'belen 11/2/2021 14:16:26'!
 test10CanNotTopWhenThereAreNoObjectsInTheStack
 
 	| stack  |
@@ -149,7 +149,7 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/1/2021 12:34:37'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 12:00:05'!
 test01AddSentencesToTheStackAndTheStackGrowsInSize
 
 	|finder|
@@ -161,10 +161,10 @@ test01AddSentencesToTheStackAndTheStackGrowsInSize
 	
 
 	
-	self assert: (finder sizeOfStack) equals: 3.! !
+	self assert: (finder sizeOfStackOfSentences) equals: 3.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/1/2021 12:36:28'!
-test02TheSentenceAddedToTheStackHadTheSamePrefixAndTheSentencesgrowsInSize
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 13:03:22'!
+test02AllTheSentencesAddedToTheStackHaveTheSamePrefixAndFindReturnSameNumberOfSentences
 
 	|finder sentencesWithPrefix|
 	
@@ -177,15 +177,16 @@ test02TheSentenceAddedToTheStackHadTheSamePrefixAndTheSentencesgrowsInSize
 	sentencesWithPrefix := finder find: 'hol'.
 
 	self assert: (finder sizeOfSentencesWithPrefix: sentencesWithPrefix)equals: 3.
+	self assert: (finder find: 'hol') equals: (OrderedCollection with: 'hola' with: 'hola todo bien' with: 'hola como estas').
 	
 	
 	
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/1/2021 12:42:00'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 12:14:59'!
 test03PrefixIsCaseSensitiveAndFindDoesNotReturnSentences
 
-	|finder sentencesWithPrefix|
+	|finder sentencesWithPrefix |
 	
 	finder := SentenceFinderByPrefix new.
 
@@ -193,26 +194,30 @@ test03PrefixIsCaseSensitiveAndFindDoesNotReturnSentences
 	finder addSentence: 'hOL andas'.
 	finder addSentence: 'adios hola'.
 	
+	
+	
 	sentencesWithPrefix := finder find: 'Hol'.
-	self assert: (finder sizeOfSentencesWithPrefix: sentencesWithPrefix ) equals: 0.! !
+	
+	self assert: (finder sizeOfSentencesWithPrefix: sentencesWithPrefix)  equals: 0.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/1/2021 13:32:39'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 13:00:49'!
 test04FindJustReturnsTheSentencesThatMatchedWithThePrefix
 
-	|finder sentenceWithPrefix|
+	|finder|
 	
 	finder := SentenceFinderByPrefix new.
 
-	finder addSentence: 'hola'.
-	finder addSentence: 'como andas'.
-	finder addSentence: 'adios'.
+	finder addSentence: 'winter is coming'.
+	finder addSentence: 'winnning is everything'.
+	finder addSentence: 'the winds of Winter'.
+	finder addSentence: 'Winter is here'.
 	
-	sentenceWithPrefix := finder find: 'hol'.
 	
 	
-	self assert: (finder sizeOfSentencesWithPrefix: sentenceWithPrefix ) equals: 1.! !
+	self assert: (finder find: 'Wint') equals: (OrderedCollection with:'Winter is here').
+	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/1/2021 13:02:25'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 22:28:41'!
 test05AfterFindOperationStackKeepsSameOrder
 
 	|finder|
@@ -224,39 +229,44 @@ test05AfterFindOperationStackKeepsSameOrder
 	finder addSentence: '3'.
 	
 	finder find: '1'.
-	self assert: (finder top) equals: '3'.! !
+	finder find: '2'.
+	finder find: '3'.
+	
+	self assert: (finder topOfStackSentences) equals: '3'.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/1/2021 13:33:23'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 12:17:30'!
 test06SentencesAddedToTheStackHaveTheSamePrefixAndFindReturnsThatSentences
 
-	|finder sentenceWithPrefix|
+	|finder|
 	
 	finder := SentenceFinderByPrefix new.
 
 	finder addSentence: 'hola'.
 	finder addSentence: 'hola que tal'.
 	
-	sentenceWithPrefix := finder find: 'hol'.
 	
 	
-	self assert: (finder sizeOfSentencesWithPrefix: sentenceWithPrefix ) equals: 2.! !
+	
+	self assert: (finder find: 'hol') equals: (OrderedCollection  with: 'hola que tal' with:'hola'). ! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/1/2021 13:34:36'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 12:21:22'!
 test07FindDoesNotAcumulateTheSentencesJustReturnsTheSentencesMatchedWithTheCurrentlyFindOperation
 
-	|finder sentenceWithPrefix|
+	|finder|
 	
 	finder := SentenceFinderByPrefix new.
 
 	finder addSentence: 'hola'.
 	finder addSentence: 'como andas'.
 	finder addSentence: 'adios'.
-	
-	finder find:'hol'.
-	sentenceWithPrefix := finder find: 'com'.
+	finder addSentence: 'ho jojo'.
 	
 	
-	self assert: (finder sizeOfSentencesWithPrefix: sentenceWithPrefix ) equals: 1.! !
+	finder find: 'ad'.
+	finder find: 'com'.
+
+	
+	self assert: (finder find: 'ho') equals: (OrderedCollection  with: 'ho jojo'  with:'hola'). ! !
 
 !SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/1/2021 12:40:20'!
 test08CanNotFindWhenPrefixIsEmpty 
@@ -273,7 +283,7 @@ test08CanNotFindWhenPrefixIsEmpty
 			self assert: anError messageText = SentenceFinderByPrefix prefixEmptyErrorDescription ]
 		! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/1/2021 12:40:27'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 12:24:37'!
 test09CanNotFindWhenPrefixIsWhiteSpace 
 
 	| finder  |
@@ -287,6 +297,22 @@ test09CanNotFindWhenPrefixIsWhiteSpace
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = SentenceFinderByPrefix prefixEmptySpaceErrorDescription ]! !
 
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 12:50:42'!
+test10AfterFindOperationTheStackOfSentencesKeepsSameNumberOfSentences
+
+	|finder|
+
+	finder := SentenceFinderByPrefix new.
+	finder addSentence: 'hola'.
+	finder addSentence: 'como'.
+	finder addSentence: 'todo'.
+	
+	finder find: 'ho'.
+	
+
+	
+	self assert: (finder sizeOfStackOfSentences) equals: 3.! !
+
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
 Object subclass: #OOStack
@@ -295,15 +321,17 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'belen 10/30/2021 15:55:10'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'belen 11/2/2021 22:13:23'!
 initialize
 	
-	stack := OOStackEmpty new.
+
+	
+	stack := OrderedCollection new.
 	
 	! !
 
 
-!OOStack methodsFor: 'testing' stamp: 'mm 10/31/2021 21:40:44'!
+!OOStack methodsFor: 'testing' stamp: 'belen 11/2/2021 22:17:14'!
 isEmpty
 	
 	^stack isEmpty.
@@ -311,43 +339,50 @@ isEmpty
 ! !
 
 
-!OOStack methodsFor: 'accesing' stamp: 'belen 10/30/2021 19:06:45'!
+!OOStack methodsFor: 'accesing' stamp: 'belen 11/2/2021 22:27:06'!
 pop
-	self verifyStateOfStackEmpty.
-	^stack pop! !
+	^self verifyStateOfStack popFromStack: stack.! !
 
-!OOStack methodsFor: 'accesing' stamp: 'belen 10/30/2021 15:15:43'!
+!OOStack methodsFor: 'accesing' stamp: 'belen 11/2/2021 22:25:36'!
 push: something
 
-
-	self verifyStateOfStack.
-	stack push: something.
+	"Opcion usar switch dinamico"
+	"( stackWithState isKindOf: OOStackStateEmpty) ifTrue:[ stackWithState := OOStackStateNotEmpty new].
+	(stackWithState isKindOf: OOStackStateNotEmpty) ifTrue:[ stackWithState:= stackWithState]."
+	^ OOStackStateNotEmpty new push: something in: stack.
 	
 	
 	! !
 
-!OOStack methodsFor: 'accesing' stamp: 'belen 10/29/2021 15:06:24'!
+!OOStack methodsFor: 'accesing' stamp: 'belen 11/2/2021 22:14:06'!
 size
 
 	^stack size.! !
 
-!OOStack methodsFor: 'accesing' stamp: 'belen 11/1/2021 13:02:25'!
+!OOStack methodsFor: 'accesing' stamp: 'belen 11/2/2021 22:14:31'!
 top
 
-	^stack top.! !
+	^self verifyStateOfStack topOf: stack.! !
 
 
-!OOStack methodsFor: 'testing - private' stamp: 'belen 10/30/2021 15:06:11'!
+!OOStack methodsFor: 'testing - private' stamp: 'belen 11/2/2021 21:51:01'!
 verifyStateOfStack
-
-	stack isEmpty ifTrue:[^stack := OOStackNotEmpty new.].
+	
+	| nombre |
+	nombre := StateOfOOStack subclasses detect:[:subclass | subclass xxx: stack].
+	
+	^nombre new.
+	"( stackWithState isKindOf: OOStackStateEmpty) ifTrue:[ stackWithState := OOStackStateNotEmpty new].
+	(stackWithState isKindOf: OOStackStateNotEmpty) ifTrue:[ stackWithState:= stackWithState]."
+	
+	"stack isEmpty ifTrue:[^stackWithState := OOStackStateNotEmpty new.]."
 	
 ! !
 
-!OOStack methodsFor: 'testing - private' stamp: 'belen 11/1/2021 12:56:31'!
+!OOStack methodsFor: 'testing - private' stamp: 'belen 11/2/2021 14:55:30'!
 verifyStateOfStackEmpty
 
-	stack isEmpty ifTrue:[^stack := OOStackEmpty new.].! !
+	stack isEmpty ifTrue:[^stackWithState := OOStackStateEmpty new.].! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -364,7 +399,7 @@ stackEmptyErrorDescription
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
 Object subclass: #SentenceFinderByPrefix
-	instanceVariableNames: 'stack'
+	instanceVariableNames: 'stackOfSentences'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
@@ -374,65 +409,76 @@ sizeOfSentencesWithPrefix: sentencesWithPrefix
 
 	^sentencesWithPrefix size.! !
 
-!SentenceFinderByPrefix methodsFor: 'accesing' stamp: 'belen 11/1/2021 12:12:50'!
-sizeOfStack
+!SentenceFinderByPrefix methodsFor: 'accesing' stamp: 'belen 11/2/2021 12:00:05'!
+sizeOfStackOfSentences
 
-	^stack size.! !
+	^stackOfSentences size.! !
 
-!SentenceFinderByPrefix methodsFor: 'accesing' stamp: 'belen 11/1/2021 13:02:25'!
-top
-	
-	^stack top.! !
+!SentenceFinderByPrefix methodsFor: 'accesing' stamp: 'belen 11/2/2021 14:18:02'!
+topOfStackSentences
+
+	^stackOfSentences top.! !
 
 
-!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'mely 10/31/2021 15:45:56'!
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'belen 11/2/2021 11:58:27'!
 initialize
 
-	stack := OOStack new.! !
+	stackOfSentences := OOStack new.! !
 
 
-!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'belen 10/31/2021 11:12:35'!
+!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'belen 11/2/2021 11:58:27'!
 addSentence: aSentence
 
-	^stack push: aSentence.
+	^stackOfSentences push: aSentence.
 	
 	
 	
 
 	! !
 
-!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'belen 11/1/2021 13:02:25'!
+!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'belen 11/2/2021 14:40:53'!
 find: aPrefix
-	
-	|sizeOfPrefix aux sentencesWithPrefix|
-	
-	self validatePrefixIsValid: aPrefix .
-	sizeOfPrefix := aPrefix size.
-	
-	sentencesWithPrefix := OrderedCollection new.
-	aux := OrderedCollection new.
-	
- 	1 to: (stack size) do:[:index |
-		|tam|
-		 
-		tam := aPrefix commonPrefixWith: stack top.
-		tam = sizeOfPrefix ifTrue:[sentencesWithPrefix add: stack top].
-		aux add: stack pop.
-		].
-	self updateStack: aux.
-	^sentencesWithPrefix.! !
+
+	self validatePrefixIsValid: aPrefix.
+	^self findSentencesWithSame: aPrefix.! !
 
 
-!SentenceFinderByPrefix methodsFor: 'testing' stamp: 'belen 11/1/2021 12:11:26'!
+!SentenceFinderByPrefix methodsFor: 'testing - private' stamp: 'belen 11/2/2021 14:16:26'!
+sentenceHasSamePrefix: aPrefix
+
+	^ (aPrefix commonPrefixWith: stackOfSentences top)  = aPrefix size. ! !
+
+!SentenceFinderByPrefix methodsFor: 'testing - private' stamp: 'belen 11/2/2021 14:44:22'!
 validatePrefixIsValid: aPrefix
 	
 	(aPrefix = '') ifTrue:[^self error: SentenceFinderByPrefix prefixEmptyErrorDescription].
 	
-	(aPrefix = ' ') ifTrue: [^self error: SentenceFinderByPrefix prefixEmptySpaceErrorDescription].! !
+	(aPrefix = ' ') ifTrue: [^self error: SentenceFinderByPrefix prefixEmptySpaceErrorDescription].
+	
+! !
 
 
-!SentenceFinderByPrefix methodsFor: 'operations - private' stamp: 'mely 10/31/2021 15:39:26'!
-updateStack: aux
+!SentenceFinderByPrefix methodsFor: 'operations - private' stamp: 'belen 11/2/2021 14:16:26'!
+findSentencesWithSame: aPrefix
+
+	|sentencesWithPrefix aux |
+	
+	
+	sentencesWithPrefix := OrderedCollection new.
+	aux := OrderedCollection new.
+	
+
+ 	1 to: (stackOfSentences size) do:[:index |
+		
+		(self sentenceHasSamePrefix: aPrefix)  ifTrue:[sentencesWithPrefix add: stackOfSentences top].
+		aux add: stackOfSentences pop.
+	].
+
+	self updateStackOfSentences: aux.
+	^sentencesWithPrefix.! !
+
+!SentenceFinderByPrefix methodsFor: 'operations - private' stamp: 'belen 11/2/2021 12:45:33'!
+updateStackOfSentences: aux
 	
 	|stackAux|
 	
@@ -441,7 +487,7 @@ updateStack: aux
 	(1 to: aux size) reverseDo: [:index | stackAux push: 
 		(aux at: index)].
 	
-	^stack := stackAux.  ! !
+	^stackOfSentences := stackAux.  ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -463,125 +509,109 @@ prefixEmptySpaceErrorDescription
 
 !classDefinition: #StateOfOOStack category: 'Stack-Exercise'!
 Object subclass: #StateOfOOStack
-	instanceVariableNames: 'stack'
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!StateOfOOStack methodsFor: 'as yet unclassified' stamp: 'belen 11/1/2021 12:48:28'!
-initialize
+
+!StateOfOOStack methodsFor: 'accesing' stamp: 'belen 11/2/2021 15:04:45'!
+popFromStack: stack
 
 	self subclassResponsibility.! !
 
-
-!StateOfOOStack methodsFor: 'testing' stamp: 'belen 10/30/2021 14:53:41'!
-isEmpty
-
+!StateOfOOStack methodsFor: 'accesing' stamp: 'belen 11/2/2021 14:48:40'!
+push: something in: stack
 	self subclassResponsibility.! !
 
-!StateOfOOStack methodsFor: 'testing' stamp: 'belen 10/30/2021 15:19:08'!
-size
-
-	self subclassResponsibility.! !
-
-
-!StateOfOOStack methodsFor: 'accesing' stamp: 'belen 10/30/2021 15:39:57'!
-pop
-
-	self subclassResponsibility.! !
-
-!StateOfOOStack methodsFor: 'accesing' stamp: 'belen 10/30/2021 15:09:46'!
-push: something
-
-	self subclassResponsibility.! !
-
-!StateOfOOStack methodsFor: 'accesing' stamp: 'belen 11/1/2021 13:02:25'!
-top
+!StateOfOOStack methodsFor: 'accesing' stamp: 'belen 11/2/2021 14:50:10'!
+topOf: stack
 
 	self subclassResponsibility.
 	! !
 
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'StateOfOOStack class' category: 'Stack-Exercise'!
+StateOfOOStack class
+	instanceVariableNames: ''!
+
+!StateOfOOStack class methodsFor: 'as yet unclassified' stamp: 'belen 11/2/2021 21:47:43'!
+xxx: stack
+
+	self subclassResponsibility! !
+
 
-!classDefinition: #OOStackEmpty category: 'Stack-Exercise'!
-StateOfOOStack subclass: #OOStackEmpty
+!classDefinition: #OOStackStateEmpty category: 'Stack-Exercise'!
+StateOfOOStack subclass: #OOStackStateEmpty
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStackEmpty methodsFor: 'testing' stamp: 'belen 10/30/2021 15:47:37'!
-isEmpty
 
-	^true.! !
-
-
-!OOStackEmpty methodsFor: 'accesing' stamp: 'belen 10/30/2021 15:51:20'!
-pop
+!OOStackStateEmpty methodsFor: 'accesing' stamp: 'belen 11/2/2021 15:04:45'!
+popFromStack: stack
 
 	^self error: OOStack stackEmptyErrorDescription.! !
 
-!OOStackEmpty methodsFor: 'accesing' stamp: 'belen 11/1/2021 12:46:59'!
-push: something
+!OOStackStateEmpty methodsFor: 'accesing' stamp: 'belen 11/2/2021 14:51:53'!
+push: something in: stack
 	
 	^self error: OOStack stackEmptyErrorDescription.! !
 
-!OOStackEmpty methodsFor: 'accesing' stamp: 'belen 10/30/2021 15:52:38'!
-size
+!OOStackStateEmpty methodsFor: 'accesing' stamp: 'belen 11/2/2021 14:52:11'!
+topOf:stack
 
 	^self error: OOStack stackEmptyErrorDescription.! !
 
-!OOStackEmpty methodsFor: 'accesing' stamp: 'belen 11/1/2021 13:02:25'!
-top
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-	^self error: OOStack stackEmptyErrorDescription.! !
+!classDefinition: 'OOStackStateEmpty class' category: 'Stack-Exercise'!
+OOStackStateEmpty class
+	instanceVariableNames: ''!
 
+!OOStackStateEmpty class methodsFor: 'as yet unclassified' stamp: 'belen 11/2/2021 21:48:41'!
+xxx: stack
 
-!OOStackEmpty methodsFor: 'as yet unclassified' stamp: 'belen 11/1/2021 12:48:45'!
-initialize! !
+	^stack isEmpty.! !
 
 
-!classDefinition: #OOStackNotEmpty category: 'Stack-Exercise'!
-StateOfOOStack subclass: #OOStackNotEmpty
+!classDefinition: #OOStackStateNotEmpty category: 'Stack-Exercise'!
+StateOfOOStack subclass: #OOStackStateNotEmpty
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStackNotEmpty methodsFor: 'as yet unclassified' stamp: 'belen 11/1/2021 12:48:10'!
-initialize
+!OOStackStateNotEmpty methodsFor: 'accesing' stamp: 'belen 11/2/2021 15:04:45'!
+popFromStack: stack
 
-	stack := OrderedCollection new.! !
-
-
-!OOStackNotEmpty methodsFor: 'accesing' stamp: 'belen 10/30/2021 19:06:59'!
-pop
-
-	| removed |
-	removed := stack removeLast.
 	
-	
-	^removed.
+	^ stack removeLast.
 	
 	! !
 
-!OOStackNotEmpty methodsFor: 'accesing' stamp: 'belen 10/30/2021 12:46:35'!
-push: something
+!OOStackStateNotEmpty methodsFor: 'accesing' stamp: 'belen 11/2/2021 22:16:31'!
+push: something in: stack
 
-	stack addLast: something.
+	^stack addLast: something.
 	! !
 
-!OOStackNotEmpty methodsFor: 'accesing' stamp: 'belen 10/30/2021 15:19:24'!
-size
-
-	^stack size.! !
-
-!OOStackNotEmpty methodsFor: 'accesing' stamp: 'belen 11/1/2021 13:02:25'!
-top
+!OOStackStateNotEmpty methodsFor: 'accesing' stamp: 'belen 11/2/2021 14:51:19'!
+topOf: stack
 
 	^stack at: (stack size)! !
 
 
-!OOStackNotEmpty methodsFor: 'testing' stamp: 'belen 10/30/2021 15:39:03'!
-isEmpty
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-	^(self size = 0)! !
+!classDefinition: 'OOStackStateNotEmpty class' category: 'Stack-Exercise'!
+OOStackStateNotEmpty class
+	instanceVariableNames: ''!
+
+!OOStackStateNotEmpty class methodsFor: 'as yet unclassified' stamp: 'belen 11/2/2021 22:22:55'!
+xxx: stack
+
+	^(stack isEmpty not).
+	! !
