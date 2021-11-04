@@ -163,7 +163,7 @@ test01AddSentencesToTheStackAndTheStackGrowsInSize
 	
 	self assert: (finder sizeOfStackOfSentences) equals: 3.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 13:03:22'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 23:37:05'!
 test02AllTheSentencesAddedToTheStackHaveTheSamePrefixAndFindReturnSameNumberOfSentences
 
 	|finder sentencesWithPrefix|
@@ -173,11 +173,12 @@ test02AllTheSentencesAddedToTheStackHaveTheSamePrefixAndFindReturnSameNumberOfSe
 	finder addSentence: 'hola como estas'.
 	finder addSentence: 'hola todo bien'.
 	finder addSentence: 'hola'.
+	finder addSentence: 'hola'.
 	
 	sentencesWithPrefix := finder find: 'hol'.
 
-	self assert: (finder sizeOfSentencesWithPrefix: sentencesWithPrefix)equals: 3.
-	self assert: (finder find: 'hol') equals: (OrderedCollection with: 'hola' with: 'hola todo bien' with: 'hola como estas').
+	self assert: (finder sizeOfSentencesWithPrefix: sentencesWithPrefix)equals: 4.
+	self assert: (finder find: 'hol') equals: (OrderedCollection with: 'hola' with: 'hola' with: 'hola todo bien' with: 'hola como estas').
 	
 	
 	
@@ -217,7 +218,7 @@ test04FindJustReturnsTheSentencesThatMatchedWithThePrefix
 	self assert: (finder find: 'Wint') equals: (OrderedCollection with:'Winter is here').
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 22:28:41'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 23:03:57'!
 test05AfterFindOperationStackKeepsSameOrder
 
 	|finder|
@@ -228,29 +229,15 @@ test05AfterFindOperationStackKeepsSameOrder
 	finder addSentence: '2'.
 	finder addSentence: '3'.
 	
-	finder find: '1'.
+	
 	finder find: '2'.
+	finder find: '1'.
 	finder find: '3'.
 	
 	self assert: (finder topOfStackSentences) equals: '3'.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 12:17:30'!
-test06SentencesAddedToTheStackHaveTheSamePrefixAndFindReturnsThatSentences
-
-	|finder|
-	
-	finder := SentenceFinderByPrefix new.
-
-	finder addSentence: 'hola'.
-	finder addSentence: 'hola que tal'.
-	
-	
-	
-	
-	self assert: (finder find: 'hol') equals: (OrderedCollection  with: 'hola que tal' with:'hola'). ! !
-
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/2/2021 12:21:22'!
-test07FindDoesNotAcumulateTheSentencesJustReturnsTheSentencesMatchedWithTheCurrentlyFindOperation
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 23:07:22'!
+test06FindDoesNotAcumulateTheSentencesJustReturnsTheSentencesThatMatchedWithTheCurrentlyFindOperation
 
 	|finder|
 	
@@ -268,8 +255,8 @@ test07FindDoesNotAcumulateTheSentencesJustReturnsTheSentencesMatchedWithTheCurre
 	
 	self assert: (finder find: 'ho') equals: (OrderedCollection  with: 'ho jojo'  with:'hola'). ! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 20:57:08'!
-test08CanNotFindWhenPrefixIsEmpty 
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 23:07:50'!
+test07CanNotFindWhenPrefixIsEmpty 
 
 	| finder  |
 	
@@ -284,8 +271,8 @@ test08CanNotFindWhenPrefixIsEmpty
 			self assert: anError messageText = SentenceFinderByPrefix prefixEmptyErrorDescription ]
 		! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 21:01:33'!
-test09CanNotFindWhenPrefixIsWhiteSpace 
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 23:11:47'!
+test08CanNotFindWhenPrefixIsWhiteSpace 
 
 	| finder  |
 	
@@ -293,13 +280,47 @@ test09CanNotFindWhenPrefixIsWhiteSpace
 	
 	
 	self
-		should: [ finder prefixIsValid: 'hola  como todo esta']
+		should: [ finder prefixIsValid: ' ']
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = SentenceFinderByPrefix prefixEmptySpaceErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'Melany 11/3/2021 13:23:31'!
-test10AfterFindOperationTheStackOfSentencesKeepsSameNumberOfSentences
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 23:33:48'!
+test10CanNotFindWhenPrefixContainsWhiteSpace 
+
+	| finder  |
+	
+	finder := SentenceFinderByPrefix  new.
+	
+	
+	self
+		should: [ finder prefixIsValid: 'hola  como todo  esta ']
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix prefixEmptySpaceErrorDescription ]! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 23:33:58'!
+test11FindCanReturnDuplicateSentences
+
+	|finder|
+	
+	finder := SentenceFinderByPrefix new.
+	
+	finder addSentence: 'Winter is here'.
+	finder addSentence: 'Winter is comming'.
+	finder addSentence: 'winnning is everything'.
+	finder addSentence: 'Winter is comming'.
+	finder addSentence: 'the winds of Winter'.
+	finder addSentence: 'Winter is here'.
+	
+	
+	
+	self assert: (finder find: 'Wint') equals: (OrderedCollection with:'Winter is here' with: 'Winter is comming' with: 'Winter is comming' with: 'Winter is here').
+	
+! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 23:08:06'!
+test9AfterFindOperationTheStackOfSentencesKeepsSameNumberOfSentences
 
 	|finder|
 
@@ -430,8 +451,8 @@ prefixIsValid: aPrefix
 	
 ! !
 
-!SentenceFinderByPrefix methodsFor: 'testing - private' stamp: 'belen 11/2/2021 14:16:26'!
-sentenceHasSamePrefix: aPrefix
+!SentenceFinderByPrefix methodsFor: 'testing - private' stamp: 'belen 11/3/2021 23:01:26'!
+sentenceHasSamePrefix: aPrefix 
 
 	^ (aPrefix commonPrefixWith: stackOfSentences top)  = aPrefix size. ! !
 
@@ -448,36 +469,36 @@ initialize
 	stackOfSentences := OOStack new.! !
 
 
-!SentenceFinderByPrefix methodsFor: 'operations - private' stamp: 'Melany 11/3/2021 18:37:03'!
+!SentenceFinderByPrefix methodsFor: 'operations - private' stamp: 'belen 11/3/2021 22:58:58'!
 findSentencesWithSamePrefix: aPrefix
 
-	|sentencesWithPrefix aux |
+	|sentencesWithPrefix copyOfTheStackSentences |
 	
 	
 	sentencesWithPrefix := OrderedCollection new.
-	aux := OrderedCollection new.
+	copyOfTheStackSentences := OrderedCollection new.
 	
 
  	1 to: (stackOfSentences size) do:[:index |
 		
 		(self sentenceHasSamePrefix: aPrefix)  ifTrue:[sentencesWithPrefix add: stackOfSentences top].
-		aux add: stackOfSentences pop.
+		copyOfTheStackSentences add: stackOfSentences pop.
 	].
 
-	self updateStackOfSentences: aux.
+	self updateStackOfSentencesWith: copyOfTheStackSentences.
 	^sentencesWithPrefix.! !
 
-!SentenceFinderByPrefix methodsFor: 'operations - private' stamp: 'belen 11/2/2021 12:45:33'!
-updateStackOfSentences: aux
+!SentenceFinderByPrefix methodsFor: 'operations - private' stamp: 'belen 11/3/2021 22:59:52'!
+updateStackOfSentencesWith: copyOfTheStackSentences
 	
-	|stackAux|
+	|auxilaryStack|
 	
-	stackAux  := OOStack new.
+	auxilaryStack  := OOStack new.
 
-	(1 to: aux size) reverseDo: [:index | stackAux push: 
-		(aux at: index)].
+	(1 to: copyOfTheStackSentences size) reverseDo: [:index | auxilaryStack push: 
+		(copyOfTheStackSentences at: index)].
 	
-	^stackOfSentences := stackAux.  ! !
+	^stackOfSentences := auxilaryStack.  ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
