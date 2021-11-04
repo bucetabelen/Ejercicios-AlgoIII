@@ -268,21 +268,23 @@ test07FindDoesNotAcumulateTheSentencesJustReturnsTheSentencesMatchedWithTheCurre
 	
 	self assert: (finder find: 'ho') equals: (OrderedCollection  with: 'ho jojo'  with:'hola'). ! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'Melany 11/3/2021 18:00:53'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 20:57:08'!
 test08CanNotFindWhenPrefixIsEmpty 
 
 	| finder  |
 	
 	finder := SentenceFinderByPrefix  new.
 	
+	
+
 	self
-		should: [ finder find: '']
+		should: [ finder prefixIsValid: ''.]
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = SentenceFinderByPrefix prefixEmptyErrorDescription ]
 		! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'Melany 11/3/2021 18:17:01'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'belen 11/3/2021 21:01:33'!
 test09CanNotFindWhenPrefixIsWhiteSpace 
 
 	| finder  |
@@ -291,7 +293,7 @@ test09CanNotFindWhenPrefixIsWhiteSpace
 	
 	
 	self
-		should: [ finder prefixIsValid: 'hola ']
+		should: [ finder prefixIsValid: 'hola  como todo esta']
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = SentenceFinderByPrefix prefixEmptySpaceErrorDescription ]! !
@@ -311,16 +313,6 @@ test10AfterFindOperationTheStackOfSentencesKeepsSameNumberOfSentences
 
 	
 	self assert: (finder sizeOfStackOfSentences) equals: 3.! !
-
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'Melany 11/3/2021 18:17:01'!
-test11V
-
-	| finder |
-	
-	finder := SentenceFinderByPrefix new.
-	
-	self assert: (finder prefixIsValid: ' hola ') equals: False.! !
-
 
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
@@ -430,10 +422,11 @@ find: aPrefix
 	^self findSentencesWithSamePrefix: aPrefix.! !
 
 
-!SentenceFinderByPrefix methodsFor: 'testing - private' stamp: 'Melany 11/3/2021 18:17:01'!
+!SentenceFinderByPrefix methodsFor: 'testing - private' stamp: 'belen 11/3/2021 21:04:53'!
 prefixIsValid: aPrefix
-	
-	(aPrefix withoutSeparators = aPrefix) ifFalse: [ ^ SentenceFinderByPrefix prefixEmptySpaceErrorDescription ].
+	. 
+	(aPrefix sameAs: '') ifTrue:[ ^self error: SentenceFinderByPrefix prefixEmptyErrorDescription].
+	(aPrefix withoutSeparators = aPrefix) ifFalse: [ ^ self error: SentenceFinderByPrefix prefixEmptySpaceErrorDescription ].
 	
 ! !
 
