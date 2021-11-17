@@ -1,11 +1,11 @@
-!classDefinition: #TestDeMovimientoMarsRover category: 'TDD-MarsRover'!
-TestCase subclass: #TestDeMovimientoMarsRover
-	instanceVariableNames: 'puntoCardinalNorte puntoCardinalSur puntoCardinalEste puntoCardinalOeste posicionInicial'
+!classDefinition: #TestDeMovimientoDeMarsRover category: 'TDD-MarsRover'!
+TestCase subclass: #TestDeMovimientoDeMarsRover
+	instanceVariableNames: 'puntoCardinalNorte puntoCardinalSur puntoCardinalEste puntoCardinalOeste posicionInicial cadenaDeComandosHaciaAdelante cadenaDeComandosHaciaAtras'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TDD-MarsRover'!
 
-!TestDeMovimientoMarsRover methodsFor: 'setUp' stamp: 'belen 11/16/2021 15:14:37'!
+!TestDeMovimientoDeMarsRover methodsFor: 'setUp' stamp: 'Melany 11/17/2021 13:09:27'!
 setUp
 
 	puntoCardinalNorte :=  'N'.
@@ -13,196 +13,184 @@ setUp
 	puntoCardinalEste := 'E'.
 	puntoCardinalOeste := 'O'.
 	
+	cadenaDeComandosHaciaAdelante := 'ffff'.
+	cadenaDeComandosHaciaAtras := 'bbbb'.
+	
 	posicionInicial := (1@1).! !
 
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test02ElMovimientoDeMarsRoverSeInicializaConUnPuntoCardinalInvalidoYSeLanzaUnaExcepcion
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:14:09'!
+test01ElMovimientoDeMarsRoverSeInicializaConUnPuntoCardinalInvalidoYSeLanzaUnaExcepcion
 
 	|puntoCardinalErroneo|
 	
 	puntoCardinalErroneo := 'P'.
 
-	
-	
+
 	self 
-	should: [MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalErroneo ]
+	should: [self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalErroneo ]
 	raise: Error
 	withExceptionDo: [ :anError | self assert: anError messageText equals:MovimientoDeMarsRover errorPuntoCardinalEsInvalido ].
 
 ! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test05SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAdelanteEnDireccionAlNorte
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:14:17'!
+test02SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAdelanteEnDireccionAlNorte
 
-	|xxx cadena posicionDestino |
+	|movimientoDeMarsRover posicionDestino |
 		
 	posicionDestino := (5@1).
-		
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalNorte .
-	cadena := 'ffff'.
+
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalNorte.
 	
-	
-	"mov -> validarSecuencia -> movHacia y movRotar"
-	xxx movimiento: cadena.
+	movimientoDeMarsRover movimiento: cadenaDeComandosHaciaAdelante .
 
+	self assert: true equals: (movimientoDeMarsRover estaEnLaPosicion: posicionDestino).! !
 
-	self assert: true equals: (xxx estaEnLaPosicion: posicionDestino).! !
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:14:24'!
+test03SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAdelanteEnDireccionAlSur
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test07SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAdelanteEnDireccionAlSur
-
-	|xxx cadena posicion |
+	|movimientoDeMarsRover posicion |
 		
 
 	posicion := (5@1).
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicion andWithCardinalPoint: puntoCardinalSur .
-	cadena := 'ffff'.
+	movimientoDeMarsRover :=  self iniciarMovimientoDeMarsRoverEnLaPosicion: posicion haciaElPuntoCardinal: puntoCardinalSur .
 	
-	
-	"mov -> validarSecuencia -> movHacia y movRotar"
-	xxx movimiento: cadena.
 
-	self assert: true equals: (xxx estaEnLaPosicion: posicionInicial).! !
+	movimientoDeMarsRover movimiento: cadenaDeComandosHaciaAdelante .
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test09SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAtrasEnDireccionAlNorte
+	self assert: true equals: (movimientoDeMarsRover estaEnLaPosicion: posicionInicial).! !
 
-	|xxx cadena posicion |
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:20:50'!
+test04SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAtrasEnDireccionAlNorte
+
+	|movimientoDeMarsRover posicion posicionDestino |
 	
 	posicion := (3@1).
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicion andWithCardinalPoint: puntoCardinalNorte .
-	cadena := 'bb'.
+	movimientoDeMarsRover :=  self iniciarMovimientoDeMarsRoverEnLaPosicion: posicion haciaElPuntoCardinal: puntoCardinalNorte .
 	
+	movimientoDeMarsRover movimiento: cadenaDeComandosHaciaAtras .
+	posicionDestino := (-1@1).
 	
-	"mov -> validarSecuencia -> movHacia y movRotar"
-	xxx movimiento: cadena.
-
-	"self assert: (xxx movimiento: cadena) equals: (3@1)."
-	self assert:  (xxx estaEnLaPosicion: posicionInicial) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test10SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverEnDireccionAlNorte
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:20:59'!
+test05SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverEnDireccionAlNorte
 
-	|xxx cadena posicionDestino|
+	|movimientoDeMarsRover cadena posicionDestino|
 
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalNorte.
+	movimientoDeMarsRover :=  self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalNorte.
+
 	cadena := 'frfrf'.
 	
 	posicionDestino := (1@2).
 	
-	"mov -> validarSecuencia -> movHacia y movRotar"
-	xxx movimiento: cadena.
+	movimientoDeMarsRover movimiento: cadena.
 
 	
-	self assert:  (xxx estaEnLaPosicion: posicionDestino) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino) equals: true.
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test11SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAdelanteEnDireccionAlEste
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:21:05'!
+test06SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAdelanteEnDireccionAlEste
 
-	|xxx cadena posicionDestino |
+	|movimientoDeMarsRover posicionDestino |
 		
 
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalEste.
-	cadena := 'ffff'.
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalEste.
+	
 	posicionDestino := (1@5).
 	
-	"mov -> validarSecuencia -> movHacia y movRotar"
-	xxx movimiento: cadena.
+
+	movimientoDeMarsRover movimiento: cadenaDeComandosHaciaAdelante .
 
 
-	self assert:  (xxx estaEnLaPosicion: posicionDestino ) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test12SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAtrasEnDireccionAlEste
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:21:12'!
+test07SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAtrasEnDireccionAlEste
 
-	|xxx cadena posicion posicionDestino puntoCardinal|
+	|movimientoDeMarsRover posicion posicionDestino |
 		
-	puntoCardinal := 'E'.
 	posicion := (2@5).
 	posicionDestino := (2@1).
-	xxx := MovimientoDeMarsRover initializeWith: posicion andWithCardinalPoint: puntoCardinal.
-	cadena := 'bbbb'.
 	
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicion haciaElPuntoCardinal: puntoCardinalEste.
+
 	
-	"mov -> validarSecuencia -> movHacia y movRotar"
-	xxx movimiento: cadena.
+	movimientoDeMarsRover movimiento: cadenaDeComandosHaciaAtras .
 
 
-	self assert:  (xxx estaEnLaPosicion: posicionDestino ) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:54'!
-test14SeRecibeUnaCadenaDeComandosParaMoverseEnDireccionAlOesteYMarsRoverSeMueveHaciaAdelante
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:21:20'!
+test08SeRecibeUnaCadenaDeComandosParaMoverseEnDireccionAlOesteYMarsRoverSeMueveHaciaAdelante
 
-	|xxx cadena posicion puntoCardinal|
+	|movimientoDeMarsRover posicion |
 	
 	posicion := (1@5).
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicion andWithCardinalPoint: puntoCardinalOeste .
-	cadena := 'ffff'.
-	
-	
-	"mov -> validarSecuencia -> movHacia y movRotar"
-	xxx movimiento: cadena.
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicion haciaElPuntoCardinal: puntoCardinalOeste.
 
 	
-	self assert:  (xxx estaEnLaPosicion: posicionInicial) equals: true.
+	movimientoDeMarsRover movimiento: cadenaDeComandosHaciaAdelante .
+
+	
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionInicial) equals: true.
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test16SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAtrasEnDireccionAlOeste
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:21:28'!
+test09SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAtrasEnDireccionAlOeste
 
-	|xxx cadena posicionDestino |
+	| movimientoDeMarsRover posicionDestino |
 		
 	
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalOeste .
-	cadena := 'bbb'.
-	posicionDestino := (1@4).
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalOeste.
+
+	posicionDestino := (1@5).
 	
-	"mov -> validarSecuencia -> movHacia y movRotar"
-	xxx movimiento: cadena.
+	movimientoDeMarsRover movimiento: cadenaDeComandosHaciaAtras .
 
 
 	
-	self assert:  (xxx estaEnLaPosicion: posicionDestino) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino) equals: true.
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test18SeRecibeUnaCadenaDeComandosParaMoverseHaciaDistintosSentidosApuntandoHaciaElNorteYMarsRoverSeMueve
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:21:36'!
+test10SeRecibeUnaCadenaDeComandosParaMoverseHaciaDistintosSentidosApuntandoHaciaElNorteYMarsRoverSeMueve
 
-	|xxx cadena posicionDestino |
+	|movimientoDeMarsRover cadena posicionDestino |
 		
 	posicionDestino := (3@1).
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalNorte.
+	movimientoDeMarsRover :=  self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalNorte.
 	cadena := 'ffbfbf'.
 	
-	xxx movimiento: cadena.
+	movimientoDeMarsRover movimiento: cadena.
 
 
-	self assert:  (xxx estaEnLaPosicion: posicionDestino) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino) equals: true.
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test19ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElNorteYCambiaDeDireccionHaciaElOeste
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:21:43'!
+test11ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElNorteYCambiaDeDireccionHaciaElOeste
 
-	|xxx movimiento   posicionDestino |
+	|movimientoDeMarsRover movimiento   posicionDestino |
 		
 
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalNorte .
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalNorte.
 	
 	movimiento := 'ffl'.
 	posicionDestino := (3@1).
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 	
-	self assert: true equals:  xxx estaEnLaDireccionOeste .
+	self assert: true equals:  movimientoDeMarsRover estaEnLaDireccionOeste .
 	
-	self assert:  (xxx estaEnLaPosicion: posicionDestino) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino) equals: true.
 	
 	
 	
@@ -210,43 +198,45 @@ test19ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElNorteYCambiaDeDireccionHaci
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:54'!
-test20ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElEsteYCambiaDeDireccionHaciaElNorte
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:21:51'!
+test12ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElEsteYCambiaDeDireccionHaciaElNorte
 
-	|xxx movimiento posicionDestino |
+	|movimientoDeMarsRover movimiento posicionDestino |
 		
 
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalEste.
+	movimientoDeMarsRover :=  self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalEste.
+
 	movimiento := 'ffflf'.
 	
 	posicionDestino := (2@4).
 	
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 	
-	self assert: true equals: xxx estaEnLaDireccionNorte .
-	self assert:  (xxx estaEnLaPosicion: posicionDestino) equals: true.
+	self assert: true equals: movimientoDeMarsRover estaEnLaDireccionNorte .
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino) equals: true.
 	
 	
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test21ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElSurYCambiaDeDireccionHaciaElEste
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:21:59'!
+test13ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElSurYCambiaDeDireccionHaciaElEste
 
-	|xxx movimiento posicion posicionDestino|
+	|movimientoDeMarsRover movimiento posicion posicionDestino|
 		
 
 	posicion := (4@2).
 		
 	posicionDestino := (3@2).
-	xxx := MovimientoDeMarsRover initializeWith: posicion andWithCardinalPoint: puntoCardinalSur.
+	movimientoDeMarsRover :=  self iniciarMovimientoDeMarsRoverEnLaPosicion: posicion haciaElPuntoCardinal: puntoCardinalSur.
+
 	movimiento := 'fl'.
 	
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 
-	self assert:  (xxx estaEnLaPosicion: posicionDestino ) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
 	
-	self assert:  true equals:  xxx estaEnLaDireccionEste .
+	self assert:  true equals:  movimientoDeMarsRover estaEnLaDireccionEste .
 	
 	
 	
@@ -254,130 +244,129 @@ test21ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElSurYCambiaDeDireccionHaciaE
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test22ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElOesteYCambiaDeDireccionHaciaElNorte
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:22:09'!
+test14ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElOesteYCambiaDeDireccionHaciaElNorte
 
-	|xxx movimiento posicionDestino |
+	|movimientoDeMarsRover movimiento posicionDestino |
 		
 	
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalOeste .
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalOeste .
 	movimiento := 'br'.
 	
 	posicionDestino := (1@2).
 	
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 	
-	self assert:  (xxx estaEnLaPosicion: posicionDestino ) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
 	
 	
 	
-	self assert: true equals:  xxx estaEnLaDireccionNorte.
+	self assert: true equals:  movimientoDeMarsRover estaEnLaDireccionNorte.
 
 	
 	
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:54'!
-test23MarsRoversSeMueveInicialmenteHaciaElOesteLuegoHaciaElNorteYFinalmenteHaciaElEste
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:22:19'!
+test15MarsRoversSeMueveInicialmenteHaciaElOesteLuegoHaciaElNorteYFinalmenteHaciaElEste
 
-	|xxx movimiento posicionDestino |
+	|movimientoDeMarsRover movimiento posicionDestino |
 		
 	
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalOeste .
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalOeste. 
+
 	movimiento := 'brr'.
 	
 	posicionDestino := (1@2).
 	
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 	
-	self assert:  (xxx estaEnLaPosicion: posicionDestino ) equals: true.
-	self assert:  true equals:  xxx estaEnLaDireccionEste .
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
+	self assert:  true equals:  movimientoDeMarsRover estaEnLaDireccionEste .
 
 	
 	
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test24ElMovimientoDeMarsRoversSeMueveInicialmenteHaciaElOesteLuegoHaciaElNorteLuegoHaciaElEsteYFinalmenteHaciaElSur
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:22:26'!
+test16ElMovimientoDeMarsRoversSeMueveInicialmenteHaciaElOesteLuegoHaciaElNorteLuegoHaciaElEsteYFinalmenteHaciaElSur
 
-	|xxx movimiento posicionDestino |
+	|movimientoDeMarsRover movimiento posicionDestino |
 		
 	
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalOeste .
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalOeste .
+
 	movimiento := 'brrr'.
 	
 	posicionDestino := (1@2).
 	
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 	
-	self assert:  (xxx estaEnLaPosicion: posicionDestino ) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
 	
-	self assert: true equals: xxx estaEnLaDireccionSur.
+	self assert: true equals: movimientoDeMarsRover estaEnLaDireccionSur.
 
 	
 	
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test25ElMovimientoDeMarsRoversSeMueveInicialmenteHaciaElOesteLuegoHaciaElNorteLuegoHaciaElEsteLuegoHaciaElSurYFinalmenteHaciaElOeste
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:22:41'!
+test17ElMovimientoDeMarsRoversSeMueveInicialmenteHaciaElOesteLuegoHaciaElNorteLuegoHaciaElEsteLuegoHaciaElSurYFinalmenteHaciaElOeste
 
-	|xxx movimiento posicionDestino |
+	|movimientoDeMarsRover movimiento posicionDestino |
 		
 	
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalOeste .
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalOeste .
 	movimiento := 'brrrr'.
 	
 	posicionDestino := (1@2).
 	
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 	
-	self assert:  (xxx estaEnLaPosicion: posicionDestino ) equals: true.
-	self assert: true equals: xxx estaEnLaDireccionOeste.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
+	self assert: true equals: movimientoDeMarsRover estaEnLaDireccionOeste.
 
 	
 	
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test26SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAtrasEnDireccionAlSur
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:22:48'!
+test18SeRecibeUnaCadenaDeComandosYSeRealizaElMovimientoDeMarsRoverHaciaAtrasEnDireccionAlSur
 
-	|xxx cadena posicion |
+	|movimientoDeMarsRover posicion |
 		
 
 	posicion := (5@1).
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalSur .
-	cadena := 'bbbb'.
-	
-	
-	"mov -> validarSecuencia -> movHacia y movRotar"
-	xxx movimiento: cadena.
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalSur .
 
-	self assert: true equals: (xxx estaEnLaPosicion: posicion).! !
+	movimientoDeMarsRover movimiento: cadenaDeComandosHaciaAtras .
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test27ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElNorteYCambiaDeDireccionHaciaElEste
+	self assert: true equals: (movimientoDeMarsRover estaEnLaPosicion: posicion).! !
 
-	|xxx movimiento   posicionDestino |
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:23:00'!
+test19ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElNorteYCambiaDeDireccionHaciaElEste
+
+	|movimientoDeMarsRover movimiento   posicionDestino |
 		
 
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalNorte .
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalNorte .
 	
 	movimiento := 'ffr'.
 	posicionDestino := (3@1).
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 	
-	self assert: true equals:  xxx estaEnLaDireccionEste .
+	self assert: true equals:  movimientoDeMarsRover estaEnLaDireccionEste .
 	
-	self assert:  (xxx estaEnLaPosicion: posicionDestino) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino) equals: true.
 	
 	
 	
@@ -385,43 +374,45 @@ test27ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElNorteYCambiaDeDireccionHaci
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:54'!
-test28ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElEsteYCambiaDeDireccionHaciaElSur
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:23:07'!
+test20ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElEsteYCambiaDeDireccionHaciaElSur
 
-	|xxx movimiento posicionDestino |
+	|movimientoDeMarsRover movimiento posicionDestino |
 		
 
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalEste.
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalEste .
+
 	movimiento := 'fffrf'.
 	
 	posicionDestino := (0@4).
 	
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 	
-	self assert: true equals: xxx estaEnLaDireccionSur .
-	self assert:  (xxx estaEnLaPosicion: posicionDestino) equals: true.
+	self assert: true equals: movimientoDeMarsRover estaEnLaDireccionSur .
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino) equals: true.
 	
 	
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test29ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElSurYCambiaDeDireccionHaciaElOeste
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:23:24'!
+test21ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElSurYCambiaDeDireccionHaciaElOeste
 
-	|xxx movimiento posicion posicionDestino|
+	|movimientoDeMarsRover movimiento posicion posicionDestino|
 		
 
 	posicion := (4@2).
 		
 	posicionDestino := (3@2).
-	xxx := MovimientoDeMarsRover initializeWith: posicion andWithCardinalPoint: puntoCardinalSur.
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicion haciaElPuntoCardinal: puntoCardinalSur .
+
 	movimiento := 'fr'.
 	
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 
-	self assert:  (xxx estaEnLaPosicion: posicionDestino ) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
 	
-	self assert:  true equals:  xxx estaEnLaDireccionOeste .
+	self assert:  true equals:  movimientoDeMarsRover estaEnLaDireccionOeste .
 	
 	
 	
@@ -429,48 +420,73 @@ test29ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElSurYCambiaDeDireccionHaciaE
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test30ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElOesteYCambiaDeDireccionHaciaElSur
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:23:31'!
+test22ElMovimientoDeMarsRoversSeMueveApuntandoHaciaElOesteYCambiaDeDireccionHaciaElSur
 
-	|xxx movimiento posicionDestino |
+	|movimientoDeMarsRover movimiento posicionDestino |
 		
 	
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalOeste .
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalOeste .
+
 	movimiento := 'bl'.
 	
 	posicionDestino := (1@2).
 	
-	xxx movimiento: movimiento.
+	movimientoDeMarsRover movimiento: movimiento.
 	
-	self assert:  (xxx estaEnLaPosicion: posicionDestino ) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionDestino ) equals: true.
 	
 	
 	
-	self assert: true equals:  xxx estaEnLaDireccionSur.
+	self assert: true equals:  movimientoDeMarsRover estaEnLaDireccionSur.
 
 	
 	
 	
 	! !
 
-!TestDeMovimientoMarsRover methodsFor: 'tests' stamp: 'Melany 11/16/2021 20:07:53'!
-test31SeRecibeUnaCadenaDeComandosDondeUnoEsErroneoYSeLanzaUnaExcepcion
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:23:40'!
+test23SeRecibeUnaCadenaDeComandosDondeUnoEsErroneoYSeLanzaUnaExcepcion
 
-	|xxx cadena posicion |
+	|movimientoDeMarsRover cadena posicion |
 	
 	posicion := (2@1).
 		
-	xxx := MovimientoDeMarsRover initializeWith: posicionInicial andWithCardinalPoint: puntoCardinalNorte .
+	movimientoDeMarsRover := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalNorte.
+
 	cadena := 'ffbxf'.
 	
 	self 
-	should: [xxx movimiento: cadena]
+	should: [movimientoDeMarsRover movimiento: cadena]
 	raise: Error
 	withExceptionDo: [ :anError | self assert: anError messageText equals:MovimientoDeMarsRover errorComandoInvalido ].
 	
-	self assert:  (xxx estaEnLaPosicion: posicion) equals: true.
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicion) equals: true.
 	! !
+
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'Melany 11/17/2021 13:23:47'!
+test24SeRecibeUnaCadenaDeComandosErroneaDesdeElInicioYSeLanzaUnaExcepcion
+
+	|movimientoDeMarsRover cadena |
+	
+	movimientoDeMarsRover  := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalNorte.
+	
+	cadena := 'xxf'.
+	
+	self 
+	should: [movimientoDeMarsRover movimiento: cadena]
+	raise: Error
+	withExceptionDo: [ :anError | self assert: anError messageText equals:MovimientoDeMarsRover errorComandoInvalido ].
+	
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionInicial) equals: true.
+	! !
+
+
+!TestDeMovimientoDeMarsRover methodsFor: 'inicializadorDeMovimientoDeMarsRover' stamp: 'Melany 11/17/2021 12:40:39'!
+iniciarMovimientoDeMarsRoverEnLaPosicion: posicion haciaElPuntoCardinal: puntoCardinal
+	
+	^ MovimientoDeMarsRover initializeWith: posicion andWithCardinalPoint: puntoCardinal! !
 
 
 !classDefinition: #DireccionesDeMovimientoDeMarsRover category: 'TDD-MarsRover'!
@@ -695,7 +711,6 @@ direccionDeMarsRover: unCaracter
 	! !
 
 
-
 !MovimientoDeMarsRover methodsFor: 'testing - privado' stamp: 'Melany 11/16/2021 20:05:41'!
 elComandoEsValido: comando
  
@@ -728,12 +743,10 @@ estaEnLaPosicion: unaPosicion
 	^posicion = unaPosicion.! !
 
 
-!MovimientoDeMarsRover methodsFor: 'inicializacion' stamp: 'Melany 11/16/2021 20:13:55'!
+!MovimientoDeMarsRover methodsFor: 'inicializacion' stamp: 'Melany 11/17/2021 13:24:22'!
 inicializarCon: puntoInicial YConPuntoCardinal: unPuntoCardinal
 	
 	posicion := puntoInicial. 
-	
-	"direccion := unPuntoCardinal."
 	
 	
 	direccionDelMovimiento := self direccionDeMarsRover: unPuntoCardinal.! !
@@ -779,28 +792,22 @@ moverseAAtrasHaciaElSur
 
 	posicion := posicion + (1@0).! !
 
-!MovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'Melany 11/16/2021 20:13:55'!
+!MovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'Melany 11/17/2021 13:25:14'!
 movimiento: cadena
 
 	cadena do: [:comando |
+		
 		(self elComandoEsValido: comando) ifFalse: [ self error: MovimientoDeMarsRover errorComandoInvalido].
+		
 		(comando = $f) ifTrue:[direccionDelMovimiento moverseHaciaAdelante: self].
+		
 		(comando = $b) ifTrue:[direccionDelMovimiento moverseHaciaAtras: self].
+		
 		(comando = $l) ifTrue:[direccionDelMovimiento rotarHaciaLaIzquierda:self].
+		
 		(comando = $r) ifTrue:[direccionDelMovimiento rotarHaciaLaDerecha: self].
-		"
-		(direccion = 'N')ifTrue: [self moverseHaciaElNorteEn:  comando]ifFalse:[
-			
-			(direccion = 'S')ifTrue: [self moverseHaciaElSurEn:  comando] ifFalse:[
-			(direccion = 'E')ifTrue: [self moverseHaciaElEsteEn:  comando].
-			(direccion = 'O')ifTrue: [self moverseHaciaElOesteEn:  comando].
-			].
-		]."
-		]
-
-
-
-	"1 to: (cadena size) do:[: index | self moverseEn: (cadena at: index)]."! !
+	]
+! !
 
 !MovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'Melany 11/16/2021 20:13:55'!
 rotarHaciaLaDerechaDesdeElEste
