@@ -520,13 +520,34 @@ rotarHaciaLaIzquierda: marsRovers
 
 	self subclassResponsibility. ! !
 
+
+!DireccionesDeMovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/18/2021 16:55:43'!
+esDireccionEste
+
+	self subclassResponsibility. ! !
+
+!DireccionesDeMovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/18/2021 16:55:36'!
+esDireccionNorte
+
+	self subclassResponsibility. ! !
+
+!DireccionesDeMovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/18/2021 16:55:45'!
+esDireccionOeste
+
+	self subclassResponsibility. ! !
+
+!DireccionesDeMovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/18/2021 16:55:40'!
+esDireccionSur
+
+	self subclassResponsibility. ! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'DireccionesDeMovimientoDeMarsRover class' category: 'TDD-MarsRover'!
 DireccionesDeMovimientoDeMarsRover class
 	instanceVariableNames: ''!
 
-!DireccionesDeMovimientoDeMarsRover class methodsFor: 'as yet unclassified' stamp: 'belen 11/18/2021 16:13:03'!
+!DireccionesDeMovimientoDeMarsRover class methodsFor: 'inicializacion' stamp: 'belen 11/18/2021 16:13:03'!
 crearDireccionDeMovimientoAdecuadaParaMarsRover: unCaracter
 
 	
@@ -537,7 +558,8 @@ crearDireccionDeMovimientoAdecuadaParaMarsRover: unCaracter
 	^ direccionActual new.
 	! !
 
-!DireccionesDeMovimientoDeMarsRover class methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 15:46:05'!
+
+!DireccionesDeMovimientoDeMarsRover class methodsFor: 'inicializacion - privada' stamp: 'belen 11/16/2021 15:46:05'!
 with: unCaracter
 
 	self subclassResponsibility. ! !
@@ -570,13 +592,34 @@ rotarHaciaLaIzquierda: marsRovers
 
 	marsRovers rotarHaciaLaIzquierdaDesdeElEste. ! !
 
+
+!DireccionDeMovimientoHaciaElEste methodsFor: 'as yet unclassified' stamp: 'belen 11/18/2021 16:56:21'!
+esDireccionEste
+	
+	^true.! !
+
+!DireccionDeMovimientoHaciaElEste methodsFor: 'as yet unclassified' stamp: 'belen 11/18/2021 16:56:34'!
+esDireccionNorte
+	
+	^false.! !
+
+!DireccionDeMovimientoHaciaElEste methodsFor: 'as yet unclassified' stamp: 'belen 11/18/2021 16:56:27'!
+esDireccionOeste
+	
+	^false.! !
+
+!DireccionDeMovimientoHaciaElEste methodsFor: 'as yet unclassified' stamp: 'belen 11/18/2021 16:56:29'!
+esDireccionSur
+	
+	^false.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'DireccionDeMovimientoHaciaElEste class' category: 'TDD-MarsRover'!
 DireccionDeMovimientoHaciaElEste class
 	instanceVariableNames: ''!
 
-!DireccionDeMovimientoHaciaElEste class methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 15:39:59'!
+!DireccionDeMovimientoHaciaElEste class methodsFor: 'inicializacion - privada' stamp: 'belen 11/16/2021 15:39:59'!
 with: unCaracter
 
 	^unCaracter = 'E'.! !
@@ -609,13 +652,34 @@ rotarHaciaLaIzquierda: marsRovers
 
 	marsRovers rotarHaciaLaIzquierdaDesdeElNorte.! !
 
+
+!DireccionDeMovimientoHaciaElNorte methodsFor: 'testing' stamp: 'belen 11/18/2021 16:56:51'!
+esDireccionEste
+
+	^false.! !
+
+!DireccionDeMovimientoHaciaElNorte methodsFor: 'testing' stamp: 'belen 11/18/2021 16:56:44'!
+esDireccionNorte
+
+	^true.! !
+
+!DireccionDeMovimientoHaciaElNorte methodsFor: 'testing' stamp: 'belen 11/18/2021 16:56:53'!
+esDireccionOeste
+
+	^false.! !
+
+!DireccionDeMovimientoHaciaElNorte methodsFor: 'testing' stamp: 'belen 11/18/2021 16:56:57'!
+esDireccionSur
+
+	^false.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'DireccionDeMovimientoHaciaElNorte class' category: 'TDD-MarsRover'!
 DireccionDeMovimientoHaciaElNorte class
 	instanceVariableNames: ''!
 
-!DireccionDeMovimientoHaciaElNorte class methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 15:39:48'!
+!DireccionDeMovimientoHaciaElNorte class methodsFor: 'inicializacion - privada' stamp: 'belen 11/16/2021 15:39:48'!
 with: unCaracter
 
 	^unCaracter = 'N'.! !
@@ -627,6 +691,27 @@ DireccionesDeMovimientoDeMarsRover subclass: #DireccionDeMovimientoHaciaElOeste
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TDD-MarsRover'!
+
+!DireccionDeMovimientoHaciaElOeste methodsFor: 'testing' stamp: 'belen 11/18/2021 16:57:19'!
+esDireccionEste
+
+	^false.! !
+
+!DireccionDeMovimientoHaciaElOeste methodsFor: 'testing' stamp: 'belen 11/18/2021 16:57:21'!
+esDireccionNorte
+
+	^false.! !
+
+!DireccionDeMovimientoHaciaElOeste methodsFor: 'testing' stamp: 'belen 11/18/2021 16:54:03'!
+esDireccionOeste
+
+	^true.! !
+
+!DireccionDeMovimientoHaciaElOeste methodsFor: 'testing' stamp: 'belen 11/18/2021 16:57:23'!
+esDireccionSur
+
+	^false.! !
+
 
 !DireccionDeMovimientoHaciaElOeste methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:44:09'!
 moverseHaciaAdelante: marsRover
@@ -656,7 +741,7 @@ rotarHaciaLaIzquierda: marsRovers
 DireccionDeMovimientoHaciaElOeste class
 	instanceVariableNames: ''!
 
-!DireccionDeMovimientoHaciaElOeste class methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 15:40:06'!
+!DireccionDeMovimientoHaciaElOeste class methodsFor: 'inicializacion - privada' stamp: 'belen 11/16/2021 15:40:06'!
 with: unCaracter
 
 	^unCaracter = 'O'.! !
@@ -691,13 +776,34 @@ rotarHaciaLaIzquierda: marsRovers
 
 	marsRovers rotarHaciaLaIzquierdaDesdeElSur.! !
 
+
+!DireccionDeMovimientoHaciaElSur methodsFor: 'testing' stamp: 'belen 11/18/2021 16:57:46'!
+esDireccionEste
+
+	^false.! !
+
+!DireccionDeMovimientoHaciaElSur methodsFor: 'testing' stamp: 'belen 11/18/2021 16:57:43'!
+esDireccionNorte
+
+	^false.! !
+
+!DireccionDeMovimientoHaciaElSur methodsFor: 'testing' stamp: 'belen 11/18/2021 16:57:48'!
+esDireccionOeste
+
+	^false.! !
+
+!DireccionDeMovimientoHaciaElSur methodsFor: 'testing' stamp: 'belen 11/18/2021 16:57:36'!
+esDireccionSur
+
+	^true.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'DireccionDeMovimientoHaciaElSur class' category: 'TDD-MarsRover'!
 DireccionDeMovimientoHaciaElSur class
 	instanceVariableNames: ''!
 
-!DireccionDeMovimientoHaciaElSur class methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 15:40:23'!
+!DireccionDeMovimientoHaciaElSur class methodsFor: 'inicializacion - privada' stamp: 'belen 11/16/2021 15:40:23'!
 with: unCaracter
 
 	^unCaracter = 'S'.! !
@@ -718,25 +824,28 @@ elComandoEsValido: comando
 	^ (#($f, $b, $l, $r) includes: comando).! !
 
 
-!MovimientoDeMarsRover methodsFor: 'testing' stamp: 'Melany 11/16/2021 20:13:55'!
+!MovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/18/2021 17:01:42'!
 estaEnLaDireccionEste
 
-	^ direccionDelMovimiento isKindOf: DireccionDeMovimientoHaciaElEste.! !
+	^ direccionDelMovimiento esDireccionEste. ! !
 
-!MovimientoDeMarsRover methodsFor: 'testing' stamp: 'Melany 11/16/2021 20:13:55'!
+!MovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/18/2021 16:51:23'!
 estaEnLaDireccionNorte
 
-	^ direccionDelMovimiento isKindOf: DireccionDeMovimientoHaciaElNorte.! !
+	
+	^direccionDelMovimiento esDireccionNorte. ! !
 
-!MovimientoDeMarsRover methodsFor: 'testing' stamp: 'Melany 11/16/2021 20:13:55'!
+!MovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/18/2021 17:01:57'!
 estaEnLaDireccionOeste
 
-	^ direccionDelMovimiento isKindOf: DireccionDeMovimientoHaciaElOeste.! !
+	
+	^direccionDelMovimiento esDireccionOeste. ! !
 
-!MovimientoDeMarsRover methodsFor: 'testing' stamp: 'Melany 11/16/2021 20:13:55'!
+!MovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/18/2021 17:02:02'!
 estaEnLaDireccionSur
 
-	^ direccionDelMovimiento isKindOf: DireccionDeMovimientoHaciaElSur.! !
+	
+	^direccionDelMovimiento esDireccionSur. ! !
 
 !MovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/16/2021 15:31:59'!
 estaEnLaPosicion: unaPosicion
@@ -870,22 +979,18 @@ rotarHaciaLaIzquierdaDesdeElSur
 MovimientoDeMarsRover class
 	instanceVariableNames: ''!
 
-!MovimientoDeMarsRover class methodsFor: 'as yet unclassified' stamp: 'Melany 11/16/2021 19:58:12'!
+!MovimientoDeMarsRover class methodsFor: 'errores' stamp: 'Melany 11/16/2021 19:58:12'!
 errorComandoInvalido
 
 	^ 'Error comando invalido'.! !
 
-!MovimientoDeMarsRover class methodsFor: 'as yet unclassified' stamp: 'belen 11/15/2021 12:26:54'!
+!MovimientoDeMarsRover class methodsFor: 'errores' stamp: 'belen 11/15/2021 12:26:54'!
 errorPuntoCardinalEsInvalido
 
 	^'Error el punto cardinal no es valido'.! !
 
-!MovimientoDeMarsRover class methodsFor: 'as yet unclassified' stamp: 'belen 11/15/2021 12:26:34'!
-errorPuntoInicialEsInvalido
 
-	^'Error el punto inicial no es valido'.! !
-
-!MovimientoDeMarsRover class methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 17:17:52'!
+!MovimientoDeMarsRover class methodsFor: 'inicializacion' stamp: 'belen 11/16/2021 17:17:52'!
 initializeWith: anInitialPoint andWithCardinalPoint: puntoCardinal
 
 
