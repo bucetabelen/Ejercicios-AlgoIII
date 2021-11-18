@@ -1,11 +1,11 @@
 !classDefinition: #TestDeMovimientoDeMarsRover category: 'TDD-MarsRover'!
 TestCase subclass: #TestDeMovimientoDeMarsRover
-	instanceVariableNames: 'puntoCardinalNorte puntoCardinalSur puntoCardinalEste puntoCardinalOeste posicionInicial cadenaDeComandosHaciaAdelante cadenaDeComandosHaciaAtras'
+	instanceVariableNames: 'puntoCardinalNorte puntoCardinalSur puntoCardinalEste puntoCardinalOeste posicionInicial cadenaDeComandosHaciaAdelante cadenaDeComandosHaciaAtras posicionInicialInvalida'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TDD-MarsRover'!
 
-!TestDeMovimientoDeMarsRover methodsFor: 'setUp' stamp: 'Melany 11/17/2021 13:09:27'!
+!TestDeMovimientoDeMarsRover methodsFor: 'setUp' stamp: 'belen 11/18/2021 17:39:50'!
 setUp
 
 	puntoCardinalNorte :=  'N'.
@@ -15,6 +15,8 @@ setUp
 	
 	cadenaDeComandosHaciaAdelante := 'ffff'.
 	cadenaDeComandosHaciaAtras := 'bbbb'.
+	
+	posicionInicialInvalida := (1/2@1/2).
 	
 	posicionInicial := (1@1).! !
 
@@ -1021,11 +1023,11 @@ errorPuntoCardinalEsInvalido
 	^'Error el punto cardinal no es valido'.! !
 
 
-!MovimientoDeMarsRover class methodsFor: 'inicializacion' stamp: 'belen 11/16/2021 17:17:52'!
+!MovimientoDeMarsRover class methodsFor: 'inicializacion' stamp: 'belen 11/18/2021 17:43:47'!
 initializeWith: anInitialPoint andWithCardinalPoint: puntoCardinal
 
 
-	(anInitialPoint isIntegerPoint) ifFalse: [self error: 'Error el punto inicial no es valido'].
-	(#('N','S','E','O') includes: puntoCardinal ) ifFalse: [self error: 'Error el punto cardinal no es valido'].
+	
+	(#('N','S','E','O') includes: puntoCardinal ) ifFalse: [self error: MovimientoDeMarsRover errorPuntoCardinalEsInvalido].
 	
 	^self new inicializarCon: anInitialPoint YConPuntoCardinal: puntoCardinal.! !
