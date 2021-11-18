@@ -482,6 +482,23 @@ test24SeRecibeUnaCadenaDeComandosErroneaDesdeElInicioYSeLanzaUnaExcepcion
 	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionInicial) equals: true.
 	! !
 
+!TestDeMovimientoDeMarsRover methodsFor: 'tests' stamp: 'belen 11/18/2021 17:25:36'!
+test25SeRecibeUnaCadenaDeComandosVaciaYSeLanzaUnaExcepcion
+
+	|movimientoDeMarsRover cadena |
+	
+	movimientoDeMarsRover  := self iniciarMovimientoDeMarsRoverEnLaPosicion: posicionInicial haciaElPuntoCardinal: puntoCardinalNorte.
+	
+	cadena := ''.
+	
+	self 
+	should: [movimientoDeMarsRover movimiento: cadena]
+	raise: Error
+	withExceptionDo: [ :anError | self assert: anError messageText equals:MovimientoDeMarsRover errorCadenaDeComandosEsVacia].
+	
+	self assert:  (movimientoDeMarsRover estaEnLaPosicion: posicionInicial) equals: true.
+	! !
+
 
 !TestDeMovimientoDeMarsRover methodsFor: 'inicializadorDeMovimientoDeMarsRover' stamp: 'Melany 11/17/2021 12:40:39'!
 iniciarMovimientoDeMarsRoverEnLaPosicion: posicion haciaElPuntoCardinal: puntoCardinal
@@ -817,11 +834,18 @@ Object subclass: #MovimientoDeMarsRover
 	category: 'TDD-MarsRover'!
 
 
-!MovimientoDeMarsRover methodsFor: 'testing - privado' stamp: 'belen 11/18/2021 16:05:37'!
+!MovimientoDeMarsRover methodsFor: 'testing - privado' stamp: 'belen 11/18/2021 17:21:41'!
 elComandoEsValido: comando
  	
 	
 	^ (#($f, $b, $l, $r) includes: comando).! !
+
+!MovimientoDeMarsRover methodsFor: 'testing - privado' stamp: 'belen 11/18/2021 17:22:41'!
+esUnaCadenaVacia: cadena
+
+	^cadena sameAs: ''.
+
+	! !
 
 
 !MovimientoDeMarsRover methodsFor: 'testing' stamp: 'belen 11/18/2021 17:01:42'!
@@ -903,9 +927,12 @@ moverseAAtrasHaciaElSur
 
 	posicion := posicion + (1@0).! !
 
-!MovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'Melany 11/17/2021 13:25:14'!
+!MovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'belen 11/18/2021 17:24:57'!
 movimiento: cadena
 
+
+	(self esUnaCadenaVacia: cadena) ifTrue:[self error: MovimientoDeMarsRover errorCadenaDeComandosEsVacia].
+		
 	cadena do: [:comando |
 		
 		(self elComandoEsValido: comando) ifFalse: [ self error: MovimientoDeMarsRover errorComandoInvalido].
@@ -972,12 +999,16 @@ rotarHaciaLaIzquierdaDesdeElSur
 	
 	! !
 
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'MovimientoDeMarsRover class' category: 'TDD-MarsRover'!
 MovimientoDeMarsRover class
 	instanceVariableNames: ''!
+
+!MovimientoDeMarsRover class methodsFor: 'errores' stamp: 'belen 11/18/2021 17:24:38'!
+errorCadenaDeComandosEsVacia
+
+	^ 'Error cadena de comandos no puede ser vacia'.! !
 
 !MovimientoDeMarsRover class methodsFor: 'errores' stamp: 'Melany 11/16/2021 19:58:12'!
 errorComandoInvalido
