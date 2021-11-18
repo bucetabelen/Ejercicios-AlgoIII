@@ -496,26 +496,26 @@ Object subclass: #DireccionesDeMovimientoDeMarsRover
 	poolDictionaries: ''
 	category: 'TDD-MarsRover'!
 
-!DireccionesDeMovimientoDeMarsRover methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 15:55:55'!
+!DireccionesDeMovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'belen 11/16/2021 15:55:55'!
 moverseHaciaAdelante: marsRover
 
 
 	self subclassResponsibility. 
 ! !
 
-!DireccionesDeMovimientoDeMarsRover methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:10:38'!
+!DireccionesDeMovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:10:38'!
 moverseHaciaAtras: marsRover
 
 
 	self subclassResponsibility. 
 ! !
 
-!DireccionesDeMovimientoDeMarsRover methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:24:17'!
+!DireccionesDeMovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:24:17'!
 rotarHaciaLaDerecha: marsRovers
 
 	self subclassResponsibility. ! !
 
-!DireccionesDeMovimientoDeMarsRover methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:15:06'!
+!DireccionesDeMovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:15:06'!
 rotarHaciaLaIzquierda: marsRovers
 
 	self subclassResponsibility. ! !
@@ -525,6 +525,17 @@ rotarHaciaLaIzquierda: marsRovers
 !classDefinition: 'DireccionesDeMovimientoDeMarsRover class' category: 'TDD-MarsRover'!
 DireccionesDeMovimientoDeMarsRover class
 	instanceVariableNames: ''!
+
+!DireccionesDeMovimientoDeMarsRover class methodsFor: 'as yet unclassified' stamp: 'belen 11/18/2021 16:13:03'!
+crearDireccionDeMovimientoAdecuadaParaMarsRover: unCaracter
+
+	
+	
+	| direccionActual|
+	direccionActual := DireccionesDeMovimientoDeMarsRover subclasses detect:[:subclass | subclass with: unCaracter].
+	
+	^ direccionActual new.
+	! !
 
 !DireccionesDeMovimientoDeMarsRover class methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 15:46:05'!
 with: unCaracter
@@ -539,22 +550,22 @@ DireccionesDeMovimientoDeMarsRover subclass: #DireccionDeMovimientoHaciaElEste
 	poolDictionaries: ''
 	category: 'TDD-MarsRover'!
 
-!DireccionDeMovimientoHaciaElEste methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:38:04'!
+!DireccionDeMovimientoHaciaElEste methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:38:04'!
 moverseHaciaAdelante: marsRover
 
 	marsRover moverseAAdelanteHaciaElEste.! !
 
-!DireccionDeMovimientoHaciaElEste methodsFor: 'as yet unclassified' stamp: 'Melany 11/16/2021 18:58:12'!
+!DireccionDeMovimientoHaciaElEste methodsFor: 'movimientos' stamp: 'Melany 11/16/2021 18:58:12'!
 moverseHaciaAtras: marsRover
 
 	marsRover moverseAAtrasHaciaElEste. ! !
 
-!DireccionDeMovimientoHaciaElEste methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:38:45'!
+!DireccionDeMovimientoHaciaElEste methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:38:45'!
 rotarHaciaLaDerecha: marsRovers
 
 	marsRovers rotarHaciaLaDerechaDesdeElEste. ! !
 
-!DireccionDeMovimientoHaciaElEste methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:38:58'!
+!DireccionDeMovimientoHaciaElEste methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:38:58'!
 rotarHaciaLaIzquierda: marsRovers
 
 	marsRovers rotarHaciaLaIzquierdaDesdeElEste. ! !
@@ -578,22 +589,22 @@ DireccionesDeMovimientoDeMarsRover subclass: #DireccionDeMovimientoHaciaElNorte
 	poolDictionaries: ''
 	category: 'TDD-MarsRover'!
 
-!DireccionDeMovimientoHaciaElNorte methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 15:58:36'!
+!DireccionDeMovimientoHaciaElNorte methodsFor: 'movimientos' stamp: 'belen 11/16/2021 15:58:36'!
 moverseHaciaAdelante: marsRover
 
 	^marsRover moverseAAdelanteHaciaElNorte.! !
 
-!DireccionDeMovimientoHaciaElNorte methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:10:54'!
+!DireccionDeMovimientoHaciaElNorte methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:10:54'!
 moverseHaciaAtras: marsRover
 
 	^marsRover moverseAAtrasHaciaElNorte.! !
 
-!DireccionDeMovimientoHaciaElNorte methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:26:52'!
+!DireccionDeMovimientoHaciaElNorte methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:26:52'!
 rotarHaciaLaDerecha: marsRovers
 
 	marsRovers rotarHaciaLaDerechaDesdeElNorte.! !
 
-!DireccionDeMovimientoHaciaElNorte methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:17:01'!
+!DireccionDeMovimientoHaciaElNorte methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:17:01'!
 rotarHaciaLaIzquierda: marsRovers
 
 	marsRovers rotarHaciaLaIzquierdaDesdeElNorte.! !
@@ -617,24 +628,24 @@ DireccionesDeMovimientoDeMarsRover subclass: #DireccionDeMovimientoHaciaElOeste
 	poolDictionaries: ''
 	category: 'TDD-MarsRover'!
 
-!DireccionDeMovimientoHaciaElOeste methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:44:09'!
+!DireccionDeMovimientoHaciaElOeste methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:44:09'!
 moverseHaciaAdelante: marsRover
 
 
 	marsRover moverseAAdelanteHaciaElOeste.! !
 
-!DireccionDeMovimientoHaciaElOeste methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:44:26'!
+!DireccionDeMovimientoHaciaElOeste methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:44:26'!
 moverseHaciaAtras: marsRover
 
 
 	marsRover moverseAAtrasHaciaElOeste.! !
 
-!DireccionDeMovimientoHaciaElOeste methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:44:44'!
+!DireccionDeMovimientoHaciaElOeste methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:44:44'!
 rotarHaciaLaDerecha: marsRovers
 
 	marsRovers rotarHaciaLaDerechaDesdeElOeste.! !
 
-!DireccionDeMovimientoHaciaElOeste methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 16:45:02'!
+!DireccionDeMovimientoHaciaElOeste methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:45:02'!
 rotarHaciaLaIzquierda: marsRovers
 
 	marsRovers rotarHaciaLaIzquierdaDesdeElOeste.! !
@@ -658,24 +669,24 @@ DireccionesDeMovimientoDeMarsRover subclass: #DireccionDeMovimientoHaciaElSur
 	poolDictionaries: ''
 	category: 'TDD-MarsRover'!
 
-!DireccionDeMovimientoHaciaElSur methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 17:02:43'!
+!DireccionDeMovimientoHaciaElSur methodsFor: 'movimientos' stamp: 'belen 11/16/2021 17:02:43'!
 moverseHaciaAdelante: marsRover
 
 	marsRover moverseAAdelanteHaciaElSur.
 	! !
 
-!DireccionDeMovimientoHaciaElSur methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 17:02:57'!
+!DireccionDeMovimientoHaciaElSur methodsFor: 'movimientos' stamp: 'belen 11/16/2021 17:02:57'!
 moverseHaciaAtras: marsRover
 
 
 	marsRover moverseAAtrasHaciaElSur.! !
 
-!DireccionDeMovimientoHaciaElSur methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 17:03:21'!
+!DireccionDeMovimientoHaciaElSur methodsFor: 'movimientos' stamp: 'belen 11/16/2021 17:03:21'!
 rotarHaciaLaDerecha: marsRovers
 
 	marsRovers rotarHaciaLaDerechaDesdeElSur.! !
 
-!DireccionDeMovimientoHaciaElSur methodsFor: 'as yet unclassified' stamp: 'belen 11/16/2021 17:03:37'!
+!DireccionDeMovimientoHaciaElSur methodsFor: 'movimientos' stamp: 'belen 11/16/2021 17:03:37'!
 rotarHaciaLaIzquierda: marsRovers
 
 	marsRovers rotarHaciaLaIzquierdaDesdeElSur.! !
@@ -699,22 +710,12 @@ Object subclass: #MovimientoDeMarsRover
 	poolDictionaries: ''
 	category: 'TDD-MarsRover'!
 
-!MovimientoDeMarsRover methodsFor: 'ubicacion - privada' stamp: 'Melany 11/16/2021 20:10:28'!
-direccionDeMarsRover: unCaracter
 
-	
-	
-	| direccionActual|
-	direccionActual := DireccionesDeMovimientoDeMarsRover subclasses detect:[:subclass | subclass with: unCaracter].
-	
-	^ direccionActual new.
-	! !
-
-
-!MovimientoDeMarsRover methodsFor: 'testing - privado' stamp: 'Melany 11/16/2021 20:05:41'!
+!MovimientoDeMarsRover methodsFor: 'testing - privado' stamp: 'belen 11/18/2021 16:05:37'!
 elComandoEsValido: comando
- 
-	^ #($f, $b, $l, $r) includes: comando.! !
+ 	
+	
+	^ (#($f, $b, $l, $r) includes: comando).! !
 
 
 !MovimientoDeMarsRover methodsFor: 'testing' stamp: 'Melany 11/16/2021 20:13:55'!
@@ -743,13 +744,14 @@ estaEnLaPosicion: unaPosicion
 	^posicion = unaPosicion.! !
 
 
-!MovimientoDeMarsRover methodsFor: 'inicializacion' stamp: 'Melany 11/17/2021 13:24:22'!
+!MovimientoDeMarsRover methodsFor: 'inicializacion' stamp: 'belen 11/18/2021 16:13:03'!
 inicializarCon: puntoInicial YConPuntoCardinal: unPuntoCardinal
 	
 	posicion := puntoInicial. 
 	
 	
-	direccionDelMovimiento := self direccionDeMarsRover: unPuntoCardinal.! !
+	direccionDelMovimiento := DireccionesDeMovimientoDeMarsRover crearDireccionDeMovimientoAdecuadaParaMarsRover: unPuntoCardinal.
+	! !
 
 
 !MovimientoDeMarsRover methodsFor: 'movimientos' stamp: 'belen 11/16/2021 16:35:59'!
@@ -860,6 +862,7 @@ rotarHaciaLaIzquierdaDesdeElSur
 	direccionDelMovimiento := DireccionDeMovimientoHaciaElEste new.
 	
 	! !
+
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
