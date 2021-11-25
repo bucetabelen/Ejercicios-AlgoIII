@@ -168,6 +168,19 @@ test06TransferAmountCanNotBeZero
 		
 		! !
 
+!TestXXX methodsFor: 'tests' stamp: 'belen 11/25/2021 19:30:21'!
+test07TransferAmountCanNotBeNegative
+
+
+	self 
+	
+		should: [Transfer from: anOriginAccount to: aDestinationAccount for: -100*peso.]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorAmountIsNegative].
+		
+		
+		! !
+
 
 !TestXXX methodsFor: 'setUp' stamp: 'belen 11/25/2021 15:00:49'!
 setUp
@@ -663,18 +676,14 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'belen 11/25/2021 14:29:09'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'belen 11/25/2021 19:33:17'!
 balance
 
 	|balanceParcial|
 	
 	balanceParcial := 0.
 
-	^transactions sum: [ :aTransaction |
-		
-		 aTransaction updateBalance: balanceParcial.]
-	
-	 ifEmpty: [ 0 ]! !
+	^transactions sum: [ :aTransaction | aTransaction updateBalance: balanceParcial.] ifEmpty: [ 0 ]! !
 
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'NR 10/17/2019 03:28:43'!
 hasRegistered: aTransaction
@@ -704,14 +713,6 @@ Object subclass: #Transfer
 !Transfer methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 17:33:10'!
 depositLeg
 	^depositLeg ! !
-
-!Transfer methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 16:42:51'!
-initializeFor: aValue a: aDepositTransfer a: aWithdrawTransfer
-	
-	
-	value := aValue. 
-	depositTransfer := aDepositTransfer.
-	withdrawTransfer := aWithdrawTransfer.! !
 
 !Transfer methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 17:30:51'!
 initializeWith: anAmountTransfer WithdrawLeg: transferWithdrawLeg DepositLeg: transferDepositLeg.
@@ -761,17 +762,23 @@ from: anOriginAccount to: aDestinationAccount for: anAmountTransfer
 	 ! !
 
 
-!Transfer class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:51:40'!
+!Transfer class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 19:29:47'!
 assert: anAmountTransfer canBeTransferedTo: aDestinationAccount from: anOriginAccount
 
 
 	(aDestinationAccount == anOriginAccount) ifTrue:[^self error:Transfer errorSameAccounts].
-	(anAmountTransfer = 0) ifTrue: [^self error: Transfer errorAmountIsCero].! !
+	(anAmountTransfer = 0) ifTrue: [^self error: Transfer errorAmountIsCero].
+	(anAmountTransfer < 0) ifTrue: [^self error: Transfer errorAmountIsNegative] .! !
 
 !Transfer class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:50:57'!
 errorAmountIsCero
 
 	^'no se puede amount'.! !
+
+!Transfer class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 19:29:37'!
+errorAmountIsNegative
+
+	^'no se puede amount negativo'.! !
 
 !Transfer class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:50:46'!
 errorSameAccounts
