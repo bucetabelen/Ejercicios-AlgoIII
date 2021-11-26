@@ -1,3 +1,227 @@
+!classDefinition: #PortfolioTest category: 'ServiciosFinancieros-Ejercicio'!
+TestCase subclass: #PortfolioTest
+	instanceVariableNames: 'accountA accountB portfolio accountC'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:55:38'!
+setUp
+
+	accountA := ReceptiveAccount new.
+	accountB := ReceptiveAccount new.
+	accountC := ReceptiveAccount new.
+	
+	portfolio := Portfolio new.! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:48:22'!
+test01PortfolioHaveZeroBalanceWhenCreated
+
+	
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountB.
+
+	
+	self assert: 0*peso equals: portfolio balance.! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:49:20'!
+test02PortfolioIncresesWhenAccountsHaveBalance
+
+
+	
+	
+	Deposit register: 100*peso on: accountA .
+	Deposit register: 200*peso on: accountB .
+	
+	
+
+	
+	portfolio agruparCuenta: accountA . 
+	portfolio agruparCuenta: accountB .
+
+	
+	self assert: 300*peso equals: portfolio balance.
+	
+	
+	
+! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:52:07'!
+test03PortfolioRegisterTransactions
+
+	| anotherAccount deposit withdraw|
+
+	anotherAccount := ReceptiveAccount new.
+	
+	deposit := Deposit register: 100*peso on: accountA .
+	withdraw := Withdraw register: 50*peso on: anotherAccount. 
+
+
+	portfolio agruparCuenta: accountA . 
+	portfolio agruparCuenta: accountB .
+	
+	
+	
+	self assert: (portfolio hasRegistered: deposit).
+	self deny: (portfolio hasRegistered: withdraw ).
+
+	
+	
+! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:01:20'!
+test04PortfolioKnowsItsTransactions
+
+
+	portfolio agruparCuenta: accountA . 
+	portfolio agruparCuenta: accountB .
+	
+	Deposit register: 100*peso on: accountA .
+	Withdraw register: 50*peso on: accountA . 
+
+	
+	
+	self assert: 2 equals: (portfolio transactions) size.! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:56:09'!
+test05PortfolioWithPortfolioAndAccountHaveZeroBalanceWhenCreated
+
+	|otroPortfolio|
+	
+	
+	otroPortfolio := Portfolio new.
+	
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountB.
+	
+	otroPortfolio agruparCuenta: portfolio. 
+	otroPortfolio agruparCuenta: accountC.
+
+	
+	self assert: 0*peso equals: otroPortfolio balance.! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:03:58'!
+test06PortfolioWithPortfolioAndAccountIncresesWhenAccountsHaveBalance
+
+	
+	|otroPortfolio|
+	
+	
+	otroPortfolio := Portfolio new.
+	
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountB.
+	
+	otroPortfolio agruparCuenta: portfolio. 
+	otroPortfolio agruparCuenta: accountC.
+	
+	Deposit register: 100*peso on: accountA.
+	Deposit register: 200*peso on: accountB.
+	Deposit register: 100*peso on: accountC.
+	
+
+	
+	self assert: 400*peso equals: otroPortfolio balance.
+	
+	
+	
+! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:01:28'!
+test07PortfolioWithPortfolioAndAccountIncresesKnowsRegisterTransactions
+
+	
+	| otroPortfolio deposit withdraw |
+	
+	
+	
+	otroPortfolio := Portfolio new.
+	
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountB.
+	
+	otroPortfolio agruparCuenta: portfolio. 
+	otroPortfolio agruparCuenta: accountC.
+	
+	deposit := Deposit register: 100*peso on: accountA.
+	
+	withdraw := Withdraw for: 100*peso.
+	
+	self assert: (otroPortfolio hasRegistered: deposit).
+	self deny: (otroPortfolio hasRegistered: withdraw ).
+
+	
+	
+	
+! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:44:31'!
+test08PortfolioWithPortfolioAndAccountIncresesKnowsRegisterTransactions
+
+	
+	| otroPortfolio portfolio3 accountD|
+	
+	
+	otroPortfolio := Portfolio new.
+	
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountC.
+	otroPortfolio agruparCuenta: portfolio. 
+	otroPortfolio agruparCuenta: accountB.
+	portfolio3 := Portfolio new.
+	accountD :=  ReceptiveAccount new.
+	portfolio3 agruparCuenta: accountD.
+	otroPortfolio agruparCuenta: portfolio3.
+	
+	Deposit register: 100*peso on: accountA.
+	Withdraw register: 200*peso on: accountC.
+
+	Deposit register: 100*peso on: accountB.
+	
+	Deposit register: 200*peso on: accountD.
+	Deposit register: 200*peso on: accountD.
+	Withdraw register: 200*peso on: accountD.
+	
+	
+	self assert: 6 equals: (otroPortfolio transactions ) size.
+	
+		! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:49:01'!
+test09PortfolioCanNotAddSameAccountTwice
+
+	portfolio agruparCuenta: accountA. 
+	
+	self should: [portfolio agruparCuenta: accountA.]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Portfolio errorCuentaRepetida ].
+		
+	
+		! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:51:26'!
+test10punto2
+
+	portfolio agruparCuenta: accountA. 
+	
+	self should: [portfolio agruparCuenta: accountA.]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Portfolio errorCuentaRepetida ].
+		
+	
+		! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 18:04:11'!
+test11PortfolioCanNotAddItsSelf
+	
+	self should: [portfolio agruparCuenta: portfolio.]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Portfolio errorNoSePuedeAgregarASiMismo].
+		
+	
+		! !
+
+
 !classDefinition: #ReceptiveAccountTest category: 'ServiciosFinancieros-Ejercicio'!
 TestCase subclass: #ReceptiveAccountTest
 	instanceVariableNames: ''
@@ -89,204 +313,6 @@ test07AccountKnowsItsTransactions
 ! !
 
 
-!classDefinition: #TestYYY category: 'ServiciosFinancieros-Ejercicio'!
-TestCase subclass: #TestYYY
-	instanceVariableNames: 'accountA accountB portfolio accountC'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ServiciosFinancieros-Ejercicio'!
-
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:55:38'!
-setUp
-
-	accountA := ReceptiveAccount new.
-	accountB := ReceptiveAccount new.
-	accountC := ReceptiveAccount new.
-	
-	portfolio := Portfolio new.! !
-
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:48:22'!
-test01PortfolioHaveZeroBalanceWhenCreated
-
-	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountB.
-
-	
-	self assert: 0*peso equals: portfolio balance.! !
-
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:49:20'!
-test02PortfolioIncresesWhenAccountsHaveBalance
-
-
-	
-	
-	Deposit register: 100*peso on: accountA .
-	Deposit register: 200*peso on: accountB .
-	
-	
-
-	
-	portfolio agruparCuenta: accountA . 
-	portfolio agruparCuenta: accountB .
-
-	
-	self assert: 300*peso equals: portfolio balance.
-	
-	
-	
-! !
-
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:52:07'!
-test03PortfolioRegisterTransactions
-
-	| anotherAccount deposit withdraw|
-
-	anotherAccount := ReceptiveAccount new.
-	
-	deposit := Deposit register: 100*peso on: accountA .
-	withdraw := Withdraw register: 50*peso on: anotherAccount. 
-
-
-	portfolio agruparCuenta: accountA . 
-	portfolio agruparCuenta: accountB .
-	
-	
-	
-	self assert: (portfolio hasRegistered: deposit).
-	self deny: (portfolio hasRegistered: withdraw ).
-
-	
-	
-! !
-
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:53:47'!
-test04PortfolioKnowsItsTransactions
-
-
-	portfolio agruparCuenta: accountA . 
-	portfolio agruparCuenta: accountB .
-	
-	Deposit register: 100*peso on: accountA .
-	Withdraw register: 50*peso on: accountA . 
-
-	
-	
-	self assert: 2 equals: (portfolio transactions) size.
-	
-	
-
-"	
-test07AccountKnowsItsTransactions 
-
-	| account deposit |
-	
-	account := ReceptiveAccount new.
-	
-	deposit := Deposit register: 50 * peso on: account.
-		
-	self assert: 1 equals: account transactions size.
-	self assert: (account transactions includes: deposit)."
-! !
-
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:56:09'!
-test05PortfolioWithPortfolioAndAccountHaveZeroBalanceWhenCreated
-
-	|otroPortfolio|
-	
-	
-	otroPortfolio := Portfolio new.
-	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountB.
-	
-	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: accountC.
-
-	
-	self assert: 0*peso equals: otroPortfolio balance.! !
-
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:03:58'!
-test06PortfolioWithPortfolioAndAccountIncresesWhenAccountsHaveBalance
-
-	
-	|otroPortfolio|
-	
-	
-	otroPortfolio := Portfolio new.
-	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountB.
-	
-	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: accountC.
-	
-	Deposit register: 100*peso on: accountA.
-	Deposit register: 200*peso on: accountB.
-	Deposit register: 100*peso on: accountC.
-	
-
-	
-	self assert: 400*peso equals: otroPortfolio balance.
-	
-	
-	
-! !
-
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:04:58'!
-test07PortfolioWithPortfolioAndAccountIncresesKnowsRegisterTransactions
-
-	
-	| otroPortfolio deposit withdraw |
-	
-	
-	
-	otroPortfolio := Portfolio new.
-	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountB.
-	
-	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: accountC.
-	
-	deposit := Deposit register: 100*peso on: accountA.
-	"withdraw:= Withdraw register: 200*peso on: otraCuenta."
-	
-	withdraw := Withdraw for: 100*peso.
-	
-	self assert: (otroPortfolio hasRegistered: deposit).
-	self deny: (otroPortfolio hasRegistered: withdraw ).
-
-	
-	
-	
-! !
-
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:28:47'!
-test08PortfolioWithPortfolioAndAccountIncresesKnowsRegisterTransactions
-
-	
-	| otroPortfolio |
-	
-	
-	otroPortfolio := Portfolio new.
-	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountC.
-	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: accountB.
-	
-	Deposit register: 100*peso on: accountA.
-	Withdraw register: 200*peso on: accountC.
-
-	Deposit register: 100*peso on: accountB.
-	
-	
-	self assert: 3 equals: (otroPortfolio transactions ) size.
-	
-		! !
-
-
 !classDefinition: #TransferTest category: 'ServiciosFinancieros-Ejercicio'!
 TestCase subclass: #TransferTest
 	instanceVariableNames: 'anOriginAccount aDestinationAccount'
@@ -340,7 +366,7 @@ test04TransferWithdrawLegKnowsTransferDepositLeg
 	self assert: transfer depositLeg equals: (transfer withdrawLeg ) depositLeg. 
 ! !
 
-!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 14:58:14'!
+!TransferTest methodsFor: 'tests' stamp: 'Melany 11/26/2021 17:48:07'!
 test05TransferBetweenSameAccountIsNotPossible
 
 
@@ -603,11 +629,18 @@ Object subclass: #Portfolio
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 15:13:32'!
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:13:11'!
 agruparCuenta: anAccount
 		
-		
+	self assertcanBeAddedToAccounts: anAccount.
 	accounts add: anAccount.! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 18:03:43'!
+assertcanBeAddedToAccounts: anAccount
+
+	(accounts includes: anAccount) ifTrue: [self error: Portfolio errorCuentaRepetida].
+	
+	(self == anAccount) ifTrue: [ ^ self error: Portfolio errorNoSePuedeAgregarASiMismo].! !
 
 !Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 15:16:23'!
 balance
@@ -634,13 +667,38 @@ initialize
 	
 	! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:29:01'!
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:37:44'!
+saveTransactionsHere: listTransactions
+
+	accounts do: [ :transactions | transactions saveTransactionsHere: listTransactions ].
+	
+	^ listTransactions.! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:35:56'!
 transactions
 	
+	|listTransaction|
 	
-	accounts do:[: account | transactionsList add: account transactions ].
+	listTransaction  := OrderedCollection new.
+	accounts do:[ :account | account saveTransactionsHere: listTransaction ].
 	
-	^transactionsList copy.! !
+	^listTransaction copy.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Portfolio class' category: 'ServiciosFinancieros-Ejercicio'!
+Portfolio class
+	instanceVariableNames: ''!
+
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:14:42'!
+errorCuentaRepetida
+	
+	^ 'Cuenta repetida en el portfolio'.! !
+
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:53:49'!
+errorNoSePuedeAgregarASiMismo
+
+	^'No se puede agregar el portfolio a si mismo'.! !
 
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
@@ -681,6 +739,16 @@ register: aTransaction
 transactions 
 
 	^ transactions copy! !
+
+
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:33:36'!
+saveTransactionsHere: listTransactions
+
+	transactions do: [: transaction | listTransactions add: transaction].
+	
+	^ listTransactions.
+
+	! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Ejercicio'!
