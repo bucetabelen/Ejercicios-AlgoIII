@@ -89,151 +89,46 @@ test07AccountKnowsItsTransactions
 ! !
 
 
-!classDefinition: #TestXXX category: 'ServiciosFinancieros-Ejercicio'!
-TestCase subclass: #TestXXX
-	instanceVariableNames: 'anOriginAccount aDestinationAccount'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ServiciosFinancieros-Ejercicio'!
-
-!TestXXX methodsFor: 'tests' stamp: 'belen 11/25/2021 15:00:40'!
-test01TransferBetweenAccountsIsPossible
-
-	
-
-	Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
-	
-	self assert: anOriginAccount balance equals: -100*peso.
-	self assert: aDestinationAccount balance equals: 100*peso.! !
-
-!TestXXX methodsFor: 'tests' stamp: 'belen 11/25/2021 14:56:53'!
-test02TransferKnowsAmountOfTransaction
-
-	|transfer|
-	transfer := Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
-	
-	
-	self assert: anOriginAccount balance equals: -100*peso.
-	self assert: aDestinationAccount balance equals: 100*peso.
-	
-	self assert: 100*peso equals: transfer value. 
-! !
-
-!TestXXX methodsFor: 'tests' stamp: 'belen 11/25/2021 14:57:09'!
-test03TransferDepositLegKnowsTransferWithdrawLeg
-	
-	|transfer  |
-	
-	transfer := Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
-	
-	
-	self assert: transfer withdrawLeg equals: (transfer depositLeg) withdrawLeg . 
-! !
-
-!TestXXX methodsFor: 'tests' stamp: 'belen 11/25/2021 14:57:24'!
-test04TransferWithdrawLegKnowsTransferDepositLeg
-	
-	|transfer  |
-	
-
-	transfer := Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
-	
-	
-	self assert: transfer depositLeg equals: (transfer withdrawLeg ) depositLeg. 
-! !
-
-!TestXXX methodsFor: 'tests' stamp: 'belen 11/25/2021 14:58:14'!
-test05TransferBetweenSameAccountIsNotPossible
-
-
-	self 
-		
-		should: [Transfer from: anOriginAccount to: anOriginAccount for: 100*peso.]
-		raise: Error
-		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorSameAccounts ].
-		
-		
-		! !
-
-!TestXXX methodsFor: 'tests' stamp: 'belen 11/25/2021 14:58:08'!
-test06TransferAmountCanNotBeZero
-
-
-	self 
-	
-		should: [Transfer from: anOriginAccount to: aDestinationAccount for: 0*peso.]
-		raise: Error
-		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorAmountIsCero].
-		
-		
-		! !
-
-!TestXXX methodsFor: 'tests' stamp: 'belen 11/25/2021 19:30:21'!
-test07TransferAmountCanNotBeNegative
-
-
-	self 
-	
-		should: [Transfer from: anOriginAccount to: aDestinationAccount for: -100*peso.]
-		raise: Error
-		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorAmountIsNegative].
-		
-		
-		! !
-
-
-!TestXXX methodsFor: 'setUp' stamp: 'belen 11/25/2021 15:00:49'!
-setUp
-
-
-	anOriginAccount := ReceptiveAccount new.
-	aDestinationAccount := ReceptiveAccount new.
-	
-	! !
-
-
 !classDefinition: #TestYYY category: 'ServiciosFinancieros-Ejercicio'!
 TestCase subclass: #TestYYY
-	instanceVariableNames: ''
+	instanceVariableNames: 'accountA accountB portfolio accountC'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 15:17:06'!
+!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:55:38'!
+setUp
+
+	accountA := ReceptiveAccount new.
+	accountB := ReceptiveAccount new.
+	accountC := ReceptiveAccount new.
+	
+	portfolio := Portfolio new.! !
+
+!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:48:22'!
 test01PortfolioHaveZeroBalanceWhenCreated
 
-	| portfolio unaCuenta otraCuenta|
 	
-	
-	unaCuenta := ReceptiveAccount new.
-	otraCuenta := ReceptiveAccount new.
-	portfolio := Portfolio new.
-	
-	portfolio agruparCuenta: unaCuenta. 
-	portfolio agruparCuenta: otraCuenta.
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountB.
 
 	
 	self assert: 0*peso equals: portfolio balance.! !
 
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 15:25:00'!
+!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:49:20'!
 test02PortfolioIncresesWhenAccountsHaveBalance
 
-	| portfolio unaCuenta otraCuenta o|
+
 	
 	
-	unaCuenta := ReceptiveAccount new.
-	otraCuenta := ReceptiveAccount new.
-	
-	
-	Deposit register: 100*peso on: unaCuenta.
-	Deposit register: 200*peso on: otraCuenta.
+	Deposit register: 100*peso on: accountA .
+	Deposit register: 200*peso on: accountB .
 	
 	
 
-	portfolio := Portfolio new.
 	
-	portfolio agruparCuenta: unaCuenta. 
-	portfolio agruparCuenta: otraCuenta.
+	portfolio agruparCuenta: accountA . 
+	portfolio agruparCuenta: accountB .
 
 	
 	self assert: 300*peso equals: portfolio balance.
@@ -242,23 +137,19 @@ test02PortfolioIncresesWhenAccountsHaveBalance
 	
 ! !
 
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 15:55:37'!
+!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:52:07'!
 test03PortfolioRegisterTransactions
 
-	| portfolio unaCuenta otraCuenta deposit withdraw a|
-	
-	
-	unaCuenta := ReceptiveAccount new.
-	otraCuenta := ReceptiveAccount new.
-	a := ReceptiveAccount new.
-	
-	deposit := Deposit register: 100*peso on: unaCuenta.
-	withdraw := Withdraw register: 50*peso on: a . 
+	| anotherAccount deposit withdraw|
 
-	portfolio := Portfolio new.
+	anotherAccount := ReceptiveAccount new.
 	
-	portfolio agruparCuenta: unaCuenta. 
-	portfolio agruparCuenta: otraCuenta.
+	deposit := Deposit register: 100*peso on: accountA .
+	withdraw := Withdraw register: 50*peso on: anotherAccount. 
+
+
+	portfolio agruparCuenta: accountA . 
+	portfolio agruparCuenta: accountB .
 	
 	
 	
@@ -269,25 +160,19 @@ test03PortfolioRegisterTransactions
 	
 ! !
 
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 16:29:28'!
+!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:53:47'!
 test04PortfolioKnowsItsTransactions
 
-	| portfolio unaCuenta otraCuenta a|
-	
-	
-	unaCuenta := ReceptiveAccount new.
-	otraCuenta := ReceptiveAccount new.
-	a := ReceptiveAccount new.
-	
-	Deposit register: 100*peso on: unaCuenta.
-	Withdraw register: 50*peso on: unaCuenta. 
 
-	portfolio := Portfolio new.
+	portfolio agruparCuenta: accountA . 
+	portfolio agruparCuenta: accountB .
 	
-	portfolio agruparCuenta: unaCuenta. 
-	portfolio agruparCuenta: otraCuenta.
+	Deposit register: 100*peso on: accountA .
+	Withdraw register: 50*peso on: accountA . 
+
 	
-	self assert: 2 equals: (portfolio transaccionesDeLaCuenta: unaCuenta) size.
+	
+	self assert: 2 equals: (portfolio transactions) size.
 	
 	
 
@@ -304,49 +189,41 @@ test07AccountKnowsItsTransactions
 	self assert: (account transactions includes: deposit)."
 ! !
 
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 16:21:02'!
+!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:56:09'!
 test05PortfolioWithPortfolioAndAccountHaveZeroBalanceWhenCreated
 
-	| portfolio unaCuenta otraCuenta otroPortfolio cuenta|
+	|otroPortfolio|
 	
 	
-	unaCuenta := ReceptiveAccount new.
-	otraCuenta := ReceptiveAccount new.
-	cuenta := ReceptiveAccount new.
-	portfolio := Portfolio new.
 	otroPortfolio := Portfolio new.
 	
-	portfolio agruparCuenta: unaCuenta. 
-	portfolio agruparCuenta: otraCuenta.
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountB.
 	
 	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: cuenta.
+	otroPortfolio agruparCuenta: accountC.
 
 	
 	self assert: 0*peso equals: otroPortfolio balance.! !
 
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 16:20:22'!
+!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:03:58'!
 test06PortfolioWithPortfolioAndAccountIncresesWhenAccountsHaveBalance
 
 	
-	| portfolio unaCuenta otraCuenta otroPortfolio cuenta|
+	|otroPortfolio|
 	
 	
-	unaCuenta := ReceptiveAccount new.
-	otraCuenta := ReceptiveAccount new.
-	cuenta := ReceptiveAccount new.
-	portfolio := Portfolio new.
 	otroPortfolio := Portfolio new.
 	
-	portfolio agruparCuenta: unaCuenta. 
-	portfolio agruparCuenta: otraCuenta.
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountB.
 	
 	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: cuenta.
+	otroPortfolio agruparCuenta: accountC.
 	
-	Deposit register: 100*peso on: unaCuenta.
-	Deposit register: 200*peso on: otraCuenta.
-	Deposit register: 100*peso on: cuenta.
+	Deposit register: 100*peso on: accountA.
+	Deposit register: 200*peso on: accountB.
+	Deposit register: 100*peso on: accountC.
 	
 
 	
@@ -356,29 +233,27 @@ test06PortfolioWithPortfolioAndAccountIncresesWhenAccountsHaveBalance
 	
 ! !
 
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 16:28:34'!
+!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:04:58'!
 test07PortfolioWithPortfolioAndAccountIncresesKnowsRegisterTransactions
 
 	
-	| portfolio unaCuenta otraCuenta otroPortfolio cuenta deposit withdraw |
+	| otroPortfolio deposit withdraw |
 	
 	
-	unaCuenta := ReceptiveAccount new.
-	otraCuenta := ReceptiveAccount new.
-	cuenta := ReceptiveAccount new.
-	portfolio := Portfolio new.
+	
 	otroPortfolio := Portfolio new.
 	
-	portfolio agruparCuenta: unaCuenta. 
-	portfolio agruparCuenta: otraCuenta.
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountB.
 	
 	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: cuenta.
+	otroPortfolio agruparCuenta: accountC.
 	
-	deposit := Deposit register: 100*peso on: unaCuenta.
+	deposit := Deposit register: 100*peso on: accountA.
 	"withdraw:= Withdraw register: 200*peso on: otraCuenta."
 	
 	withdraw := Withdraw for: 100*peso.
+	
 	self assert: (otroPortfolio hasRegistered: deposit).
 	self deny: (otroPortfolio hasRegistered: withdraw ).
 
@@ -387,31 +262,132 @@ test07PortfolioWithPortfolioAndAccountIncresesKnowsRegisterTransactions
 	
 ! !
 
-!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 16:31:56'!
+!TestYYY methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:28:47'!
 test08PortfolioWithPortfolioAndAccountIncresesKnowsRegisterTransactions
 
 	
-	| portfolio unaCuenta otraCuenta otroPortfolio cuenta deposit withdraw |
+	| otroPortfolio |
 	
 	
-	unaCuenta := ReceptiveAccount new.
-	otraCuenta := ReceptiveAccount new.
-	cuenta := ReceptiveAccount new.
-	portfolio := Portfolio new.
 	otroPortfolio := Portfolio new.
 	
-	portfolio agruparCuenta: unaCuenta. 
-	portfolio agruparCuenta: otraCuenta.
-	
+	portfolio agruparCuenta: accountA. 
+	portfolio agruparCuenta: accountC.
 	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: cuenta.
+	otroPortfolio agruparCuenta: accountB.
 	
-	Deposit register: 100*peso on: unaCuenta.
-	Withdraw register: 200*peso on: unaCuenta.
+	Deposit register: 100*peso on: accountA.
+	Withdraw register: 200*peso on: accountC.
+
+	Deposit register: 100*peso on: accountB.
 	
-	self assert: 2 equals: (portfolio transaccionesDeLaCuenta: unaCuenta) size.
+	
+	self assert: 3 equals: (otroPortfolio transactions ) size.
 	
 		! !
+
+
+!classDefinition: #TransferTest category: 'ServiciosFinancieros-Ejercicio'!
+TestCase subclass: #TransferTest
+	instanceVariableNames: 'anOriginAccount aDestinationAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 15:00:40'!
+test01TransferBetweenAccountsIsPossible
+
+	
+
+	Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
+	
+	self assert: anOriginAccount balance equals: -100*peso.
+	self assert: aDestinationAccount balance equals: 100*peso.! !
+
+!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 14:56:53'!
+test02TransferKnowsAmountOfTransaction
+
+	|transfer|
+	transfer := Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
+	
+	
+	self assert: anOriginAccount balance equals: -100*peso.
+	self assert: aDestinationAccount balance equals: 100*peso.
+	
+	self assert: 100*peso equals: transfer value. 
+! !
+
+!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 14:57:09'!
+test03TransferDepositLegKnowsTransferWithdrawLeg
+	
+	|transfer  |
+	
+	transfer := Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
+	
+	
+	self assert: transfer withdrawLeg equals: (transfer depositLeg) withdrawLeg . 
+! !
+
+!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 14:57:24'!
+test04TransferWithdrawLegKnowsTransferDepositLeg
+	
+	|transfer  |
+	
+
+	transfer := Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
+	
+	
+	self assert: transfer depositLeg equals: (transfer withdrawLeg ) depositLeg. 
+! !
+
+!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 14:58:14'!
+test05TransferBetweenSameAccountIsNotPossible
+
+
+	self 
+		
+		should: [Transfer from: anOriginAccount to: anOriginAccount for: 100*peso.]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorSameAccounts ].
+		
+		
+		! !
+
+!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 14:58:08'!
+test06TransferAmountCanNotBeZero
+
+
+	self 
+	
+		should: [Transfer from: anOriginAccount to: aDestinationAccount for: 0*peso.]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorAmountIsCero].
+		
+		
+		! !
+
+!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 19:30:21'!
+test07TransferAmountCanNotBeNegative
+
+
+	self 
+	
+		should: [Transfer from: anOriginAccount to: aDestinationAccount for: -100*peso.]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorAmountIsNegative].
+		
+		
+		! !
+
+
+!TransferTest methodsFor: 'setUp' stamp: 'belen 11/25/2021 15:00:49'!
+setUp
+
+
+	anOriginAccount := ReceptiveAccount new.
+	aDestinationAccount := ReceptiveAccount new.
+	
+	! !
 
 
 !classDefinition: #AccountTransaction category: 'ServiciosFinancieros-Ejercicio'!
@@ -575,21 +551,21 @@ updateBalance: balance
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Ejercicio'!
 AccountTransaction subclass: #Withdraw
-	instanceVariableNames: 'value'
+	instanceVariableNames: 'amount'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Withdraw methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:46'!
+!Withdraw methodsFor: 'initialization' stamp: 'belen 11/26/2021 15:23:56'!
 initializeFor: aValue
 
-	value := aValue ! !
+	amount := aValue ! !
 
 
-!Withdraw methodsFor: 'value' stamp: 'belen 11/25/2021 14:11:59'!
+!Withdraw methodsFor: 'value' stamp: 'belen 11/26/2021 15:23:56'!
 value
 
-	^ value! !
+	^ amount! !
 
 
 !Withdraw methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:27:42'!
@@ -622,7 +598,7 @@ register: aValue on: account
 
 !classDefinition: #Portfolio category: 'ServiciosFinancieros-Ejercicio'!
 Object subclass: #Portfolio
-	instanceVariableNames: 'accounts'
+	instanceVariableNames: 'accounts transactionsList'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
@@ -649,18 +625,22 @@ hasRegistered: aDeposit
 	
 	! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 15:13:48'!
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 20:42:20'!
 initialize
 
-	accounts := OrderedCollection new.! !
+	accounts := OrderedCollection new.
+	
+	transactionsList := OrderedCollection new.
+	
+	! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 16:10:06'!
-transaccionesDeLaCuenta: unaCuenta
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:29:01'!
+transactions
 	
-	|cuenta|
-	accounts do:[:account | (account == unaCuenta) ifTrue:[cuenta := account] ].
 	
-	^cuenta transactions. ! !
+	accounts do:[: account | transactionsList add: account transactions ].
+	
+	^transactionsList copy.! !
 
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
