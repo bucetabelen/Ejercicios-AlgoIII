@@ -5,40 +5,25 @@ TestCase subclass: #PortfolioTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:55:38'!
-setUp
-
-	accountA := ReceptiveAccount new.
-	accountB := ReceptiveAccount new.
-	accountC := ReceptiveAccount new.
-	
-	portfolio := Portfolio new.! !
-
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:48:22'!
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 14:51:52'!
 test01PortfolioHaveZeroBalanceWhenCreated
 
-	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountB.
-
+	portfolio := self addAccountsOnPortfolio. 
 	
 	self assert: 0*peso equals: portfolio balance.! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:49:20'!
-test02PortfolioIncresesWhenAccountsHaveBalance
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/28/2021 18:25:11'!
+test02DepositIncreasesPortfolioBalanceOnTransactionValue
 
 
 	
 	
+
 	Deposit register: 100*peso on: accountA .
 	Deposit register: 200*peso on: accountB .
-	
-	
 
+	portfolio := self addAccountsOnPortfolio.	
 	
-	portfolio agruparCuenta: accountA . 
-	portfolio agruparCuenta: accountB .
-
 	
 	self assert: 300*peso equals: portfolio balance.
 	
@@ -46,35 +31,68 @@ test02PortfolioIncresesWhenAccountsHaveBalance
 	
 ! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:52:07'!
-test03PortfolioRegisterTransactions
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 15:02:35'!
+test03WithdrawDecreasesPortfolioBalanceOnTransactionValue 
+	
+	
+	
+	Deposit register: 100*peso on: accountA .
+	Withdraw register: 200*peso on: accountB .
+	
+	
+	
+ 	portfolio := self addAccountsOnPortfolio. 
+	
+	self assert: -100*peso equals: portfolio balance.
+	
+	
+	! !
 
-	| anotherAccount deposit withdraw|
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/28/2021 18:25:18'!
+test04PortfolioKnowsRegisteredTransactions
 
-	anotherAccount := ReceptiveAccount new.
+	| deposit withdraw|
+
+	
 	
 	deposit := Deposit register: 100*peso on: accountA .
-	withdraw := Withdraw register: 50*peso on: anotherAccount. 
+	withdraw := Withdraw register: 50*peso on: accountB. 
 
 
-	portfolio agruparCuenta: accountA . 
-	portfolio agruparCuenta: accountB .
-	
-	
+	portfolio := self addAccountsOnPortfolio. 
 	
 	self assert: (portfolio hasRegistered: deposit).
+	self assert: (portfolio hasRegistered: withdraw ).
+
+	
+	
+! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/28/2021 18:25:04'!
+test05PortfolioDoesNotKnowNotRegisteredTransactions
+
+	|deposit withdraw|
+
+	
+	deposit := Deposit for:100*peso.
+	withdraw := Withdraw for: 50*peso. 
+
+
+	portfolio := self addAccountsOnPortfolio. 
+	
+	
+	self deny: (portfolio hasRegistered: deposit).
 	self deny: (portfolio hasRegistered: withdraw ).
 
 	
 	
 ! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:01:20'!
-test04PortfolioKnowsItsTransactions
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 15:03:30'!
+test06PortfolioKnowsItsTransactions
 
 
-	portfolio agruparCuenta: accountA . 
-	portfolio agruparCuenta: accountB .
+	portfolio := self addAccountsOnPortfolio.
 	
 	Deposit register: 100*peso on: accountA .
 	Withdraw register: 50*peso on: accountA . 
@@ -83,202 +101,224 @@ test04PortfolioKnowsItsTransactions
 	
 	self assert: 2 equals: (portfolio transactions) size.! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 14:56:09'!
-test05PortfolioWithPortfolioAndAccountHaveZeroBalanceWhenCreated
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 15:13:03'!
+test07PortfolioCanNotAddSameAccountTwice
 
-	|otroPortfolio|
+	portfolio addAccount: accountA. 
 	
+	self should: [portfolio addAccount: accountA.]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Portfolio errorAccountCanNotBeDuplicated ].
+		
 	
-	otroPortfolio := Portfolio new.
+		! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 15:13:40'!
+test08PortfolioCanNotAddItsSelf
 	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountB.
+	self should: [portfolio addAccount: portfolio.]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Portfolio errorPortfolioCanNotAddItself].
+		
 	
-	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: accountC.
+		! !
+
+
+!PortfolioTest methodsFor: 'operations' stamp: 'BELEN 11/27/2021 14:53:42'!
+addAccountsOnPortfolio
 
 	
-	self assert: 0*peso equals: otroPortfolio balance.! !
+	| unPortfolio auxiliarPorfolio|
+	
+	
+	unPortfolio := Portfolio new.
+	auxiliarPorfolio := Portfolio new.
+	
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'belen 11/26/2021 15:03:58'!
-test06PortfolioWithPortfolioAndAccountIncresesWhenAccountsHaveBalance
+	auxiliarPorfolio addAccount: accountA. 
+	auxiliarPorfolio addAccount: accountB.
+	
+	unPortfolio addAccount: auxiliarPorfolio. 
+	unPortfolio addAccount: accountC.
+	
+	^unPortfolio. 
+		! !
+
+!PortfolioTest methodsFor: 'operations' stamp: 'BELEN 11/27/2021 13:35:35'!
+generateTransactionsOnAccounts
 
 	
-	|otroPortfolio|
+	Deposit register: 100*peso on: accountA.
+	Withdraw register: 200*peso on: accountC.
+	Deposit register: 100*peso on: accountB.! !
+
+
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:21:45'!
+NOTAStest01PortfolioHaveZeroBalanceWhenCreated
 	
+	portfolio addAccount: accountA.
+	portfolio addAccount: accountB.
 	
-	otroPortfolio := Portfolio new.
+	self assert: 0*peso equals: portfolio balance.! !
+
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:22:50'!
+NOTAStest02DepositIncreasesPortfolioBalanceOnTransactionValue
 	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountB.
-	
-	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: accountC.
+	portfolio addAccount: accountA.
+	portfolio addAccount: accountB.
+	portfolio addAccount: accountC.
 	
 	Deposit register: 100*peso on: accountA.
 	Deposit register: 200*peso on: accountB.
 	Deposit register: 100*peso on: accountC.
 	
-
-	
-	self assert: 400*peso equals: otroPortfolio balance.
+	self assert: 400*peso equals: portfolio balance.
 	
 	
 	
 ! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:01:28'!
-test07PortfolioWithPortfolioAndAccountIncresesKnowsRegisterTransactions
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:23:00'!
+NOTAStest03WithdrawDecreasesPortfolioBalanceOnTransactionValue 
+	
+	
+	
+	Deposit register: 100*peso on: accountA .
+	Withdraw register: 200*peso on: accountB .
+	
+	
+	portfolio addAccount: accountA.
+	portfolio addAccount: accountB.
+	
+	self assert: -100*peso equals: portfolio balance.
+	
+	
+	! !
+
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:23:07'!
+NOTAStest04PortfolioKnowsRegisteredTransactions
+
+	| deposit withdraw|
 
 	
-	| otroPortfolio deposit withdraw |
 	
-	
-	
-	otroPortfolio := Portfolio new.
-	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountB.
-	
-	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: accountC.
-	
-	deposit := Deposit register: 100*peso on: accountA.
-	
-	withdraw := Withdraw for: 100*peso.
-	
-	self assert: (otroPortfolio hasRegistered: deposit).
-	self deny: (otroPortfolio hasRegistered: withdraw ).
+	deposit := Deposit register: 100*peso on: accountA .
+	withdraw := Withdraw register: 50*peso on: accountB. 
+
 
 	
+	portfolio addAccount: accountA . 
+	portfolio addAccount: accountB .
+	
+	
+	
+	self assert: (portfolio hasRegistered: deposit).
+	self assert: (portfolio hasRegistered: withdraw ).
+
 	
 	
 ! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:44:31'!
-test08PortfolioWithPortfolioAndAccountIncresesKnowsRegisterTransactions
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:23:15'!
+NOTAStest05PortfolioDoesNotKnowNotRegisteredTransactions
+
+	|deposit withdraw|
 
 	
-	| otroPortfolio portfolio3 accountD|
-	
-	
-	otroPortfolio := Portfolio new.
-	
-	portfolio agruparCuenta: accountA. 
-	portfolio agruparCuenta: accountC.
-	otroPortfolio agruparCuenta: portfolio. 
-	otroPortfolio agruparCuenta: accountB.
-	portfolio3 := Portfolio new.
-	accountD :=  ReceptiveAccount new.
-	portfolio3 agruparCuenta: accountD.
-	otroPortfolio agruparCuenta: portfolio3.
-	
-	Deposit register: 100*peso on: accountA.
-	Withdraw register: 200*peso on: accountC.
+	deposit := Deposit for:100*peso.
+	withdraw := Withdraw for: 50*peso. 
 
-	Deposit register: 100*peso on: accountB.
-	
-	Deposit register: 200*peso on: accountD.
-	Deposit register: 200*peso on: accountD.
-	Withdraw register: 200*peso on: accountD.
-	
-	
-	self assert: 6 equals: (otroPortfolio transactions ) size.
-	
-		! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:49:01'!
-test09PortfolioCanNotAddSameAccountTwice
+	portfolio addAccount: accountA . 
+	portfolio addAccount: accountB .
+	
+	self deny: (portfolio hasRegistered: deposit).
+	self deny: (portfolio hasRegistered: withdraw ).
 
-	portfolio agruparCuenta: accountA. 
 	
-	self should: [portfolio agruparCuenta: accountA.]
-		raise: Error
-		withExceptionDo: [ :anError | self assert: anError messageText equals: Portfolio errorCuentaRepetida ].
-		
 	
-		! !
+! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:51:26'!
-test10punto2
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:23:24'!
+NOTAStest06PortfolioKnowsItsTransactions
 
-	portfolio agruparCuenta: accountA. 
-	
-	self should: [portfolio agruparCuenta: accountA.]
-		raise: Error
-		withExceptionDo: [ :anError | self assert: anError messageText equals: Portfolio errorCuentaRepetida ].
-		
-	
-		! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 18:04:11'!
-test11PortfolioCanNotAddItsSelf
+	portfolio addAccount: accountA.
+	portfolio addAccount: accountB.
 	
-	self should: [portfolio agruparCuenta: portfolio.]
-		raise: Error
-		withExceptionDo: [ :anError | self assert: anError messageText equals: Portfolio errorNoSePuedeAgregarASiMismo].
-		
+	Deposit register: 100*peso on: accountA .
+	Withdraw register: 50*peso on: accountA . 
+
 	
-		! !
+	
+	self assert: 2 equals: (portfolio transactions) size.! !
+
+
+!PortfolioTest methodsFor: 'setUp' stamp: 'belen 11/26/2021 14:55:38'!
+setUp
+
+	accountA := ReceptiveAccount new.
+	accountB := ReceptiveAccount new.
+	accountC := ReceptiveAccount new.
+	
+	portfolio := Portfolio new.! !
 
 
 !classDefinition: #ReceptiveAccountTest category: 'ServiciosFinancieros-Ejercicio'!
 TestCase subclass: #ReceptiveAccountTest
-	instanceVariableNames: ''
+	instanceVariableNames: 'account'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:10:43'!
+!ReceptiveAccountTest methodsFor: 'setUp' stamp: 'BELEN 11/27/2021 13:05:56'!
+setUp
+
+	account := ReceptiveAccount new.! !
+
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:06:11'!
 test01ReceptiveAccountHaveZeroAsBalanceWhenCreated 
 
-	| account |
 	
-	account := ReceptiveAccount new.
-
 	self assert: 0 equals: account balance
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:14:20'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:06:23'!
 test02DepositIncreasesBalanceOnTransactionValue 
 
-	| account |
-	
-	account := ReceptiveAccount  new.
+
 	Deposit register: 100 * peso on: account.
 		
 	self assert: 100 * peso equals: account balance
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:14:24'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:06:32'!
 test03WithdrawDecreasesBalanceOnTransactionValue 
 
-	| account |
-	
-	account := ReceptiveAccount new.
+
 	Deposit register: 100 * peso on: account.
 	Withdraw register: 50 * peso on: account.
 		
 	self assert: 50 * peso equals: account balance
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:10:14'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:06:49'!
 test04WithdrawValueMustBePositive 
 
-	| account withdrawValue |
-	
-	account := ReceptiveAccount new.
+	|  withdrawValue |
+
 	withdrawValue := 50 * peso.
 	
 	self assert: withdrawValue equals: (Withdraw register: withdrawValue on: account) value
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:10:22'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:07:11'!
 test05ReceptiveAccountKnowsRegisteredTransactions 
 
-	| account deposit withdraw |
+	|  deposit withdraw |
 	
-	account := ReceptiveAccount new.
+	
 	deposit := Deposit register: 100 * peso on: account.
 	withdraw := Withdraw register: 50 * peso on: account.
 		
@@ -286,12 +326,11 @@ test05ReceptiveAccountKnowsRegisteredTransactions
 	self assert: (account hasRegistered: withdraw).
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:12:14'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:07:37'!
 test06ReceptiveAccountDoNotKnowNotRegisteredTransactions
 
-	| account deposit withdraw |
+	|  deposit withdraw |
 	
-	account := ReceptiveAccount new.
 	deposit :=  Deposit for: 100 * peso.
 	withdraw := Withdraw for: 50 * peso.
 		
@@ -299,12 +338,11 @@ test06ReceptiveAccountDoNotKnowNotRegisteredTransactions
 	self deny: (account hasRegistered: withdraw).
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:12:23'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:08:22'!
 test07AccountKnowsItsTransactions 
 
-	| account deposit |
+	|  deposit |
 	
-	account := ReceptiveAccount new.
 	
 	deposit := Deposit register: 50 * peso on: account.
 		
@@ -320,7 +358,7 @@ TestCase subclass: #TransferTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 15:00:40'!
+!TransferTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:01:28'!
 test01TransferBetweenAccountsIsPossible
 
 	
@@ -330,10 +368,11 @@ test01TransferBetweenAccountsIsPossible
 	self assert: anOriginAccount balance equals: -100*peso.
 	self assert: aDestinationAccount balance equals: 100*peso.! !
 
-!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 14:56:53'!
+!TransferTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:01:57'!
 test02TransferKnowsAmountOfTransaction
 
 	|transfer|
+	
 	transfer := Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
 	
 	
@@ -343,12 +382,14 @@ test02TransferKnowsAmountOfTransaction
 	self assert: 100*peso equals: transfer value. 
 ! !
 
-!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 14:57:09'!
+!TransferTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:03:06'!
 test03TransferDepositLegKnowsTransferWithdrawLeg
 	
 	|transfer  |
 	
 	transfer := Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
+	
+	"self generateTransferBetweenAccounts"
 	
 	
 	self assert: transfer withdrawLeg equals: (transfer depositLeg) withdrawLeg . 
@@ -366,7 +407,7 @@ test04TransferWithdrawLegKnowsTransferDepositLeg
 	self assert: transfer depositLeg equals: (transfer withdrawLeg ) depositLeg. 
 ! !
 
-!TransferTest methodsFor: 'tests' stamp: 'Melany 11/26/2021 17:48:07'!
+!TransferTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 12:57:35'!
 test05TransferBetweenSameAccountIsNotPossible
 
 
@@ -374,12 +415,12 @@ test05TransferBetweenSameAccountIsNotPossible
 		
 		should: [Transfer from: anOriginAccount to: anOriginAccount for: 100*peso.]
 		raise: Error
-		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorSameAccounts ].
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorTransferBetweenSameAccountIsNotPossible ].
 		
 		
 		! !
 
-!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 14:58:08'!
+!TransferTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 12:59:35'!
 test06TransferAmountCanNotBeZero
 
 
@@ -387,12 +428,12 @@ test06TransferAmountCanNotBeZero
 	
 		should: [Transfer from: anOriginAccount to: aDestinationAccount for: 0*peso.]
 		raise: Error
-		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorAmountIsCero].
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorAmountIsInvalid ].
 		
 		
 		! !
 
-!TransferTest methodsFor: 'tests' stamp: 'belen 11/25/2021 19:30:21'!
+!TransferTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:00:11'!
 test07TransferAmountCanNotBeNegative
 
 
@@ -400,7 +441,7 @@ test07TransferAmountCanNotBeNegative
 	
 		should: [Transfer from: anOriginAccount to: aDestinationAccount for: -100*peso.]
 		raise: Error
-		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorAmountIsNegative].
+		withExceptionDo: [ :anError | self assert: anError messageText equals: Transfer errorAmountIsInvalid].
 		
 		
 		! !
@@ -416,238 +457,62 @@ setUp
 	! !
 
 
-!classDefinition: #AccountTransaction category: 'ServiciosFinancieros-Ejercicio'!
-Object subclass: #AccountTransaction
+!classDefinition: #Account category: 'ServiciosFinancieros-Ejercicio'!
+Object subclass: #Account
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!AccountTransaction methodsFor: 'value' stamp: 'HernanWilkinson 9/12/2011 12:25'!
-value 
+!Account methodsFor: 'initialization' stamp: 'BELEN 11/28/2021 18:41:18'!
+initialize
 
-	self subclassResponsibility ! !
+	self subclassResponsibility. ! !
 
 
-!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:26:15'!
-updateBalance: balance
+!Account methodsFor: 'main protocol' stamp: 'BELEN 11/28/2021 18:30:36'!
+balance
 
 	self subclassResponsibility.! !
 
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+!Account methodsFor: 'main protocol' stamp: 'BELEN 11/28/2021 18:32:27'!
+hasRegistered: aTransaction
 
-!classDefinition: 'AccountTransaction class' category: 'ServiciosFinancieros-Ejercicio'!
-AccountTransaction class
-	instanceVariableNames: ''!
+	self subclassResponsibility. ! !
 
-!AccountTransaction class methodsFor: 'instance creation' stamp: 'NR 10/17/2019 03:22:00'!
-register: aValue on: account
+!Account methodsFor: 'main protocol' stamp: 'BELEN 11/28/2021 18:31:58'!
+transactions
 
-	| transaction |
-	
-	transaction := self for: aValue.
-	account register: transaction.
-		
-	^ transaction! !
-
-
-!classDefinition: #Deposit category: 'ServiciosFinancieros-Ejercicio'!
-AccountTransaction subclass: #Deposit
-	instanceVariableNames: 'value'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ServiciosFinancieros-Ejercicio'!
-
-!Deposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:45'!
-initializeFor: aValue
-
-	value := aValue ! !
+	self subclassResponsibility. ! !
 
 
-!Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
-value
+!Account methodsFor: 'operations' stamp: 'BELEN 11/28/2021 18:31:43'!
+saveTransactionsHere: listTransactions
 
-	^ value! !
-
-
-!Deposit methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:26:56'!
-updateBalance: balance
-
-	^balance + self value.
-	
-	! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Deposit class' category: 'ServiciosFinancieros-Ejercicio'!
-Deposit class
-	instanceVariableNames: ''!
-
-!Deposit class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:38'!
-for: aValue
-
-	^ self new initializeFor: aValue ! !
-
-
-!Deposit class methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 17:42:36'!
-register: aValue on: account
-
-	| transaction |
-	
-	transaction := self for: aValue.
-	account register: transaction.
-		
-	^ transaction! !
-
-
-!classDefinition: #TransferLeg category: 'ServiciosFinancieros-Ejercicio'!
-AccountTransaction subclass: #TransferLeg
-	instanceVariableNames: 'transfer'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ServiciosFinancieros-Ejercicio'!
-
-!TransferLeg methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 13:37:02'!
-initializeFor: aTransfer
-
-	transfer := aTransfer! !
-
-!TransferLeg methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 13:40:40'!
-registerOn: account
-
-	
-	account register: self.
-		
-	^ self.! !
-
-!TransferLeg methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 13:37:50'!
-value
-
-	^transfer value.! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'TransferLeg class' category: 'ServiciosFinancieros-Ejercicio'!
-TransferLeg class
-	instanceVariableNames: ''!
-
-!TransferLeg class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 13:34:24'!
-of: aTransfer on: anOriginAccount
-
-	
-	^self new initializeFor: aTransfer. 
-! !
-
-
-!classDefinition: #TransferDepositLeg category: 'ServiciosFinancieros-Ejercicio'!
-TransferLeg subclass: #TransferDepositLeg
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ServiciosFinancieros-Ejercicio'!
-
-!TransferDepositLeg methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:27:16'!
-updateBalance: balance
-
-	^balance + self value.! !
-
-!TransferDepositLeg methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 17:23:48'!
-withdrawLeg
-
-	^transfer withdrawLeg.! !
-
-
-!classDefinition: #TransferWithdrawLeg category: 'ServiciosFinancieros-Ejercicio'!
-TransferLeg subclass: #TransferWithdrawLeg
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ServiciosFinancieros-Ejercicio'!
-
-!TransferWithdrawLeg methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 17:24:07'!
-depositLeg
-
-	^transfer depositLeg.! !
-
-!TransferWithdrawLeg methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:27:33'!
-updateBalance: balance
-
-	^balance + self value negated.! !
-
-
-!classDefinition: #Withdraw category: 'ServiciosFinancieros-Ejercicio'!
-AccountTransaction subclass: #Withdraw
-	instanceVariableNames: 'amount'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ServiciosFinancieros-Ejercicio'!
-
-!Withdraw methodsFor: 'initialization' stamp: 'belen 11/26/2021 15:23:56'!
-initializeFor: aValue
-
-	amount := aValue ! !
-
-
-!Withdraw methodsFor: 'value' stamp: 'belen 11/26/2021 15:23:56'!
-value
-
-	^ amount! !
-
-
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:27:42'!
-updateBalance: balance
-
-	^balance + self value negated.! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Withdraw class' category: 'ServiciosFinancieros-Ejercicio'!
-Withdraw class
-	instanceVariableNames: ''!
-
-!Withdraw class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:33'!
-for: aValue
-
-	^ self new initializeFor: aValue ! !
-
-
-!Withdraw class methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 17:42:40'!
-register: aValue on: account
-
-	| transaction |
-	
-	transaction := self for: aValue.
-	account register: transaction.
-		
-	^ transaction! !
+	self subclassResponsibility.! !
 
 
 !classDefinition: #Portfolio category: 'ServiciosFinancieros-Ejercicio'!
-Object subclass: #Portfolio
-	instanceVariableNames: 'accounts transactionsList'
+Account subclass: #Portfolio
+	instanceVariableNames: 'accounts'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:13:11'!
-agruparCuenta: anAccount
-		
-	self assertcanBeAddedToAccounts: anAccount.
-	accounts add: anAccount.! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 18:03:43'!
+!Portfolio methodsFor: 'assert - private' stamp: 'BELEN 11/27/2021 15:13:40'!
 assertcanBeAddedToAccounts: anAccount
 
-	(accounts includes: anAccount) ifTrue: [self error: Portfolio errorCuentaRepetida].
+	(accounts includes: anAccount) ifTrue: [self error: Portfolio errorAccountCanNotBeDuplicated].
 	
-	(self == anAccount) ifTrue: [ ^ self error: Portfolio errorNoSePuedeAgregarASiMismo].! !
+	(self == anAccount) ifTrue: [ ^ self error: Portfolio errorPortfolioCanNotAddItself].! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 15:16:23'!
+
+!Portfolio methodsFor: 'main protocol' stamp: 'BELEN 11/27/2021 13:14:30'!
 balance
 	
-	^accounts sum:[:acc | acc balance]! !
+	^accounts sum:[:account | account balance]! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 16:26:28'!
+!Portfolio methodsFor: 'main protocol' stamp: 'BELEN 11/27/2021 13:13:56'!
 hasRegistered: aDeposit 
 	
 	|bool|
@@ -658,23 +523,7 @@ hasRegistered: aDeposit
 	
 	! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 20:42:20'!
-initialize
-
-	accounts := OrderedCollection new.
-	
-	transactionsList := OrderedCollection new.
-	
-	! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:37:44'!
-saveTransactionsHere: listTransactions
-
-	accounts do: [ :transactions | transactions saveTransactionsHere: listTransactions ].
-	
-	^ listTransactions.! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:35:56'!
+!Portfolio methodsFor: 'main protocol' stamp: 'Melany 11/26/2021 17:35:56'!
 transactions
 	
 	|listTransaction|
@@ -684,25 +533,48 @@ transactions
 	
 	^listTransaction copy.! !
 
+
+!Portfolio methodsFor: 'operations' stamp: 'BELEN 11/27/2021 13:16:18'!
+addAccount: anAccount
+		
+	self assertcanBeAddedToAccounts: anAccount.
+	accounts add: anAccount.! !
+
+!Portfolio methodsFor: 'operations' stamp: 'Melany 11/26/2021 17:37:44'!
+saveTransactionsHere: listTransactions
+
+	accounts do: [ :transactions | transactions saveTransactionsHere: listTransactions ].
+	
+	^ listTransactions.! !
+
+
+!Portfolio methodsFor: 'initialization' stamp: 'BELEN 11/27/2021 13:11:41'!
+initialize
+
+	accounts := OrderedCollection new.
+	
+
+! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: 'ServiciosFinancieros-Ejercicio'!
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:14:42'!
-errorCuentaRepetida
+!Portfolio class methodsFor: 'error' stamp: 'BELEN 11/27/2021 15:13:03'!
+errorAccountCanNotBeDuplicated
 	
 	^ 'Cuenta repetida en el portfolio'.! !
 
-!Portfolio class methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:53:49'!
-errorNoSePuedeAgregarASiMismo
+!Portfolio class methodsFor: 'error' stamp: 'BELEN 11/27/2021 15:13:40'!
+errorPortfolioCanNotAddItself
 
 	^'No se puede agregar el portfolio a si mismo'.! !
 
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
-Object subclass: #ReceptiveAccount
+Account subclass: #ReceptiveAccount
 	instanceVariableNames: 'transactions'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -712,6 +584,16 @@ Object subclass: #ReceptiveAccount
 initialize
 
 	transactions := OrderedCollection new.! !
+
+
+!ReceptiveAccount methodsFor: 'operations' stamp: 'Melany 11/26/2021 17:33:36'!
+saveTransactionsHere: listTransactions
+
+	transactions do: [: transaction | listTransactions add: transaction].
+	
+	^ listTransactions.
+
+	! !
 
 
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'belen 11/25/2021 19:33:17'!
@@ -740,45 +622,231 @@ transactions
 
 	^ transactions copy! !
 
-
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 11/26/2021 17:33:36'!
-saveTransactionsHere: listTransactions
-
-	transactions do: [: transaction | listTransactions add: transaction].
-	
-	^ listTransactions.
-
-	! !
-
 
-!classDefinition: #Transfer category: 'ServiciosFinancieros-Ejercicio'!
-Object subclass: #Transfer
-	instanceVariableNames: 'value depositTransfer withdrawTransfer depositLeg withdrawLeg'
+!classDefinition: #AccountTransaction category: 'ServiciosFinancieros-Ejercicio'!
+Object subclass: #AccountTransaction
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Transfer methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 17:33:10'!
+!AccountTransaction methodsFor: 'value' stamp: 'HernanWilkinson 9/12/2011 12:25'!
+value 
+
+	self subclassResponsibility ! !
+
+
+!AccountTransaction methodsFor: 'operations' stamp: 'belen 11/25/2021 14:26:15'!
+updateBalance: balance
+
+	self subclassResponsibility.! !
+
+
+!classDefinition: #Deposit category: 'ServiciosFinancieros-Ejercicio'!
+AccountTransaction subclass: #Deposit
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!Deposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:45'!
+initializeFor: aValue
+
+	value := aValue ! !
+
+
+!Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
+value
+
+	^ value! !
+
+
+!Deposit methodsFor: 'operations' stamp: 'belen 11/25/2021 14:26:56'!
+updateBalance: balance
+
+	^balance + self value.
+	
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Deposit class' category: 'ServiciosFinancieros-Ejercicio'!
+Deposit class
+	instanceVariableNames: ''!
+
+!Deposit class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:38'!
+for: aValue
+
+	^ self new initializeFor: aValue ! !
+
+!Deposit class methodsFor: 'instance creation' stamp: 'belen 11/24/2021 17:42:36'!
+register: aValue on: account
+
+	| transaction |
+	
+	transaction := self for: aValue.
+	account register: transaction.
+		
+	^ transaction! !
+
+
+!classDefinition: #TransferLeg category: 'ServiciosFinancieros-Ejercicio'!
+AccountTransaction subclass: #TransferLeg
+	instanceVariableNames: 'transfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!TransferLeg methodsFor: 'value' stamp: 'belen 11/25/2021 13:37:50'!
+value
+
+	^transfer value.! !
+
+
+!TransferLeg methodsFor: 'initialization' stamp: 'belen 11/25/2021 13:37:02'!
+initializeFor: aTransfer
+
+	transfer := aTransfer! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferLeg class' category: 'ServiciosFinancieros-Ejercicio'!
+TransferLeg class
+	instanceVariableNames: ''!
+
+!TransferLeg class methodsFor: 'instance creation' stamp: 'BELEN 11/27/2021 12:50:54'!
+for: aTransfer
+
+
+	^self new initializeFor: aTransfer.! !
+
+!TransferLeg class methodsFor: 'instance creation' stamp: 'BELEN 11/27/2021 12:51:01'!
+of: aTransfer on: anAccount
+
+	|transfer|
+	
+	transfer := self for: aTransfer. 
+	
+	anAccount register: transfer.
+	
+	^transfer.
+! !
+
+
+!classDefinition: #TransferDepositLeg category: 'ServiciosFinancieros-Ejercicio'!
+TransferLeg subclass: #TransferDepositLeg
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!TransferDepositLeg methodsFor: 'accesing' stamp: 'belen 11/24/2021 17:23:48'!
+withdrawLeg
+
+	^transfer withdrawLeg.! !
+
+
+!TransferDepositLeg methodsFor: 'operations' stamp: 'belen 11/25/2021 14:27:16'!
+updateBalance: balance
+
+	^balance + self value.! !
+
+
+!classDefinition: #TransferWithdrawLeg category: 'ServiciosFinancieros-Ejercicio'!
+TransferLeg subclass: #TransferWithdrawLeg
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!TransferWithdrawLeg methodsFor: 'accesing' stamp: 'belen 11/24/2021 17:24:07'!
+depositLeg
+
+	^transfer depositLeg.! !
+
+
+!TransferWithdrawLeg methodsFor: 'operations' stamp: 'belen 11/25/2021 14:27:33'!
+updateBalance: balance
+
+	^balance + self value negated.! !
+
+
+!classDefinition: #Withdraw category: 'ServiciosFinancieros-Ejercicio'!
+AccountTransaction subclass: #Withdraw
+	instanceVariableNames: 'amount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!Withdraw methodsFor: 'initialization' stamp: 'belen 11/26/2021 15:23:56'!
+initializeFor: aValue
+
+	amount := aValue ! !
+
+
+!Withdraw methodsFor: 'value' stamp: 'belen 11/26/2021 15:23:56'!
+value
+
+	^ amount! !
+
+
+!Withdraw methodsFor: 'operations' stamp: 'belen 11/25/2021 14:27:42'!
+updateBalance: balance
+
+	^balance + self value negated.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Withdraw class' category: 'ServiciosFinancieros-Ejercicio'!
+Withdraw class
+	instanceVariableNames: ''!
+
+!Withdraw class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:33'!
+for: aValue
+
+	^ self new initializeFor: aValue ! !
+
+!Withdraw class methodsFor: 'instance creation' stamp: 'belen 11/24/2021 17:42:40'!
+register: aValue on: account
+
+	| transaction |
+	
+	transaction := self for: aValue.
+	account register: transaction.
+		
+	^ transaction! !
+
+
+!classDefinition: #Transfer category: 'ServiciosFinancieros-Ejercicio'!
+Object subclass: #Transfer
+	instanceVariableNames: 'amount depositLeg withdrawLeg'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!Transfer methodsFor: 'accesing' stamp: 'belen 11/24/2021 17:33:10'!
 depositLeg
 	^depositLeg ! !
 
-!Transfer methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 17:30:51'!
-initializeWith: anAmountTransfer WithdrawLeg: transferWithdrawLeg DepositLeg: transferDepositLeg.
-	 
-	
-	value := anAmountTransfer. 
-	depositLeg := transferDepositLeg.
-	withdrawLeg := transferWithdrawLeg.! !
-
-!Transfer methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 20:46:49'!
-value
-
-	^value.! !
-
-!Transfer methodsFor: 'as yet unclassified' stamp: 'belen 11/24/2021 17:33:00'!
+!Transfer methodsFor: 'accesing' stamp: 'belen 11/24/2021 17:33:00'!
 withdrawLeg
 
 	^withdrawLeg. ! !
+
+
+!Transfer methodsFor: 'initialization' stamp: 'BELEN 11/28/2021 18:27:34'!
+initializeWith: anAmountTransfer WithdrawLeg: transferWithdrawLeg DepositLeg: transferDepositLeg.
+	 
+	
+	amount := anAmountTransfer. 
+	depositLeg := transferDepositLeg.
+	withdrawLeg := transferWithdrawLeg.! !
+
+
+!Transfer methodsFor: 'value' stamp: 'BELEN 11/28/2021 18:27:34'!
+value
+
+	^amount.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -786,7 +854,7 @@ withdrawLeg
 Transfer class
 	instanceVariableNames: 'tranfers'!
 
-!Transfer class methodsFor: 'operations' stamp: 'belen 11/25/2021 14:39:55'!
+!Transfer class methodsFor: 'instance creation' stamp: 'BELEN 11/27/2021 12:53:10'!
 from: anOriginAccount to: aDestinationAccount for: anAmountTransfer 
 
 
@@ -799,10 +867,10 @@ from: anOriginAccount to: aDestinationAccount for: anAmountTransfer
 	
 	
 	transferWithdrawLeg := TransferWithdrawLeg of: transfer on: anOriginAccount.
-	transferWithdrawLeg registerOn: anOriginAccount. 
+	
 	
 	transferDepositLeg := TransferDepositLeg of: transfer on: aDestinationAccount.
-	transferDepositLeg registerOn: aDestinationAccount . 
+	
 	
 	^transfer initializeWith: anAmountTransfer WithdrawLeg: transferWithdrawLeg DepositLeg: transferDepositLeg.
 	 
@@ -810,25 +878,21 @@ from: anOriginAccount to: aDestinationAccount for: anAmountTransfer
 	 ! !
 
 
-!Transfer class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 19:29:47'!
+!Transfer class methodsFor: 'assert - private' stamp: 'BELEN 11/27/2021 12:59:57'!
 assert: anAmountTransfer canBeTransferedTo: aDestinationAccount from: anOriginAccount
 
 
-	(aDestinationAccount == anOriginAccount) ifTrue:[^self error:Transfer errorSameAccounts].
-	(anAmountTransfer = 0) ifTrue: [^self error: Transfer errorAmountIsCero].
-	(anAmountTransfer < 0) ifTrue: [^self error: Transfer errorAmountIsNegative] .! !
+	(aDestinationAccount == anOriginAccount) ifTrue:[^self error:Transfer errorTransferBetweenSameAccountIsNotPossible].
+	(anAmountTransfer <= 0) ifTrue: [^self error: Transfer errorAmountIsInvalid ].
+	! !
 
-!Transfer class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:50:57'!
-errorAmountIsCero
 
-	^'no se puede amount'.! !
+!Transfer class methodsFor: 'error' stamp: 'BELEN 11/27/2021 12:59:07'!
+errorAmountIsInvalid
 
-!Transfer class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 19:29:37'!
-errorAmountIsNegative
+	^'El monto a transferir es inválido'.! !
 
-	^'no se puede amount negativo'.! !
+!Transfer class methodsFor: 'error' stamp: 'BELEN 11/27/2021 12:57:54'!
+errorTransferBetweenSameAccountIsNotPossible
 
-!Transfer class methodsFor: 'as yet unclassified' stamp: 'belen 11/25/2021 14:50:46'!
-errorSameAccounts
-
-	^'no se puede'.! !
+	^'No se puede realizar transferencias entre la misma cuenta'.! !
