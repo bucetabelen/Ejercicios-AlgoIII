@@ -5,36 +5,32 @@ TestCase subclass: #PortfolioTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 14:51:52'!
+!PortfolioTest methodsFor: 'AclaracionSobreElTDD' stamp: 'BELEN 11/29/2021 15:59:48'!
+AclaracionSobreTDD
+
+"Aclaración sobre el desarrollo de TDD. 
+
+Empezamos escribiendo los tests 'simples' acorde a los requerimientos. Definimos portfolio simple como aquel portfolio cuyo contenido son sólo Receptives Accounts. Por ejemplo, primero comenzamos haciendo el test donde se testea el correcto agregado de cuentas a un portfolio y así siguiendo según los requerimientos. En principio, estos tests fueron desarrollados pensando en portfolios 'simples'.  Luego, seguimos por el testeo de los portfolios compuestos, aquellos compuestos por Receptives Accounts y Portfolios. Este testeo consistió de nuevo en testear que todos los requerimientos se efectuen correctamente para este 'tipo' de portfolios (compuestos). 
+
+Una vez terminado esto, reflexionando nos dimos cuenta de que en realidad, no había tal distinción entre portfolios simples y compuestos, sino que simplemente teniamos portfolios que podian contener Receptives Accounts y/o Portfolios. A su vez, el testeo de los tests era entonces redundante pues tanto para testear un portfolio simple como para testear un portfolio compuesto, utilizabamos el mismo formato de test (según el requerimiento que buscabámos testear). Luego, decidimos refactorizar los tests y dejar sólo los tests que probaban en general los requerimientos (es decir, los que instanciaban un portfolio con Receptives Accounts y Portfolio). 
+Esta nota la hacemos porque queremos dejar en claro que el resultado final de los tests no es el camino original que tomamos, como explicamos en el primer párrafo, el desarrollo de TDD lo hicimos en principio pensando para un portfolio simple, luego para un portfolio compuesto. Es por ello que también para mayor claridad dejamos como 'notasTestsQueQuedaronAfuera' los tests originales que testeaban portfolios simples, donde se podrá ver claramente que su formato es idéntico a los de los tests que finalmente dejamos."! !
+
+
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:00:19'!
 test01PortfolioHaveZeroBalanceWhenCreated
 
+	"Leer AclaracionSobreElTDD"
+	"Aclaracion: NOTAStest01... contiene la implementación original de este método" 
+	
 	portfolio := self addAccountsOnPortfolio. 
 	
 	self assert: 0*peso equals: portfolio balance.! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/28/2021 18:25:11'!
-test02DepositIncreasesPortfolioBalanceOnTransactionValue
-
-
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:45:13'!
+test02PortfolioHasBalanceAsSumOfEachCompositedAccounts 
 	
-	
-
-	Deposit register: 100*peso on: accountA .
-	Deposit register: 200*peso on: accountB .
-
-	portfolio := self addAccountsOnPortfolio.	
-	
-	
-	self assert: 300*peso equals: portfolio balance.
-	
-	
-	
-! !
-
-!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 15:02:35'!
-test03WithdrawDecreasesPortfolioBalanceOnTransactionValue 
-	
-	
+	"Leer AclaracionSobreElTDD"
+	"Aclaracion: NOTAStest02... contiene la implementación original de este método" 
 	
 	Deposit register: 100*peso on: accountA .
 	Withdraw register: 200*peso on: accountB .
@@ -48,8 +44,11 @@ test03WithdrawDecreasesPortfolioBalanceOnTransactionValue
 	
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/28/2021 18:25:18'!
-test04PortfolioKnowsRegisteredTransactions
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:45:09'!
+test03PortfolioKnowsRegisteredTransactions
+	
+	"Leer AclaracionSobreElTDD"
+	"Aclaracion: NOTAStest03... contiene la implementación original de este método" 
 
 	| deposit withdraw|
 
@@ -68,9 +67,12 @@ test04PortfolioKnowsRegisteredTransactions
 	
 ! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/28/2021 18:25:04'!
-test05PortfolioDoesNotKnowNotRegisteredTransactions
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:45:05'!
+test04PortfolioDoesNotKnowNotRegisteredTransactions
 
+	"Leer AclaracionSobreElTDD"
+	"Aclaracion: NOTAStest04... contiene la implementación original de este método" 
+	
 	|deposit withdraw|
 
 	
@@ -88,9 +90,11 @@ test05PortfolioDoesNotKnowNotRegisteredTransactions
 	
 ! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 15:03:30'!
-test06PortfolioKnowsItsTransactions
-
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:45:00'!
+test05PortfolioKnowsItsTransactions
+	
+	"Leer AclaracionSobreElTDD"
+	"Aclaracion: NOTAStest05... contiene la implementación original de este método" 
 
 	portfolio := self addAccountsOnPortfolio.
 	
@@ -101,9 +105,10 @@ test06PortfolioKnowsItsTransactions
 	
 	self assert: 2 equals: (portfolio transactions) size.! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 15:13:03'!
-test07PortfolioCanNotAddSameAccountTwice
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:42:49'!
+test06PortfolioCanNotAddSameAccountTwice
 
+	
 	portfolio addAccount: accountA. 
 	
 	self should: [portfolio addAccount: accountA.]
@@ -113,8 +118,9 @@ test07PortfolioCanNotAddSameAccountTwice
 	
 		! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 15:13:40'!
-test08PortfolioCanNotAddItsSelf
+!PortfolioTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:42:56'!
+test07PortfolioCanNotAddItsSelf
+
 	
 	self should: [portfolio addAccount: portfolio.]
 		raise: Error
@@ -124,7 +130,7 @@ test08PortfolioCanNotAddItsSelf
 		! !
 
 
-!PortfolioTest methodsFor: 'operations' stamp: 'BELEN 11/27/2021 14:53:42'!
+!PortfolioTest methodsFor: 'operations' stamp: 'BELEN 11/29/2021 16:07:12'!
 addAccountsOnPortfolio
 
 	
@@ -136,20 +142,20 @@ addAccountsOnPortfolio
 	
 
 	auxiliarPorfolio addAccount: accountA. 
-	auxiliarPorfolio addAccount: accountB.
+	
 	
 	unPortfolio addAccount: auxiliarPorfolio. 
-	unPortfolio addAccount: accountC.
+	unPortfolio addAccount: accountB.
 	
 	^unPortfolio. 
 		! !
 
-!PortfolioTest methodsFor: 'operations' stamp: 'BELEN 11/27/2021 13:35:35'!
+!PortfolioTest methodsFor: 'operations' stamp: 'BELEN 11/29/2021 16:05:53'!
 generateTransactionsOnAccounts
 
 	
 	Deposit register: 100*peso on: accountA.
-	Withdraw register: 200*peso on: accountC.
+	Withdraw register: 200*peso on: accountA.
 	Deposit register: 100*peso on: accountB.! !
 
 
@@ -161,25 +167,8 @@ NOTAStest01PortfolioHaveZeroBalanceWhenCreated
 	
 	self assert: 0*peso equals: portfolio balance.! !
 
-!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:22:50'!
-NOTAStest02DepositIncreasesPortfolioBalanceOnTransactionValue
-	
-	portfolio addAccount: accountA.
-	portfolio addAccount: accountB.
-	portfolio addAccount: accountC.
-	
-	Deposit register: 100*peso on: accountA.
-	Deposit register: 200*peso on: accountB.
-	Deposit register: 100*peso on: accountC.
-	
-	self assert: 400*peso equals: portfolio balance.
-	
-	
-	
-! !
-
-!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:23:00'!
-NOTAStest03WithdrawDecreasesPortfolioBalanceOnTransactionValue 
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/29/2021 16:45:47'!
+NOTAStest02PortfolioHasBalanceAsSumOfEachCompositedAccounts 
 	
 	
 	
@@ -195,8 +184,8 @@ NOTAStest03WithdrawDecreasesPortfolioBalanceOnTransactionValue
 	
 	! !
 
-!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:23:07'!
-NOTAStest04PortfolioKnowsRegisteredTransactions
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/29/2021 16:44:02'!
+NOTAStest03PortfolioKnowsRegisteredTransactions
 
 	| deposit withdraw|
 
@@ -219,8 +208,8 @@ NOTAStest04PortfolioKnowsRegisteredTransactions
 	
 ! !
 
-!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:23:15'!
-NOTAStest05PortfolioDoesNotKnowNotRegisteredTransactions
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/29/2021 16:44:08'!
+NOTAStest04PortfolioDoesNotKnowNotRegisteredTransactions
 
 	|deposit withdraw|
 
@@ -239,13 +228,13 @@ NOTAStest05PortfolioDoesNotKnowNotRegisteredTransactions
 	
 ! !
 
-!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/28/2021 18:23:24'!
-NOTAStest06PortfolioKnowsItsTransactions
-
+!PortfolioTest methodsFor: 'notasTestsQueQuedaronAfuera' stamp: 'BELEN 11/29/2021 16:44:14'!
+NOTAStest05PortfolioKnowsItsTransactions
 
 	portfolio addAccount: accountA.
 	portfolio addAccount: accountB.
 	
+
 	Deposit register: 100*peso on: accountA .
 	Withdraw register: 50*peso on: accountA . 
 
@@ -303,18 +292,39 @@ test03WithdrawDecreasesBalanceOnTransactionValue
 	self assert: 50 * peso equals: account balance
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:06:49'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:24:08'!
 test04WithdrawValueMustBePositive 
 
 	|  withdrawValue |
 
-	withdrawValue := 50 * peso.
+	withdrawValue := -50 * peso.
+
+	self should: [Withdraw register: withdrawValue on: account]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: AccountTransaction errorAmountCanNotBeNegative ].
+		
 	
-	self assert: withdrawValue equals: (Withdraw register: withdrawValue on: account) value
+		
+	
+	"self assert: withdrawValue equals: (Withdraw register: withdrawValue on: account) "
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:07:11'!
-test05ReceptiveAccountKnowsRegisteredTransactions 
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:44:38'!
+test05DepositValueMustBePositive 
+
+	|  depositValue |
+
+	depositValue := -50 * peso.
+
+	self should: [Withdraw register: depositValue on: account]
+		raise: Error
+		withExceptionDo: [ :anError | self assert: anError messageText equals: AccountTransaction errorAmountCanNotBeNegative ].
+		
+	
+	! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:28:03'!
+test06ReceptiveAccountKnowsRegisteredTransactions 
 
 	|  deposit withdraw |
 	
@@ -324,18 +334,6 @@ test05ReceptiveAccountKnowsRegisteredTransactions
 		
 	self assert: (account hasRegistered: deposit).
 	self assert: (account hasRegistered: withdraw).
-! !
-
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:07:37'!
-test06ReceptiveAccountDoNotKnowNotRegisteredTransactions
-
-	|  deposit withdraw |
-	
-	deposit :=  Deposit for: 100 * peso.
-	withdraw := Withdraw for: 50 * peso.
-		
-	self deny: (account hasRegistered: deposit).
-	self deny: (account hasRegistered: withdraw).
 ! !
 
 !ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:08:22'!
@@ -348,6 +346,18 @@ test07AccountKnowsItsTransactions
 		
 	self assert: 1 equals: account transactions size.
 	self assert: (account transactions includes: deposit).
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:28:24'!
+test08ReceptiveAccountDoNotKnowNotRegisteredTransactions
+
+	|  deposit withdraw |
+	
+	deposit :=  Deposit for: 100 * peso.
+	withdraw := Withdraw for: 50 * peso.
+		
+	self deny: (account hasRegistered: deposit).
+	self deny: (account hasRegistered: withdraw).
 ! !
 
 
@@ -382,14 +392,12 @@ test02TransferKnowsAmountOfTransaction
 	self assert: 100*peso equals: transfer value. 
 ! !
 
-!TransferTest methodsFor: 'tests' stamp: 'BELEN 11/27/2021 13:03:06'!
+!TransferTest methodsFor: 'tests' stamp: 'BELEN 11/29/2021 16:39:17'!
 test03TransferDepositLegKnowsTransferWithdrawLeg
 	
 	|transfer  |
 	
 	transfer := Transfer from: anOriginAccount to: aDestinationAccount for: 100*peso.
-	
-	"self generateTransferBetweenAccounts"
 	
 	
 	self assert: transfer withdrawLeg equals: (transfer depositLeg) withdrawLeg . 
@@ -512,11 +520,12 @@ balance
 	
 	^accounts sum:[:account | account balance]! !
 
-!Portfolio methodsFor: 'main protocol' stamp: 'BELEN 11/27/2021 13:13:56'!
-hasRegistered: aDeposit 
+!Portfolio methodsFor: 'main protocol' stamp: 'BELEN 11/29/2021 15:17:33'!
+hasRegistered: aTransaction 
 	
 	|bool|
-	accounts do:[ :account | (account hasRegistered: aDeposit)ifTrue:[^account hasRegistered: aDeposit]ifFalse:[bool := false]].
+	
+	accounts do:[ :account | (account hasRegistered: aTransaction)ifTrue:[^true]ifFalse:[bool := false]].
 	
 	^bool.
 	
@@ -641,24 +650,42 @@ updateBalance: balance
 
 	self subclassResponsibility.! !
 
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountTransaction class' category: 'ServiciosFinancieros-Ejercicio'!
+AccountTransaction class
+	instanceVariableNames: ''!
+
+!AccountTransaction class methodsFor: 'error' stamp: 'BELEN 11/29/2021 16:19:45'!
+errorAmountCanNotBeNegative
+
+	^'Error el monto no puede ser negativo'! !
+
+
+!AccountTransaction class methodsFor: 'assert - private' stamp: 'BELEN 11/29/2021 16:26:44'!
+assertCanDoTransactionWith: aValue
+
+
+	(aValue < 0) ifTrue:[^self error: AccountTransaction errorAmountCanNotBeNegative]! !
+
 
 !classDefinition: #Deposit category: 'ServiciosFinancieros-Ejercicio'!
 AccountTransaction subclass: #Deposit
-	instanceVariableNames: 'value'
+	instanceVariableNames: 'amount'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Deposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:45'!
+!Deposit methodsFor: 'initialization' stamp: 'BELEN 11/29/2021 15:20:21'!
 initializeFor: aValue
 
-	value := aValue ! !
+	amount := aValue ! !
 
 
-!Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
+!Deposit methodsFor: 'value' stamp: 'BELEN 11/29/2021 15:20:21'!
 value
 
-	^ value! !
+	^ amount! !
 
 
 !Deposit methodsFor: 'operations' stamp: 'belen 11/25/2021 14:26:56'!
@@ -674,9 +701,10 @@ updateBalance: balance
 Deposit class
 	instanceVariableNames: ''!
 
-!Deposit class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:38'!
+!Deposit class methodsFor: 'instance creation' stamp: 'BELEN 11/29/2021 16:27:40'!
 for: aValue
-
+	
+	self assertCanDoTransactionWith: aValue.
 	^ self new initializeFor: aValue ! !
 
 !Deposit class methodsFor: 'instance creation' stamp: 'belen 11/24/2021 17:42:36'!
@@ -688,6 +716,7 @@ register: aValue on: account
 	account register: transaction.
 		
 	^ transaction! !
+
 
 
 !classDefinition: #TransferLeg category: 'ServiciosFinancieros-Ejercicio'!
@@ -801,12 +830,13 @@ updateBalance: balance
 Withdraw class
 	instanceVariableNames: ''!
 
-!Withdraw class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:33'!
+!Withdraw class methodsFor: 'instance creation' stamp: 'BELEN 11/29/2021 16:27:13'!
 for: aValue
-
+	
+	self assertCanDoTransactionWith: aValue.
 	^ self new initializeFor: aValue ! !
 
-!Withdraw class methodsFor: 'instance creation' stamp: 'belen 11/24/2021 17:42:40'!
+!Withdraw class methodsFor: 'instance creation' stamp: 'BELEN 11/29/2021 16:22:11'!
 register: aValue on: account
 
 	| transaction |
@@ -815,6 +845,7 @@ register: aValue on: account
 	account register: transaction.
 		
 	^ transaction! !
+
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Ejercicio'!
