@@ -10,7 +10,7 @@ test01BalanceOfPortfolioWithoutAccountsIsZero
 
 	self assert: 0 equals: Portfolio new balance! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:27:00'!
+!PortfolioTest methodsFor: 'tests' stamp: 'Melany 12/1/2021 17:33:56'!
 test02BalanceOfPortfolioWithOneAccountIsAccountBalance
 
 	| account portfolio |
@@ -210,6 +210,35 @@ test15PortfolioCanNotIncludeAnyOfTheComposedAccountOfPortfolioToAdd
 			self assert: Portfolio canNotAddAccountErrorMessage equals: anError messageText.
 			self assert: portfolioToModify accountsIsEmpty ]! !
 
+!PortfolioTest methodsFor: 'tests' stamp: 'Melany 12/1/2021 18:02:59'!
+test16
+
+	| account portfolio resumen accountB |
+	
+	resumen := OrderedCollection new.
+	accountB := ReceptiveAccount new.
+	
+	account := ReceptiveAccount new.
+	Deposit register: 100 * peso on: account.
+	portfolio := Portfolio with: account with: accountB .
+
+	Withdraw register: 50*peso on: account.
+	
+	Transfer amount: 20*peso from: account to: accountB.
+	Transfer amount: 30*peso from: accountB to: account.
+	
+	resumen add: 'Deposito por 100 pesos'.
+	resumen add: 'Extraccion por 50 pesos'.
+	resumen add: 'Salida por transferencia de 20 pesos'.
+	resumen add: 'Entrada por transferencia de 30 pesos'.
+	resumen add: 'Entrada por transferencia de 20 pesos'.
+	resumen add: 'Salida por transferencia de 30 pesos'.
+	resumen add: 'Balance = 50 pesos'.
+	
+	self assert: portfolio accountSummary equals: resumen.
+	
+	! !
+
 
 !classDefinition: #ReceptiveAccountTest category: 'ServiciosFinancieros-Solucion'!
 TestCase subclass: #ReceptiveAccountTest
@@ -301,7 +330,7 @@ test07AccountKnowsItsTransactions
 	self assert: (account transactions includes: deposit).
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'Melany 11/29/2021 21:49:45'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'Melany 12/1/2021 17:48:08'!
 test08
 
 	| account accountB resumenTest |
@@ -324,6 +353,24 @@ test08
 	resumenTest add: 'Balance = 60 pesos'.
 	
 	self assert: account accountSummary equals: resumenTest.
+
+
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'Melany 12/1/2021 17:30:50'!
+test09
+
+	| account accountB |
+	
+	
+	account := ReceptiveAccount  new.
+	accountB := ReceptiveAccount new.
+
+	Transfer amount: 20*peso from: account to: accountB.
+	Transfer amount: 30*peso from: accountB to: account.
+	
+	
+	self assert: account transferNet equals: '10 pesos'.
 
 
 ! !
@@ -582,6 +629,28 @@ signalCanNotAddAccount
 	
 	self error: self class canNotAddAccountErrorMessage! !
 
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 12/1/2021 17:54:08'!
+accountSummary
+	| resumen |
+	resumen := OrderedCollection  new.
+	
+	accounts do: [ : account | account saveSummaryHere: resumen ].
+	resumen add: ('Balance = ', self balance asString).
+	^ resumen.
+
+	
+	! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 12/1/2021 17:52:43'!
+saveSummaryHere: resumen
+
+	accounts do: [ : account | account saveSummaryHere: resumen ].
+	
+	
+	
+	^ resumen.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: 'ServiciosFinancieros-Solucion'!
@@ -681,6 +750,31 @@ accountSummary
 	resumen add: 'Balance = ', self balance asString.
 	^ resumen.! !
 
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 12/1/2021 17:58:13'!
+saveSummaryHere: resumen
+
+	transactions do: [ : transaction | (transaction isKindOf: Deposit) ifTrue: [ resumen add: 'Deposito por ', transaction value asString].
+		(transaction isKindOf: Withdraw) ifTrue: [resumen add: 'Extraccion por ', transaction value asString].
+		(transaction isKindOf: TransferWithdrawLeg) ifTrue: [resumen add: 'Salida por transferencia de ', transaction value asString]. 
+		(transaction isKindOf: TransferDepositLeg) ifTrue: [resumen add: 'Entrada por transferencia de ', transaction value asString].
+	].
+	
+	^ resumen.! !
+
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 12/1/2021 17:31:00'!
+transferNet
+	| sumaParcial |
+	
+	sumaParcial := 0.
+	transactions  do: [ : transaction| (transaction isKindOf: TransferDepositLeg) ifTrue: [ sumaParcial := sumaParcial + transaction value].
+			(transaction isKindOf: TransferWithdrawLeg) ifTrue: [ sumaParcial  := sumaParcial  - transaction value].
+		].
+	
+	^ sumaParcial asString.
+	
+	
+	! !
+
 
 !classDefinition: #AccountTransaction category: 'ServiciosFinancieros-Solucion'!
 Object subclass: #AccountTransaction
@@ -765,6 +859,10 @@ value
 initializeWith: aTransfer
 
 	transfer := aTransfer! !
+
+
+!TransferLeg methodsFor: 'as yet unclassified' stamp: 'Melany 11/29/2021 21:53:03'!
+transferNet! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
