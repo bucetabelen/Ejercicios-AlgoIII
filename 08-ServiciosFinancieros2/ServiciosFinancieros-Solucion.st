@@ -1,3 +1,109 @@
+!classDefinition: #AccountSummaryTest category: 'ServiciosFinancieros-Solucion'!
+TestCase subclass: #AccountSummaryTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:07:44'!
+test00
+
+	| account accountB |
+	
+	
+	account := ReceptiveAccount  new.
+	accountB := ReceptiveAccount new.
+
+	Transfer amount: 20*peso from: account to: accountB.
+	Transfer amount: 30*peso from: accountB to: account.
+	
+	
+	self assert: account transferNet equals: '10 pesos'.
+
+
+! !
+
+!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:09:15'!
+test01
+
+	| account  resumenTest |
+	
+	resumenTest := OrderedCollection new.
+	
+	account := ReceptiveAccount  new.
+	Deposit register: 100*peso on: account.
+	
+	resumenTest add: 'Deposito por 100 pesos'.
+	resumenTest add: 'Balance = 100 pesos'.
+	
+	self assert: account accountSummary equals: resumenTest.
+
+
+! !
+
+!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:09:22'!
+test02
+
+	| account  resumenTest |
+	
+	resumenTest := OrderedCollection new.
+	
+	
+	account := ReceptiveAccount  new.
+
+	Withdraw register: 50*peso on: account.
+	
+	
+	resumenTest add: 'Extraccion por 50 pesos'.
+	resumenTest add: 'Balance = -50 pesos'.
+	
+	self assert: account accountSummary equals: resumenTest.
+
+
+! !
+
+!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:07:58'!
+test03
+
+	| account accountB resumenTest |
+	
+	resumenTest := OrderedCollection new.
+	
+	account := ReceptiveAccount  new.
+	accountB := ReceptiveAccount new.
+	
+	Transfer amount: 20*peso from: account to: accountB.
+
+	resumenTest add: 'Salida por transferencia de 20 pesos'.
+	resumenTest add: 'Balance = -20 pesos'.
+	
+	self assert: account accountSummary equals: resumenTest.
+
+
+! !
+
+!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:09:51'!
+test04
+
+	| account accountB resumenTest |
+	
+	resumenTest := OrderedCollection new.
+	
+	account := ReceptiveAccount  new.
+	accountB := ReceptiveAccount new.
+
+	Transfer amount: 30*peso from: accountB to: account.
+	
+	
+	resumenTest add: 'Entrada por transferencia de 30 pesos'.
+	resumenTest add: 'Balance = 30 pesos'.
+	
+	self assert: account accountSummary equals: resumenTest.
+
+
+! !
+
+
 !classDefinition: #PortfolioTest category: 'ServiciosFinancieros-Solucion'!
 TestCase subclass: #PortfolioTest
 	instanceVariableNames: ''
@@ -210,35 +316,6 @@ test15PortfolioCanNotIncludeAnyOfTheComposedAccountOfPortfolioToAdd
 			self assert: Portfolio canNotAddAccountErrorMessage equals: anError messageText.
 			self assert: portfolioToModify accountsIsEmpty ]! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'Melany 12/1/2021 18:02:59'!
-test16
-
-	| account portfolio resumen accountB |
-	
-	resumen := OrderedCollection new.
-	accountB := ReceptiveAccount new.
-	
-	account := ReceptiveAccount new.
-	Deposit register: 100 * peso on: account.
-	portfolio := Portfolio with: account with: accountB .
-
-	Withdraw register: 50*peso on: account.
-	
-	Transfer amount: 20*peso from: account to: accountB.
-	Transfer amount: 30*peso from: accountB to: account.
-	
-	resumen add: 'Deposito por 100 pesos'.
-	resumen add: 'Extraccion por 50 pesos'.
-	resumen add: 'Salida por transferencia de 20 pesos'.
-	resumen add: 'Entrada por transferencia de 30 pesos'.
-	resumen add: 'Entrada por transferencia de 20 pesos'.
-	resumen add: 'Salida por transferencia de 30 pesos'.
-	resumen add: 'Balance = 50 pesos'.
-	
-	self assert: portfolio accountSummary equals: resumen.
-	
-	! !
-
 
 !classDefinition: #ReceptiveAccountTest category: 'ServiciosFinancieros-Solucion'!
 TestCase subclass: #ReceptiveAccountTest
@@ -330,50 +407,30 @@ test07AccountKnowsItsTransactions
 	self assert: (account transactions includes: deposit).
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'Melany 12/1/2021 17:48:08'!
-test08
+
+!classDefinition: #TransferNetTest category: 'ServiciosFinancieros-Solucion'!
+TestCase subclass: #TransferNetTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
 
-	| account accountB resumenTest |
+!TransferNetTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:12:00'!
+test01
+
+	| account portfolio accountB  |
 	
-	resumenTest := OrderedCollection new.
-	
-	
-	account := ReceptiveAccount  new.
-	accountB := ReceptiveAccount new.
-	Deposit register: 100*peso on: account.
-	Withdraw register: 50*peso on: account.
+	accountB := ReceptiveAccount new..
+	account := ReceptiveAccount new.
+	portfolio := Portfolio with: account.
 	
 	Transfer amount: 20*peso from: account to: accountB.
 	Transfer amount: 30*peso from: accountB to: account.
+
 	
-	resumenTest add: 'Deposito por 100 pesos'.
-	resumenTest add: 'Extraccion por 50 pesos'.
-	resumenTest add: 'Salida por transferencia de 20 pesos'.
-	resumenTest add: 'Entrada por transferencia de 30 pesos'.
-	resumenTest add: 'Balance = 60 pesos'.
+	self assert: portfolio transferNet equals: '10 pesos'.
 	
-	self assert: account accountSummary equals: resumenTest.
-
-
-! !
-
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'Melany 12/1/2021 17:30:50'!
-test09
-
-	| account accountB |
-	
-	
-	account := ReceptiveAccount  new.
-	accountB := ReceptiveAccount new.
-
-	Transfer amount: 20*peso from: account to: accountB.
-	Transfer amount: 30*peso from: accountB to: account.
-	
-	
-	self assert: account transferNet equals: '10 pesos'.
-
-
-! !
+	! !
 
 
 !classDefinition: #TransferTest category: 'ServiciosFinancieros-Solucion'!
@@ -534,10 +591,10 @@ initialize
 	parents := OrderedCollection new.! !
 
 
-!Portfolio methodsFor: 'main protocol' stamp: 'HAW 5/25/2019 11:19:36'!
+!Portfolio methodsFor: 'main protocol' stamp: 'Melany 12/2/2021 21:15:03'!
 balance
 	
-	^accounts sum: [ :anAccount | anAccount balance ] ifEmpty: [ 0 ]! !
+	^accounts sum: [ :anAccount | anAccount balance ] ifEmpty: [ 0 * peso]! !
 
 !Portfolio methodsFor: 'main protocol' stamp: 'HAW 5/25/2019 11:28:29'!
 hasRegistered: aTransaction
@@ -651,6 +708,18 @@ saveSummaryHere: resumen
 	
 	^ resumen.! !
 
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 19:03:16'!
+transferNet
+	| sumaParcial |
+	sumaParcial := accounts sum: [ :account | (account transferNet) asNumber].
+	
+	^ sumaParcial asString, ' pesos'.
+
+	
+	
+	
+! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: 'ServiciosFinancieros-Solucion'!
@@ -692,11 +761,11 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'HAW 5/25/2019 11:24:46'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'Melany 12/2/2021 21:14:42'!
 balance
 
 	^transactions 
-		inject: 0
+		inject: 0*peso
 		into: [ :currentBalance :transaction | transaction affectBalance: currentBalance ]! !
 
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'NR 10/21/2019 18:55:56'!
@@ -734,7 +803,7 @@ isComposedBy: anAccount
 	^self = anAccount ! !
 
 
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 11/29/2021 21:49:23'!
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:05:19'!
 accountSummary
 	
 	| resumen |
@@ -743,7 +812,7 @@ accountSummary
 	
 	transactions do: [ : transaction | (transaction isKindOf: Deposit) ifTrue: [ resumen add: 'Deposito por ', transaction value asString].
 		(transaction isKindOf: Withdraw) ifTrue: [resumen add: 'Extraccion por ', transaction value asString].
-		(transaction isKindOf: TransferWithdrawLeg) ifTrue: [resumen add: 'Salida por transferencia de ', transaction value asString]. 
+		(transaction isKindOf: TransferWithdrawLeg) ifTrue: [resumen add: 'Salida por transferencia de ', transaction value asString].
 		(transaction isKindOf: TransferDepositLeg) ifTrue: [resumen add: 'Entrada por transferencia de ', transaction value asString].
 	].
 
@@ -761,7 +830,7 @@ saveSummaryHere: resumen
 	
 	^ resumen.! !
 
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 12/1/2021 17:31:00'!
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 18:57:51'!
 transferNet
 	| sumaParcial |
 	
