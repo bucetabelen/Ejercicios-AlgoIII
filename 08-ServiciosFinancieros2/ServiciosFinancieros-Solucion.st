@@ -1,107 +1,199 @@
 !classDefinition: #AccountSummaryTest category: 'ServiciosFinancieros-Solucion'!
 TestCase subclass: #AccountSummaryTest
-	instanceVariableNames: ''
+	instanceVariableNames: 'originAccount destinationAccount reportDetail accountSummaryReportOfReceptiveAccount unPortfolio accountSummaryReportOfPortfolio'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:07:44'!
-test00
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 18:18:18'!
+test01SummaryOfReceptiveAccountWithNoTransactionsIncludesJustZeroBalance	
 
-	| account accountB |
+	reportDetail add: 'Balance = 0 pesos'.
 	
+	self assert: accountSummaryReportOfReceptiveAccount printReport equals: reportDetail.
 	
-	account := ReceptiveAccount  new.
-	accountB := ReceptiveAccount new.
+! !
 
-	Transfer amount: 20*peso from: account to: accountB.
-	Transfer amount: 30*peso from: accountB to: account.
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:11:13'!
+test02SummaryOfPortfolioWithNoTransactionsIncludesJustZeroBalance	
+
+	reportDetail add: 'Balance = 0 pesos'.
+	
+	self assert: accountSummaryReportOfPortfolio printReport equals: reportDetail.
+	
+! !
+
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:11:40'!
+test03SummaryOfReceptiveAccountWithDepositeIncludesJustThatDepositAndBalance
+
 	
 	
-	self assert: account transferNet equals: '10 pesos'.
+	Deposit register: 100*peso on: originAccount.
+	
+	
+	reportDetail add: 'Deposito por 100 pesos'.
+	reportDetail add: 'Balance = 100 pesos'.
+	
+	
+	self assert: accountSummaryReportOfReceptiveAccount printReport equals: reportDetail.
+	
 
 
 ! !
 
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:09:15'!
-test01
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:11:57'!
+test04SummaryOfPortfolioWithDepositeIncludesJustThatDepositAndBalance
 
-	| account  resumenTest |
 	
-	resumenTest := OrderedCollection new.
 	
-	account := ReceptiveAccount  new.
-	Deposit register: 100*peso on: account.
+	Deposit register: 10*peso on: destinationAccount.
 	
-	resumenTest add: 'Deposito por 100 pesos'.
-	resumenTest add: 'Balance = 100 pesos'.
 	
-	self assert: account accountSummary equals: resumenTest.
+	reportDetail add: 'Deposito por 10 pesos'.
+	reportDetail add: 'Balance = 10 pesos'.
+	
+	self assert: accountSummaryReportOfPortfolio printReport equals: reportDetail.
 
 
 ! !
 
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:09:22'!
-test02
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:12:32'!
+test05SummaryOfReceptiveAccountWithWithdrawIncludesJustThatWithdrawAndBalance
 
-	| account  resumenTest |
-	
-	resumenTest := OrderedCollection new.
-	
-	
-	account := ReceptiveAccount  new.
 
-	Withdraw register: 50*peso on: account.
+	
+	Withdraw register: 50*peso on: originAccount .
+	
+
+	reportDetail add: 'Extraccion por 50 pesos'.
+	reportDetail add: 'Balance = -50 pesos'.
 	
 	
-	resumenTest add: 'Extraccion por 50 pesos'.
-	resumenTest add: 'Balance = -50 pesos'.
+	self assert: accountSummaryReportOfReceptiveAccount printReport equals: reportDetail .
 	
-	self assert: account accountSummary equals: resumenTest.
+! !
+
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:15:45'!
+test06SummaryOfPortfolioWithWithdrawIncludesJustThatWithdrawAndBalance
+
+
+
+	Withdraw register: 50*peso on: destinationAccount.
+	
+	
+
+	reportDetail add: 'Extraccion por 50 pesos'.
+	reportDetail add: 'Balance = -50 pesos'.
+	
+	
+	
+	self assert: accountSummaryReportOfPortfolio printReport equals: reportDetail .
+	
+
+! !
+
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:15:21'!
+test07SummaryOfReceptiveAccountWithDepositeTransferIncludesJustThatDepositTransferAndBalance
+
+	
+	Transfer amount: 30*peso from: destinationAccount to: originAccount.
+	
+
+	reportDetail add: 'Entrada por transferencia de 30 pesos'.
+	reportDetail add: 'Balance = 30 pesos'.
+	
+	
+	self assert: accountSummaryReportOfReceptiveAccount printReport equals: reportDetail.
+	
+
+! !
+
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:15:04'!
+test08SummaryOfPortfolioWithDepositeTransferIncludesJustThatDepositTransferAndBalance
+
+	
+	Transfer amount: 30*peso from: originAccount to: destinationAccount.
+	
+	reportDetail add: 'Entrada por transferencia de 30 pesos'.
+	reportDetail add: 'Balance = 30 pesos'.
+	
+
+	self assert: accountSummaryReportOfPortfolio printReport equals: reportDetail.
+	
 
 
 ! !
 
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:07:58'!
-test03
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:14:29'!
+test09SummaryOfReceptiveAccountWithWithdrawTransferIncludesJustThatWithdrawTransferAndBalance
 
-	| account accountB resumenTest |
-	
-	resumenTest := OrderedCollection new.
-	
-	account := ReceptiveAccount  new.
-	accountB := ReceptiveAccount new.
-	
-	Transfer amount: 20*peso from: account to: accountB.
 
-	resumenTest add: 'Salida por transferencia de 20 pesos'.
-	resumenTest add: 'Balance = -20 pesos'.
 	
-	self assert: account accountSummary equals: resumenTest.
+	Transfer amount: 20*peso from: originAccount to: destinationAccount.
+
+	reportDetail add: 'Salida por transferencia de 20 pesos'.
+	reportDetail add: 'Balance = -20 pesos'.
+	
+
+	self assert: accountSummaryReportOfReceptiveAccount printReport equals: reportDetail.
+	
+! !
+
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:14:42'!
+test10SummaryOfPortfolioWithWithdrawTransferIncludesJustThatWithdrawTransferAndBalance
+
+	
+	
+	Transfer amount: 20*peso from: destinationAccount to: originAccount .
+
+	
+	reportDetail add: 'Salida por transferencia de 20 pesos'.
+	reportDetail add: 'Balance = -20 pesos'.
+	
+
+	self assert: accountSummaryReportOfPortfolio printReport equals: reportDetail.
 
 
 ! !
 
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:09:51'!
-test04
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:13:58'!
+test11MultiplesTransactionsCanBeIncludeInSummaryOfAccount
 
-	| account accountB resumenTest |
 	
-	resumenTest := OrderedCollection new.
-	
-	account := ReceptiveAccount  new.
-	accountB := ReceptiveAccount new.
-
-	Transfer amount: 30*peso from: accountB to: account.
+	Deposit register: 100*peso  on: originAccount.
+	Withdraw register: 50*peso on: originAccount. 
+	Transfer amount: 20*peso from: originAccount to: destinationAccount.
+	Transfer amount: 30*peso from: destinationAccount  to: originAccount . 
 	
 	
-	resumenTest add: 'Entrada por transferencia de 30 pesos'.
-	resumenTest add: 'Balance = 30 pesos'.
+	reportDetail add: 'Deposito por 100 pesos'.
+	reportDetail  add: 'Extraccion por 50 pesos'.
+	reportDetail add: 'Salida por transferencia de 20 pesos'.
+	reportDetail add: 'Entrada por transferencia de 30 pesos'.
+	reportDetail add: 'Balance = 60 pesos'.
 	
-	self assert: account accountSummary equals: resumenTest.
-
-
+	
+	self assert: accountSummaryReportOfReceptiveAccount printReport equals: reportDetail.
+	
 ! !
+
+
+!AccountSummaryTest methodsFor: 'setUp' stamp: 'belen 12/5/2021 17:15:03'!
+setUp
+
+	originAccount := ReceptiveAccount new.
+	
+	destinationAccount := ReceptiveAccount new.
+	
+	reportDetail := OrderedCollection new.
+	
+	unPortfolio := Portfolio with: destinationAccount.
+	
+	accountSummaryReportOfReceptiveAccount := AccountSummaryVisitor for: originAccount. 
+	
+	accountSummaryReportOfPortfolio := AccountSummaryVisitor for: unPortfolio.
+	
+	! !
 
 
 !classDefinition: #PortfolioTest category: 'ServiciosFinancieros-Solucion'!
@@ -410,26 +502,94 @@ test07AccountKnowsItsTransactions
 
 !classDefinition: #TransferNetTest category: 'ServiciosFinancieros-Solucion'!
 TestCase subclass: #TransferNetTest
-	instanceVariableNames: ''
+	instanceVariableNames: 'originAccount destinationAccount reportDetail unPortfolio transferNetForReceptiveAccount transferNetForPortfolio'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!TransferNetTest methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:12:00'!
-test01
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:25:25'!
+test01TransferNetOfPortfolioIsZeroWhenThereIsNoTranferTransactions
 
-	| account portfolio accountB  |
-	
-	accountB := ReceptiveAccount new..
-	account := ReceptiveAccount new.
-	portfolio := Portfolio with: account.
-	
-	Transfer amount: 20*peso from: account to: accountB.
-	Transfer amount: 30*peso from: accountB to: account.
+
+	self assert: transferNetForPortfolio printReport equals: '0 pesos'.
+	! !
+
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:25:14'!
+test02TransferNetOfReceptiveAccountIsZeroWhenThereIsNoTranferTransactions
+
 
 	
-	self assert: portfolio transferNet equals: '10 pesos'.
+	self assert: transferNetForReceptiveAccount printReport equals: '0 pesos'.
+	! !
+
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:24:58'!
+test03TransferNetOfPortfolioGivesSumOfItTranferTransactions
+
+
 	
+	Transfer amount: 20*peso from: destinationAccount to: originAccount.
+	Transfer amount: 30*peso from: originAccount to: destinationAccount.
+
+	
+	self assert: transferNetForPortfolio printReport equals: '10 pesos'.
+	! !
+
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:22:43'!
+test04TransferNetOfReceptiveAccountGivesSumOfItTranferTransactions
+
+
+	
+
+	
+	Transfer amount: 20*peso from: destinationAccount to: originAccount .
+	Transfer amount: 30*peso from: originAccount to: destinationAccount .
+
+	
+	self assert: transferNetForReceptiveAccount printReport equals: '-10 pesos'.
+	! !
+
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:23:21'!
+test05TransferNetShouldBeAPartialBalanceForTransferences
+
+
+	
+	
+	
+	Transfer amount: 20*peso from: destinationAccount to: originAccount.
+	
+
+	self assert: transferNetForReceptiveAccount printReport equals: '20 pesos'.
+	! !
+
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:23:53'!
+test06TransferNetShouldBeNegativeWithOnlyWithdrawTransactions
+
+
+	
+	
+	Transfer amount: 10*peso from: originAccount to: destinationAccount.
+	
+	self assert: transferNetForReceptiveAccount printReport equals: '-10 pesos'.
+	! !
+
+
+!TransferNetTest methodsFor: 'setUp' stamp: 'belen 12/5/2021 17:22:08'!
+setUp
+
+
+	originAccount := ReceptiveAccount new.
+	
+	destinationAccount := ReceptiveAccount new.
+	
+	reportDetail := OrderedCollection new.
+	
+	unPortfolio := Portfolio with: destinationAccount.
+	
+	transferNetForReceptiveAccount := TranferNetVisitor for: originAccount.
+	
+	transferNetForPortfolio := TranferNetVisitor for: unPortfolio. 
+	
+	 
 	! !
 
 
@@ -544,6 +704,11 @@ Object subclass: #Account
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
+!Account methodsFor: 'main protocol' stamp: 'belen 12/4/2021 12:07:24'!
+accept: aReport
+
+	self subclassResponsibility. ! !
+
 !Account methodsFor: 'main protocol' stamp: 'HAW 5/25/2019 12:23:40'!
 balance
 
@@ -591,6 +756,12 @@ initialize
 	parents := OrderedCollection new.! !
 
 
+!Portfolio methodsFor: 'main protocol' stamp: 'belen 12/4/2021 12:35:10'!
+accept: aReport
+
+
+	^ aReport handleAccountAsAPortfolio: self. ! !
+
 !Portfolio methodsFor: 'main protocol' stamp: 'Melany 12/2/2021 21:15:03'!
 balance
 	
@@ -600,6 +771,13 @@ balance
 hasRegistered: aTransaction
 
 	^accounts anySatisfy: [ :anAccount | anAccount hasRegistered: aTransaction ]! !
+
+!Portfolio methodsFor: 'main protocol' stamp: 'belen 12/5/2021 12:36:17'!
+toAllAccountsDo: aBlock
+
+	
+	 accounts do: [:account | aBlock value: account].
+	! !
 
 !Portfolio methodsFor: 'main protocol' stamp: 'HAW 5/25/2019 11:38:32'!
 transactions
@@ -686,40 +864,6 @@ signalCanNotAddAccount
 	
 	self error: self class canNotAddAccountErrorMessage! !
 
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 12/1/2021 17:54:08'!
-accountSummary
-	| resumen |
-	resumen := OrderedCollection  new.
-	
-	accounts do: [ : account | account saveSummaryHere: resumen ].
-	resumen add: ('Balance = ', self balance asString).
-	^ resumen.
-
-	
-	! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 12/1/2021 17:52:43'!
-saveSummaryHere: resumen
-
-	accounts do: [ : account | account saveSummaryHere: resumen ].
-	
-	
-	
-	^ resumen.! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 19:03:16'!
-transferNet
-	| sumaParcial |
-	sumaParcial := accounts sum: [ :account | (account transferNet) asNumber].
-	
-	^ sumaParcial asString, ' pesos'.
-
-	
-	
-	
-! !
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: 'ServiciosFinancieros-Solucion'!
@@ -761,6 +905,11 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'belen 12/4/2021 12:42:54'!
+accept: aReport
+
+	^ aReport handleAccountAsAReceptiveAccount: self.! !
+
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'Melany 12/2/2021 21:14:42'!
 balance
 
@@ -785,6 +934,11 @@ transactions
 
 	^ transactions copy! !
 
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'belen 12/4/2021 13:13:46'!
+withTransactionsDo: aBlock
+
+	 transactions do: [:aTransaction | aBlock value: aTransaction].! !
+
 
 !ReceptiveAccount methodsFor: 'private' stamp: 'HAW 5/25/2019 11:38:52'!
 addTransactionsTo: aCollectionOfTransactions
@@ -801,48 +955,6 @@ addedTo: aPortfolio
 isComposedBy: anAccount
 
 	^self = anAccount ! !
-
-
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 21:05:19'!
-accountSummary
-	
-	| resumen |
-	
-	resumen := OrderedCollection new.
-	
-	transactions do: [ : transaction | (transaction isKindOf: Deposit) ifTrue: [ resumen add: 'Deposito por ', transaction value asString].
-		(transaction isKindOf: Withdraw) ifTrue: [resumen add: 'Extraccion por ', transaction value asString].
-		(transaction isKindOf: TransferWithdrawLeg) ifTrue: [resumen add: 'Salida por transferencia de ', transaction value asString].
-		(transaction isKindOf: TransferDepositLeg) ifTrue: [resumen add: 'Entrada por transferencia de ', transaction value asString].
-	].
-
-	resumen add: 'Balance = ', self balance asString.
-	^ resumen.! !
-
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 12/1/2021 17:58:13'!
-saveSummaryHere: resumen
-
-	transactions do: [ : transaction | (transaction isKindOf: Deposit) ifTrue: [ resumen add: 'Deposito por ', transaction value asString].
-		(transaction isKindOf: Withdraw) ifTrue: [resumen add: 'Extraccion por ', transaction value asString].
-		(transaction isKindOf: TransferWithdrawLeg) ifTrue: [resumen add: 'Salida por transferencia de ', transaction value asString]. 
-		(transaction isKindOf: TransferDepositLeg) ifTrue: [resumen add: 'Entrada por transferencia de ', transaction value asString].
-	].
-	
-	^ resumen.! !
-
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'Melany 12/2/2021 18:57:51'!
-transferNet
-	| sumaParcial |
-	
-	sumaParcial := 0.
-	transactions  do: [ : transaction| (transaction isKindOf: TransferDepositLeg) ifTrue: [ sumaParcial := sumaParcial + transaction value].
-			(transaction isKindOf: TransferWithdrawLeg) ifTrue: [ sumaParcial  := sumaParcial  - transaction value].
-		].
-	
-	^ sumaParcial asString.
-	
-	
-	! !
 
 
 !classDefinition: #AccountTransaction category: 'ServiciosFinancieros-Solucion'!
@@ -862,6 +974,12 @@ value
 affectBalance: aBalance
 
 	self subclassResponsibility ! !
+
+
+!AccountTransaction methodsFor: 'main protocol' stamp: 'belen 12/4/2021 11:27:06'!
+accept: aReport
+
+	self subclassResponsibility. ! !
 
 
 !classDefinition: #Deposit category: 'ServiciosFinancieros-Solucion'!
@@ -888,6 +1006,12 @@ affectBalance: aBalance
 
 	^aBalance + value ! !
 
+
+!Deposit methodsFor: 'main protocol' stamp: 'belen 12/4/2021 11:45:41'!
+accept: aReport
+
+	^aReport handleTransactionAsDeposit: self.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Deposit class' category: 'ServiciosFinancieros-Solucion'!
@@ -899,8 +1023,7 @@ for: aValue
 
 	^ self new initializeFor: aValue ! !
 
-
-!Deposit class methodsFor: 'as yet unclassified' stamp: 'LL 7/8/2021 21:45:00'!
+!Deposit class methodsFor: 'instance creation' stamp: 'LL 7/8/2021 21:45:00'!
 register: aValue on: account
 
 	| transaction |
@@ -929,17 +1052,13 @@ initializeWith: aTransfer
 
 	transfer := aTransfer! !
 
-
-!TransferLeg methodsFor: 'as yet unclassified' stamp: 'Melany 11/29/2021 21:53:03'!
-transferNet! !
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TransferLeg class' category: 'ServiciosFinancieros-Solucion'!
 TransferLeg class
 	instanceVariableNames: ''!
 
-!TransferLeg class methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 22:45:01'!
+!TransferLeg class methodsFor: 'instance creation' stamp: 'LL 9/20/2020 22:45:01'!
 of: aTransfer on: anAccount
 
 	| transaction |
@@ -968,6 +1087,12 @@ affectBalance: aBalance
 
 	^aBalance + self value! !
 
+
+!TransferDepositLeg methodsFor: 'main protocol' stamp: 'belen 12/4/2021 11:56:02'!
+accept: aReport
+
+	^ aReport handleTransactionAsDepositLeg: self.! !
+
 
 !classDefinition: #TransferWithdrawLeg category: 'ServiciosFinancieros-Solucion'!
 TransferLeg subclass: #TransferWithdrawLeg
@@ -986,6 +1111,12 @@ depositLeg
 affectBalance: aBalance
 
 	^aBalance - self value! !
+
+
+!TransferWithdrawLeg methodsFor: 'main protocol' stamp: 'belen 12/4/2021 11:52:01'!
+accept: aReport
+
+	^ aReport handleTransactionAsWithdrawLeg: self.! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Solucion'!
@@ -1012,6 +1143,12 @@ affectBalance: aBalance
 
 	^aBalance - value! !
 
+
+!Withdraw methodsFor: 'main protocol' stamp: 'belen 12/4/2021 11:50:44'!
+accept: aReport
+
+	^ aReport handleTransactionAsWithdraw: self.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Withdraw class' category: 'ServiciosFinancieros-Solucion'!
@@ -1023,8 +1160,7 @@ for: aValue
 
 	^ self new initializeFor: aValue ! !
 
-
-!Withdraw class methodsFor: 'as yet unclassified' stamp: 'LL 7/8/2021 21:45:05'!
+!Withdraw class methodsFor: 'instance creation' stamp: 'LL 7/8/2021 21:45:05'!
 register: aValue on: account
 
 	| transaction |
@@ -1033,6 +1169,208 @@ register: aValue on: account
 	account register: transaction.
 		
 	^ transaction! !
+
+
+!classDefinition: #ReportVisitor category: 'ServiciosFinancieros-Solucion'!
+Object subclass: #ReportVisitor
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!ReportVisitor methodsFor: 'manage account' stamp: 'belen 12/5/2021 21:21:09'!
+handleAccountAsAPortfolio: aPortfolio
+	
+	self subclassResponsibility. ! !
+
+!ReportVisitor methodsFor: 'manage account' stamp: 'belen 12/4/2021 12:35:35'!
+handleAccountAsAReceptiveAccount: aReceptiveAccount
+	
+	self subclassResponsibility. ! !
+
+
+!ReportVisitor methodsFor: 'manage transactions' stamp: 'belen 12/4/2021 11:45:41'!
+handleTransactionAsDeposit: aDeposit
+
+
+	self subclassResponsibility. ! !
+
+!ReportVisitor methodsFor: 'manage transactions' stamp: 'belen 12/4/2021 11:56:30'!
+handleTransactionAsDepositLeg: aDepositLeg
+
+	self subclassResponsibility. ! !
+
+!ReportVisitor methodsFor: 'manage transactions' stamp: 'belen 12/4/2021 11:46:56'!
+handleTransactionAsWithdraw: aWithdraw
+
+	self subclassResponsibility. ! !
+
+!ReportVisitor methodsFor: 'manage transactions' stamp: 'belen 12/4/2021 11:52:44'!
+handleTransactionAsWithdrawLeg: aWithdrawLeg
+
+	self subclassResponsibility. ! !
+
+
+!ReportVisitor methodsFor: 'main protocol' stamp: 'belen 12/4/2021 11:01:36'!
+printReport
+
+	self subclassResponsibility. ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ReportVisitor class' category: 'ServiciosFinancieros-Solucion'!
+ReportVisitor class
+	instanceVariableNames: ''!
+
+!ReportVisitor class methodsFor: 'instance creation' stamp: 'belen 12/4/2021 10:54:14'!
+for: anAccount
+
+	self subclassResponsibility. ! !
+
+
+!classDefinition: #AccountSummaryVisitor category: 'ServiciosFinancieros-Solucion'!
+ReportVisitor subclass: #AccountSummaryVisitor
+	instanceVariableNames: 'account reporter'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!AccountSummaryVisitor methodsFor: 'manage transactions' stamp: 'belen 12/4/2021 11:45:41'!
+handleTransactionAsDeposit: aDeposit
+
+
+	^'Deposito por ', aDeposit value asString.! !
+
+!AccountSummaryVisitor methodsFor: 'manage transactions' stamp: 'belen 12/4/2021 11:56:55'!
+handleTransactionAsDepositLeg: aDepositLeg
+
+
+	^'Entrada por transferencia de ', aDepositLeg value asString.! !
+
+!AccountSummaryVisitor methodsFor: 'manage transactions' stamp: 'belen 12/4/2021 11:47:02'!
+handleTransactionAsWithdraw: aWithdraw
+
+	^'Extraccion por ', aWithdraw value asString.! !
+
+!AccountSummaryVisitor methodsFor: 'manage transactions' stamp: 'belen 12/4/2021 11:53:25'!
+handleTransactionAsWithdrawLeg: aWithdrawLeg
+
+	^'Salida por transferencia de ', aWithdrawLeg value asString. ! !
+
+
+!AccountSummaryVisitor methodsFor: 'main protocol' stamp: 'belen 12/4/2021 11:31:25'!
+printReport
+	
+	
+	account accept: self.
+	
+	reporter add: 'Balance = ', account balance asString. 
+	
+	^reporter.! !
+
+
+!AccountSummaryVisitor methodsFor: 'instance creation' stamp: 'belen 12/4/2021 11:24:46'!
+initializeFor: anAccount 
+
+	account := anAccount. 
+	
+	reporter := OrderedCollection new.! !
+
+
+!AccountSummaryVisitor methodsFor: 'manage account' stamp: 'belen 12/5/2021 12:45:41'!
+handleAccountAsAPortfolio: aPortfolio
+	
+	 aPortfolio toAllAccountsDo: [:acc | (acc accept: self)].
+	! !
+
+!AccountSummaryVisitor methodsFor: 'manage account' stamp: 'belen 12/4/2021 12:41:38'!
+handleAccountAsAReceptiveAccount: aReceptiveAccount
+	
+	aReceptiveAccount withTransactionsDo: [:transaction | reporter add: ( transaction accept:self)]
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountSummaryVisitor class' category: 'ServiciosFinancieros-Solucion'!
+AccountSummaryVisitor class
+	instanceVariableNames: ''!
+
+!AccountSummaryVisitor class methodsFor: 'instance creation' stamp: 'belen 12/4/2021 11:14:11'!
+for: anAccount
+
+	^self new initializeFor: anAccount ! !
+
+
+!classDefinition: #TranferNetVisitor category: 'ServiciosFinancieros-Solucion'!
+ReportVisitor subclass: #TranferNetVisitor
+	instanceVariableNames: 'account reportTransferBalance'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!TranferNetVisitor methodsFor: 'instance creation' stamp: 'belen 12/5/2021 12:50:34'!
+initializeFor: anAccount
+
+	account := anAccount. 
+	
+	reportTransferBalance := 0*peso.! !
+
+
+!TranferNetVisitor methodsFor: 'manage account' stamp: 'belen 12/5/2021 12:45:12'!
+handleAccountAsAPortfolio: aPortfolio
+
+	aPortfolio toAllAccountsDo: [: anAccount |  (anAccount accept: self)].! !
+
+!TranferNetVisitor methodsFor: 'manage account' stamp: 'belen 12/5/2021 16:41:39'!
+handleAccountAsAReceptiveAccount: aReceptiveAccount
+
+	aReceptiveAccount withTransactionsDo: [:transaction |  reportTransferBalance := (transaction accept: self)].! !
+
+
+!TranferNetVisitor methodsFor: 'manage transactions' stamp: 'belen 12/5/2021 12:17:41'!
+handleTransactionAsDeposit: aDeposit
+
+
+	^0*peso.! !
+
+!TranferNetVisitor methodsFor: 'manage transactions' stamp: 'belen 12/5/2021 16:40:40'!
+handleTransactionAsDepositLeg: aDepositLeg
+
+
+	^ aDepositLeg affectBalance: reportTransferBalance. 
+	! !
+
+!TranferNetVisitor methodsFor: 'manage transactions' stamp: 'belen 12/5/2021 12:18:53'!
+handleTransactionAsWithdraw: aWithdraw
+
+
+	^0*peso.! !
+
+!TranferNetVisitor methodsFor: 'manage transactions' stamp: 'belen 12/5/2021 16:40:33'!
+handleTransactionAsWithdrawLeg: aWithdrawLeg
+
+
+	^ aWithdrawLeg affectBalance: reportTransferBalance. 
+	! !
+
+
+!TranferNetVisitor methodsFor: 'main protocol' stamp: 'belen 12/5/2021 12:50:34'!
+printReport
+	
+	account accept: self.
+	
+	^reportTransferBalance asString.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TranferNetVisitor class' category: 'ServiciosFinancieros-Solucion'!
+TranferNetVisitor class
+	instanceVariableNames: ''!
+
+!TranferNetVisitor class methodsFor: 'instance creation' stamp: 'belen 12/5/2021 11:57:10'!
+for: anAccount
+
+	^ self new initializeFor: anAccount! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Solucion'!
