@@ -23,8 +23,8 @@ test02SummaryOfPortfolioWithNoTransactionsIncludesJustZeroBalance
 	
 ! !
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:11:40'!
-test03SummaryOfReceptiveAccountWithDepositeIncludesJustThatDepositAndBalance
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:22:27'!
+test03SummaryOfReceptiveAccountWithDepositeIncludesJustThatDepositAndBalanceEntries
 
 	
 	
@@ -41,8 +41,8 @@ test03SummaryOfReceptiveAccountWithDepositeIncludesJustThatDepositAndBalance
 
 ! !
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:11:57'!
-test04SummaryOfPortfolioWithDepositeIncludesJustThatDepositAndBalance
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:22:35'!
+test04SummaryOfPortfolioWithDepositeIncludesJustThatDepositAndBalanceEntries
 
 	
 	
@@ -57,8 +57,8 @@ test04SummaryOfPortfolioWithDepositeIncludesJustThatDepositAndBalance
 
 ! !
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:12:32'!
-test05SummaryOfReceptiveAccountWithWithdrawIncludesJustThatWithdrawAndBalance
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:24:50'!
+test05SummaryOfReceptiveAccountWithWithdrawIncludesJustThatWithdrawAndBalanceEntries
 
 
 	
@@ -73,8 +73,8 @@ test05SummaryOfReceptiveAccountWithWithdrawIncludesJustThatWithdrawAndBalance
 	
 ! !
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:15:45'!
-test06SummaryOfPortfolioWithWithdrawIncludesJustThatWithdrawAndBalance
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:24:57'!
+test06SummaryOfPortfolioWithWithdrawIncludesJustThatWithdrawAndBalanceEntries
 
 
 
@@ -92,8 +92,8 @@ test06SummaryOfPortfolioWithWithdrawIncludesJustThatWithdrawAndBalance
 
 ! !
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:15:21'!
-test07SummaryOfReceptiveAccountWithDepositeTransferIncludesJustThatDepositTransferAndBalance
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:25:08'!
+test07SummaryOfReceptiveAccountWithDepositeTransferIncludesJustThatDepositTransferAndBalanceEntries
 
 	
 	Transfer amount: 30*peso from: destinationAccount to: originAccount.
@@ -108,8 +108,8 @@ test07SummaryOfReceptiveAccountWithDepositeTransferIncludesJustThatDepositTransf
 
 ! !
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:15:04'!
-test08SummaryOfPortfolioWithDepositeTransferIncludesJustThatDepositTransferAndBalance
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:25:15'!
+test08SummaryOfPortfolioWithDepositeTransferIncludesJustThatDepositTransferAndBalanceEntries
 
 	
 	Transfer amount: 30*peso from: originAccount to: destinationAccount.
@@ -124,8 +124,8 @@ test08SummaryOfPortfolioWithDepositeTransferIncludesJustThatDepositTransferAndBa
 
 ! !
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:14:29'!
-test09SummaryOfReceptiveAccountWithWithdrawTransferIncludesJustThatWithdrawTransferAndBalance
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:25:21'!
+test09SummaryOfReceptiveAccountWithWithdrawTransferIncludesJustThatWithdrawTransferAndBalanceEntries
 
 
 	
@@ -139,8 +139,8 @@ test09SummaryOfReceptiveAccountWithWithdrawTransferIncludesJustThatWithdrawTrans
 	
 ! !
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/5/2021 21:14:42'!
-test10SummaryOfPortfolioWithWithdrawTransferIncludesJustThatWithdrawTransferAndBalance
+!AccountSummaryTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:25:28'!
+test10SummaryOfPortfolioWithWithdrawTransferIncludesJustThatWithdrawTransferAndBalanceEntries
 
 	
 	
@@ -507,23 +507,23 @@ TestCase subclass: #TransferNetTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:25:25'!
-test01TransferNetOfPortfolioIsZeroWhenThereIsNoTranferTransactions
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:14:12'!
+test01TransferNetOfPortfolioIsZeroWhenThereIsNoTransferTransactions
 
 
 	self assert: transferNetForPortfolio printReport equals: '0 pesos'.
 	! !
 
-!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:25:14'!
-test02TransferNetOfReceptiveAccountIsZeroWhenThereIsNoTranferTransactions
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:14:20'!
+test02TransferNetOfReceptiveAccountIsZeroWhenThereIsNoTransferTransactions
 
 
 	
 	self assert: transferNetForReceptiveAccount printReport equals: '0 pesos'.
 	! !
 
-!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:24:58'!
-test03TransferNetOfPortfolioGivesSumOfItTranferTransactions
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:14:30'!
+test03TransferNetOfPortfolioGivesSumOfItTransferTransactions
 
 
 	
@@ -534,8 +534,8 @@ test03TransferNetOfPortfolioGivesSumOfItTranferTransactions
 	self assert: transferNetForPortfolio printReport equals: '10 pesos'.
 	! !
 
-!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/5/2021 17:22:43'!
-test04TransferNetOfReceptiveAccountGivesSumOfItTranferTransactions
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:14:02'!
+test04TransferNetOfReceptiveAccountGivesSumOfItTransferTransactions
 
 
 	
@@ -572,6 +572,26 @@ test06TransferNetShouldBeNegativeWithOnlyWithdrawTransactions
 	self assert: transferNetForReceptiveAccount printReport equals: '-10 pesos'.
 	! !
 
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:12:52'!
+test07TransferNetShouldNotConsiderDeposits
+
+
+	
+	Deposit register: 100*peso on: originAccount. 
+	
+	self assert: transferNetForReceptiveAccount printReport equals: '0 pesos'.
+	! !
+
+!TransferNetTest methodsFor: 'tests' stamp: 'belen 12/6/2021 10:13:14'!
+test08TransferNetShouldNotConsiderWithdraws
+
+
+	
+	Withdraw register: 100*peso on: originAccount. 
+	
+	self assert: transferNetForReceptiveAccount printReport equals: '0 pesos'.
+	! !
+
 
 !TransferNetTest methodsFor: 'setUp' stamp: 'belen 12/5/2021 17:22:08'!
 setUp
@@ -600,7 +620,7 @@ TestCase subclass: #TransferTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 21:07:03'!
+!TransferTest methodsFor: 'tests' stamp: 'LL 9/20/2020 21:07:03'!
 test01ATransferDecreasesBalanceFromOriginAccountAndIncreasesItForDestinationAccount
 
 	| destinationAccount originAccount |
@@ -616,7 +636,7 @@ test01ATransferDecreasesBalanceFromOriginAccountAndIncreasesItForDestinationAcco
 	self assert: 8 * peso equals: originAccount balance.
 	self assert: 12 * peso equals: destinationAccount balance.! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 21:12:28'!
+!TransferTest methodsFor: 'tests' stamp: 'LL 9/20/2020 21:12:28'!
 test02ATransferKnowsItsValue
 
 	| destinationAccount originAccount transfer |
@@ -631,7 +651,7 @@ test02ATransferKnowsItsValue
 	
 	self assert: 2 * peso equals: transfer value.! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 23:01:44'!
+!TransferTest methodsFor: 'tests' stamp: 'LL 9/20/2020 23:01:44'!
 test03DepositLegKnowsItsWithdrawCounterpart
 
 	| destinationAccount originAccount transfer |
@@ -646,7 +666,7 @@ test03DepositLegKnowsItsWithdrawCounterpart
 	
 	self assert: transfer withdrawLeg equals: transfer depositLeg withdrawLeg! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 23:01:51'!
+!TransferTest methodsFor: 'tests' stamp: 'LL 9/20/2020 23:01:51'!
 test04WithdrawLegKnowsItsDepositCounterpart
 
 	| destinationAccount originAccount transfer |
@@ -661,7 +681,7 @@ test04WithdrawLegKnowsItsDepositCounterpart
 	
 	self assert: transfer depositLeg equals: transfer withdrawLeg depositLeg! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 23:02:36'!
+!TransferTest methodsFor: 'tests' stamp: 'LL 9/20/2020 23:02:36'!
 test05OriginAndDestinationAccountsCannotBeTheSame
 
 	| originAccount |
@@ -677,7 +697,7 @@ test05OriginAndDestinationAccountsCannotBeTheSame
 		]
 ! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 23:02:44'!
+!TransferTest methodsFor: 'tests' stamp: 'LL 9/20/2020 23:02:44'!
 test06CannotTransferAZeroAmount
 
 	| originAccount destinationAccount |
@@ -870,19 +890,20 @@ signalCanNotAddAccount
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'as yet unclassified' stamp: 'HAW 5/25/2019 11:48:55'!
+!Portfolio class methodsFor: 'error' stamp: 'HAW 5/25/2019 11:48:55'!
 canNotAddAccountErrorMessage
 	
 	^'Can not add repeated account to a portfolio'! !
 
-!Portfolio class methodsFor: 'as yet unclassified' stamp: 'HAW 5/25/2019 11:18:21'!
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/25/2019 11:18:21'!
 with: anAccount
 
 	^self new 
 		add: anAccount;
 		yourself! !
 
-!Portfolio class methodsFor: 'as yet unclassified' stamp: 'HAW 5/25/2019 11:23:59'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/25/2019 11:23:59'!
 with: anAccount with: anotherAccount
 
 	^self new 
